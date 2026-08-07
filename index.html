@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Remi Hardcore - Online Game Retro Edition v1.1</title>
+    <title>Remi Hardcore - Online Game Retro Edition v1.4 (Protected GM Mode)</title>
+    <!-- Google Fonts Gaming -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
@@ -29,7 +30,7 @@
             background: linear-gradient(180deg, rgba(16, 35, 20, 0.98) 0%, rgba(8, 20, 11, 0.98) 100%);
             padding: 25px; border-radius: 20px;
             box-shadow: 0 15px 40px rgba(0,0,0,0.9), inset 0 0 0 2px #ffd700, inset 0 0 25px rgba(255,215,0,0.2);
-            border: 5px solid #2d5a32;
+            border: 5px solid #2d5a32; position: relative;
         }
         .menu-title {
             font-family: 'Press Start 2P', cursive;
@@ -72,94 +73,17 @@
         @keyframes crystalBlink { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         .bg-synthwave { background: linear-gradient(180deg, #1b003a 0%, #680058 60%, #ff5e00 100%); position: relative; }
 
-        /* BORDER AVATAR & ORNAMEN */
+        /* OVERLAY BORDER SYSTEM */
         .avatar-preview-box {
-            width: 85px; height: 85px; border-radius: 50%;
+            width: 100px; height: 100px;
             margin: 0 auto 8px; position: relative; display: flex;
-            justify-content: center; align-items: center; background: #111;
+            justify-content: center; align-items: center;
         }
-        .avatar-preview-box img {
-            width: 73px; height: 73px; border-radius: 50%; object-fit: cover; z-index: 3; position: relative;
+        .avatar-preview-box img.avatar-img {
+            width: 62px; height: 62px; border-radius: 50%; object-fit: cover; z-index: 1; position: absolute;
         }
-
-        .border-none { position: relative; border: 3px solid #555; border-radius: 50%; }
-        .border-neon, .border-lightning, .border-fire, .border-gold-glitter, .border-aurora, .border-ultimate,
-        .border-wings, .border-crown, .border-cyborg {
-            position: relative; border-radius: 50%;
-        }
-        
-        .border-neon::before {
-            content: ''; position: absolute; top: -5px; left: -5px; right: -5px; bottom: -5px;
-            border-radius: 50%; background: conic-gradient(from 0deg, #00f3ff, #0055ff, #00f3ff);
-            animation: spinBorder 2s linear infinite; z-index: 1; box-shadow: 0 0 12px #00f3ff;
-        }
-        .border-lightning::before {
-            content: ''; position: absolute; top: -5px; left: -5px; right: -5px; bottom: -5px;
-            border-radius: 50%; background: conic-gradient(from 0deg, #00e5ff, #e040fb, #ffffff, #00e5ff);
-            animation: spinBorder 0.6s linear infinite; z-index: 1; box-shadow: 0 0 15px #00e5ff, 0 0 25px #e040fb;
-        }
-        .border-fire::before {
-            content: ''; position: absolute; top: -6px; left: -6px; right: -6px; bottom: -6px;
-            border-radius: 50%; background: radial-gradient(circle, #ffea00 0%, #ff3d00 50%, #d50000 100%);
-            animation: roFlameFlicker 0.15s infinite alternate; z-index: 1; box-shadow: 0 -4px 15px #ffea00, 0 4px 18px #ff3d00;
-        }
-        .border-gold-glitter::before {
-            content: ''; position: absolute; top: -5px; left: -5px; right: -5px; bottom: -5px;
-            border-radius: 50%; background: conic-gradient(from 0deg, #ffd700, #fff8e7, #ff8f00, #ffd700);
-            animation: spinBorder 2.5s linear infinite; z-index: 1; box-shadow: 0 0 15px #ffd700;
-        }
-        .border-aurora::before {
-            content: ''; position: absolute; top: -6px; left: -6px; right: -6px; bottom: -6px;
-            border-radius: 50%; background: linear-gradient(45deg, #7c4dff, #00e676, #ff007f);
-            background-size: 200% 200%; animation: auroraShift 1.5s ease infinite alternate; z-index: 1; box-shadow: 0 0 20px #7c4dff;
-        }
-        .border-ultimate::before {
-            content: ''; position: absolute; top: -6px; left: -6px; right: -6px; bottom: -6px;
-            border-radius: 50%; background: conic-gradient(from 0deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff, #ff0000);
-            animation: spinBorder 0.8s linear infinite; z-index: 1; box-shadow: 0 0 20px rgba(255,255,255,0.9);
-        }
-
-        /* ORNAMEN SPECIAL */
-        .border-wings::before {
-            content: ''; position: absolute; top: -5px; left: -5px; right: -5px; bottom: -5px;
-            border-radius: 50%; background: conic-gradient(from 0deg, #ffd700, #ffffff, #ffd700);
-            animation: spinBorder 3s linear infinite; z-index: 1; box-shadow: 0 0 15px #ffd700;
-        }
-        .border-wings::after {
-            content: '🪽'; position: absolute; font-size: 34px; width: 130px; text-align: center;
-            top: 20px; left: -22px; z-index: 2; pointer-events: none;
-            filter: drop-shadow(0 0 8px #ffd700); animation: floatWings 1.5s ease-in-out infinite alternate;
-        }
-        @keyframes floatWings { 0% { transform: translateY(-2px); } 100% { transform: translateY(4px); } }
-
-        .border-crown::before {
-            content: ''; position: absolute; top: -6px; left: -6px; right: -6px; bottom: -6px;
-            border-radius: 50%; background: conic-gradient(from 0deg, #ff3d00, #ffd700, #ff3d00);
-            animation: spinBorder 2s linear infinite; z-index: 1; box-shadow: 0 0 18px #ffd700;
-        }
-        .border-crown::after {
-            content: '👑'; position: absolute; font-size: 28px;
-            top: -24px; left: 28px; z-index: 4; pointer-events: none;
-            filter: drop-shadow(0 0 6px #ffd700); animation: floatCrown 1.2s ease-in-out infinite alternate;
-        }
-        @keyframes floatCrown { 0% { transform: translateY(0); } 100% { transform: translateY(-4px); } }
-
-        .border-cyborg::before {
-            content: ''; position: absolute; top: -7px; left: -7px; right: -7px; bottom: -7px;
-            border-radius: 50%; background: conic-gradient(from 0deg, #00f3ff, #333, #00f3ff, #333);
-            animation: spinBorder 1.2s linear infinite; z-index: 1; box-shadow: 0 0 15px #00f3ff;
-        }
-        .border-cyborg::after {
-            content: '⚙️'; position: absolute; font-size: 20px;
-            bottom: -8px; right: -4px; z-index: 4; pointer-events: none;
-            filter: drop-shadow(0 0 8px #00f3ff); animation: spinGear 2s linear infinite;
-        }
-        @keyframes spinGear { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        @keyframes spinBorder { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes roFlameFlicker {
-            0% { transform: scale(1) rotate(-1deg); filter: drop-shadow(0 0 8px #ffea00); }
-            100% { transform: scale(0.98) rotate(-2deg); filter: drop-shadow(0 0 12px #d50000); }
+        .avatar-preview-box img.border-overlay {
+            width: 100%; height: 100%; object-fit: contain; z-index: 2; position: absolute; pointer-events: none;
         }
 
         /* BADGES & STATS */
@@ -174,6 +98,8 @@
         .badge-gold { background: linear-gradient(180deg, #ffd700, #ff8f00); color: #000; border: 1px solid #fff; }
         .badge-ruby { background: linear-gradient(180deg, #ff1744, #d50000); color: #fff; border: 1px solid #ff80ab; }
         .badge-aurora { background: linear-gradient(90deg, #d500f9, #00e5ff); color: #fff; border: 1px solid #fff; }
+        .badge-gm { background: linear-gradient(90deg, #ff0000, #ffd700, #ff0000); color: #000; border: 2px solid #fff; animation: gmGlow 1s infinite alternate; }
+        @keyframes gmGlow { 0% { box-shadow: 0 0 5px #ffd700; } 100% { box-shadow: 0 0 15px #ff0000; } }
 
         .currency-bar { display: flex; justify-content: center; gap: 15px; margin-top: 12px; font-size: 20px; font-weight: bold; }
         .coin-text { color: #ffd700; text-shadow: 0 0 8px rgba(255, 215, 0, 0.6); }
@@ -204,6 +130,7 @@
         .btn-dark { background: linear-gradient(180deg, #4b5563 0%, #1f2937 100%); color: white; }
         .btn-green { background: linear-gradient(180deg, #4ade80 0%, #16a34a 100%); color: #000; text-shadow:none; }
         .btn-orange { background: linear-gradient(180deg, #fb923c 0%, #c2410c 100%); color: white; }
+        .btn-gm-purple { background: linear-gradient(180deg, #a855f7 0%, #6b21a8 100%); color: #fff; border-color: #ffd700; }
 
         button:disabled { background: #333 !important; color: #777 !important; cursor: not-allowed; box-shadow: none !important; transform: none !important; text-shadow: none !important; }
 
@@ -217,8 +144,10 @@
             font-size: 16px; background: rgba(255, 255, 255, 0.05); padding: 8px;
             border-radius: 8px; position: relative; display: flex; align-items: center; gap: 10px; text-align: left;
         }
-        .player-score-avatar-box { width: 48px; height: 48px; flex-shrink: 0; display: flex; justify-content: center; align-items: center; }
-        .player-score-avatar-box img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; }
+        .player-score-avatar-box { width: 55px; height: 55px; flex-shrink: 0; display: flex; justify-content: center; align-items: center; position: relative; }
+        .player-score-avatar-box img.avatar-img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; position: absolute; z-index: 1; }
+        .player-score-avatar-box img.border-overlay { width: 100%; height: 100%; object-fit: contain; position: absolute; z-index: 2; pointer-events: none; }
+        
         .active-player { background: rgba(255, 215, 0, 0.15); border: 2px solid #ffd700; box-shadow: 0 0 10px rgba(255, 215, 0, 0.4); }
         .active-player::before {
             content: "▶ TURN"; position: absolute; top: -10px; right: 8px;
@@ -229,7 +158,7 @@
         .cekih-bubble {
             position: absolute; top: -14px; left: 10px; font-family: 'Press Start 2P', cursive;
             background: #dc2626; color: white; font-size: 8px; padding: 2px 6px; border-radius: 8px;
-            border: 1px solid #fff; animation: bounceBubble 0.6s infinite alternate;
+            border: 1px solid #fff; animation: bounceBubble 0.6s infinite alternate; z-index: 10;
         }
         @keyframes bounceBubble { from { transform: translateY(0); } to { transform: translateY(-3px); } }
         .player-name-text { font-weight: bold; font-size: 18px; color: #fff; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -251,7 +180,6 @@
         .card:hover { transform: translateY(-6px); box-shadow: 0 8px 15px rgba(0,0,0,0.6); }
         .card.red { color: #d32f2f; }
 
-        /* TEMA KARTU DEPAN & BELAKANG */
         .theme-classic .card.face-down {
             background: linear-gradient(135deg, #a71d1d 25%, #7a1212 25%, #7a1212 50%, #a71d1d 50%, #a71d1d 75%, #7a1212 75%, #7a1212 100%);
             background-size: 10px 10px; border: 2px solid #ffffff;
@@ -352,10 +280,10 @@
             background: rgba(0,0,0,0.5); border: 2px solid #2d5a32; border-radius: 10px; padding: 10px;
             display: flex; flex-direction: column; align-items: center; gap: 8px;
         }
-        .shop-item img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+        .shop-item img.preview-img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
         .shop-bg-preview { width: 100%; height: 55px; border-radius: 8px; border: 2px solid #ffd700; overflow: hidden; }
         .shop-card-preview { width: 45px; height: 65px; border-radius: 5px; border: 2px solid #fff; margin: 0 auto; }
-        .shop-item-title { font-size: 15px; font-weight: bold; color: #ffd700; text-align: center; }
+        .shop-item-title { font-size: 13px; font-weight: bold; color: #ffd700; text-align: center; }
         
         .end-cards-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 6px; }
 
@@ -371,15 +299,21 @@
 </head>
 <body class="theme-classic">
 
+<!-- HOME SCREEN MENU -->
 <div id="home-screen">
+    <!-- TOMBOL DEV TOOLS DENGAN DILINDUNGI PASSWORD -->
+    <button class="btn-gm-purple" onclick="openGmModal()" style="position: absolute; top: 15px; right: 15px; padding: 6px 10px; font-size: 8px; z-index: 10;">👑 DEV TOOLS</button>
+
     <div class="menu-title">♣ REMI HARDCORE ♠</div>
     <div class="menu-subtitle">~ ONLINE CASINO ARCADE ~</div>
 
+    <!-- PROFILE PANEL -->
     <div class="profile-card bg-volcano" id="home-profile-card">
         <div class="profile-card-overlay"></div>
         <div class="profile-content">
             <div class="avatar-preview-box" id="home-avatar-box">
-                <img id="avatar-preview" src="https://api.dicebear.com/7.x/bottts/svg?seed=King" alt="Avatar">
+                <img id="avatar-preview" class="avatar-img" src="https://api.dicebear.com/7.x/bottts/svg?seed=King" alt="Avatar">
+                <img id="border-preview" class="border-overlay" src="" alt="Border Overlay">
             </div>
             
             <div style="font-size: 24px; font-weight: bold; color: #ffd700;" id="user-display-name">Kamu</div>
@@ -410,6 +344,7 @@
     <button class="menu-btn btn-dark" onclick="openSettingsModal()">⚙️ PENGATURAN & BOT</button>
 </div>
 
+<!-- GAME BOARD CONTAINER -->
 <div id="game-container">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
         <h3 style="margin: 0; color: #ffd700; font-family: 'Press Start 2P', cursive; font-size: 13px;">♣ REMI HARDCORE ♠</h3>
@@ -468,6 +403,7 @@
     <div id="log-box"></div>
 </div>
 
+<!-- Modal Rekap Skor -->
 <div id="modal-score" class="modal">
     <div class="modal-content">
         <h3 id="modal-title" style="color: #ffd700; margin-top: 0; font-family: 'Press Start 2P', cursive; font-size: 14px;">Ronde Selesai</h3>
@@ -477,6 +413,7 @@
     </div>
 </div>
 
+<!-- MODAL TOKO -->
 <div id="modal-shop" class="modal">
     <div class="modal-content">
         <h3 style="color: #ffd700; margin-top: 0; font-family: 'Press Start 2P', cursive; font-size: 12px;">🛒 TOKO CUSTOMIZATION</h3>
@@ -484,7 +421,7 @@
         
         <div class="shop-tabs">
             <button class="btn-primary" onclick="switchShopTab('avatars')" id="btn-tab-avatars" style="font-size: 8px;">Avatar Hero</button>
-            <button class="btn-dark" onclick="switchShopTab('borders')" id="btn-tab-borders" style="font-size: 8px;">Aura & Ornament</button>
+            <button class="btn-dark" onclick="switchShopTab('borders')" id="btn-tab-borders" style="font-size: 8px;">Avatar Border 🖼️</button>
             <button class="btn-dark" onclick="switchShopTab('backgrounds')" id="btn-tab-backgrounds" style="font-size: 8px;">BG Profil</button>
             <button class="btn-dark" onclick="switchShopTab('cards')" id="btn-tab-cards" style="font-size: 8px;">Desain Kartu 🃏</button>
         </div>
@@ -500,26 +437,35 @@
     </div>
 </div>
 
+<!-- MODAL GAME MASTER / DEVELOPER TOOLS -->
+<div id="modal-gm" class="modal">
+    <div class="modal-content" style="border-color: #a855f7;">
+        <h3 style="color: #c084fc; margin-top: 0; font-family: 'Press Start 2P', cursive; font-size: 13px;">👑 GAME MASTER CONSOLE</h3>
+        <p style="font-size: 15px; color: #aaa;">Panel rahasia developer untuk testing dan debugging game.</p>
+        
+        <div style="display: flex; flex-direction: column; gap: 10px; margin: 20px 0;">
+            <button class="btn-primary" onclick="gmAddCoins()">💰 TAMBAH +100.000 KOIN</button>
+            <button class="btn-green" onclick="gmUnlockAll()">🔓 UNLOCK ALL ITEMS (Semua Border & Skin Toko)</button>
+            <button class="btn-secondary" onclick="gmMaxLevel()">⭐ MAX LEVEL (Level 100 + GM Badge)</button>
+            <button class="btn-shop" onclick="gmResetData()">⚠️ RESET PROFILE TO DEFAULT</button>
+        </div>
+
+        <div style="margin-top: 15px;">
+            <button class="btn-dark" onclick="closeGmModal()">Tutup Console</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL PATCH NOTES / UPDATE LOG -->
 <div id="modal-patch" class="modal">
     <div class="modal-content">
         <h3 style="color: #ffd700; margin-top: 0; font-family: 'Press Start 2P', cursive; font-size: 12px;">📜 PATCH NOTES & UPDATE LOG</h3>
         
         <div class="patch-item">
-            <div class="patch-ver">VERSION 1.1 (LATEST UPDATE)</div>
+            <div class="patch-ver">VERSION 1.4 (SECURITY UPDATE)</div>
             <ul class="patch-list">
-                <li>🪽 <b>Border Avatar Ber-Ornamen</b>: Ditambahkan Wings of Valkyrie, Imperial Crown, & Mech Cyborg.</li>
-                <li>🃏 <b>Full Custom Kartu</b>: Muka depan dan belakang kartu kini menyesuaikan tema yang dipilih di Toko!</li>
-                <li>🪙 <b>Level Up Bonus</b>: Dapatkan bonus koin melimpah (Level x 50 Koin) setiap kali naik level.</li>
-                <li>🛠️ <b>Bug Fix</b>: Memperbaiki aura border avatar yang sempat membesar raksasa.</li>
-            </ul>
-        </div>
-
-        <div class="patch-item">
-            <div class="patch-ver">VERSION 1.0 (INITIAL LAUNCH)</div>
-            <ul class="patch-list">
-                <li>🎮 <b>UI Retro MMORPG</b>: Tampilan lobby dan arena bermain ala game online casino.</li>
-                <li>🌌 <b>Animated Profile BG</b>: 6 Pilihan background profil bergerak (Volcano, Cyber, Aurora, dll).</li>
-                <li>🤖 <b>Mode Bot AI Offline</b>: Bermain seru melawan 3 Bot pintar dengan fitur Cekih & Sunat Poin.</li>
+                <li>🔒 <b>Proteksi GM Tools</b>: Tombol Dev Tools kini dilindungi password rahasia GM.</li>
+                <li>👑 <b>Game Master Console</b>: Fitur Cheat Tambah Koin & Unlock All Item hanya dapat diakses oleh Developer resmi.</li>
             </ul>
         </div>
 
@@ -529,6 +475,7 @@
     </div>
 </div>
 
+<!-- MODAL KONFIRMASI PEMBELIAN -->
 <div id="modal-confirm" class="modal">
     <div class="modal-content" style="max-width: 420px; border-color: #facc15;">
         <h3 style="color: #ffd700; margin-top: 0; font-family: 'Press Start 2P', cursive; font-size: 10px;">KONFIRMASI PEMBELIAN</h3>
@@ -540,6 +487,7 @@
     </div>
 </div>
 
+<!-- MODAL PENGATURAN -->
 <div id="modal-settings" class="modal">
     <div class="modal-content">
         <h3 style="color: #ffd700; margin-top: 0; font-family: 'Press Start 2P', cursive; font-size: 12px;">PENGATURAN GAME</h3>
@@ -636,13 +584,13 @@
 
     /* --- USER PROFILE & DATA --- */
     let userProfile = {
-        name: "Kamu", level: 1, exp: 0, coins: 100,
+        name: "Kamu", level: 1, exp: 0, coins: 0, isGm: false,
         equippedAvatar: "https://api.dicebear.com/7.x/bottts/svg?seed=King",
-        equippedBorder: "border-none",
+        equippedBorderUrl: "",
         equippedBgClass: "bg-volcano",
         equippedCardTheme: "theme-classic",
         ownedAvatars: ["https://api.dicebear.com/7.x/bottts/svg?seed=King"],
-        ownedBorders: ["border-none"],
+        ownedBorders: [""],
         ownedBgs: ["bg-volcano"],
         ownedCardThemes: ["theme-classic"]
     };
@@ -661,6 +609,7 @@
     function getExpForNextLevel(lvl) { return lvl * 100; }
 
     function renderLevelBadge(lvl) {
+        if (userProfile.isGm) return `<span class="lvl-badge badge-gm">[GM DIRECTOR]</span>`;
         if (lvl <= 10) return `<span class="lvl-badge badge-wood">Kayu</span>`;
         if (lvl <= 30) return `<span class="lvl-badge badge-bronze">Perunggu</span>`;
         if (lvl <= 60) return `<span class="lvl-badge badge-silver">Perak</span>`;
@@ -692,19 +641,73 @@
         document.getElementById('player-name-input').value = userProfile.name;
         document.getElementById('user-level-text').innerText = userProfile.level;
         document.getElementById('user-badge-container').innerHTML = renderLevelBadge(userProfile.level);
-        document.getElementById('user-coin-text').innerText = userProfile.coins;
+        document.getElementById('user-coin-text').innerText = userProfile.coins.toLocaleString();
         
         const reqExp = getExpForNextLevel(userProfile.level);
         const expPct = Math.min(100, (userProfile.exp / reqExp) * 100);
         document.getElementById('user-exp-fill').style.width = expPct + "%";
         document.getElementById('user-exp-text').innerText = `${userProfile.exp} / ${reqExp} EXP`;
 
-        const avatarBox = document.getElementById('home-avatar-box');
-        avatarBox.className = `avatar-preview-box ${userProfile.equippedBorder}`;
         document.getElementById('avatar-preview').src = userProfile.equippedAvatar;
+        const bPreview = document.getElementById('border-preview');
+        if (userProfile.equippedBorderUrl) {
+            bPreview.src = userProfile.equippedBorderUrl; bPreview.style.display = 'block';
+        } else {
+            bPreview.style.display = 'none';
+        }
 
         document.getElementById('home-profile-card').className = `profile-card ${userProfile.equippedBgClass}`;
         document.body.className = userProfile.equippedCardTheme || "theme-classic";
+    }
+
+    /* --- GAME MASTER (GM) SECURITY & FUNCTIONS --- */
+    const GM_PASSWORD_SECRET = "gm123"; // GANTI KATA SANDI RAHASIA GM KAMU DI SINI!
+
+    function openGmModal() {
+        const inputPassword = prompt("🔒 MASUKKAN PASSWORD GAME MASTER / DEVELOPER:");
+        
+        if (inputPassword === null) return; // Batal diklik
+
+        if (inputPassword === GM_PASSWORD_SECRET) {
+            playSound('levelup');
+            document.getElementById('modal-gm').style.display = 'flex';
+        } else {
+            playSound('bad');
+            alert("🚨 AKSES DITOLAK!\nPassword yang Anda masukkan salah. Halaman ini khusus untuk Game Master / Developer.");
+        }
+    }
+
+    function closeGmModal() { document.getElementById('modal-gm').style.display = 'none'; }
+
+    function gmAddCoins() {
+        userProfile.coins += 100000;
+        playSound('levelup');
+        saveProfileData();
+        alert("👑 GM CHEAT: Sukses menambah +100.000 Koin!");
+    }
+
+    function gmUnlockAll() {
+        userProfile.ownedAvatars = shopAvatars.map(a => a.url);
+        userProfile.ownedBorders = shopBorders.map(b => b.url);
+        userProfile.ownedBgs = shopBackgrounds.map(bg => bg.class);
+        userProfile.ownedCardThemes = shopCards.map(c => c.themeClass);
+        playSound('levelup');
+        saveProfileData();
+        alert("👑 GM CHEAT: Semua Avatar, Border, Background & Tema Kartu BERHASIL DI-UNLOCK!");
+    }
+
+    function gmMaxLevel() {
+        userProfile.level = 100; userProfile.exp = 0; userProfile.isGm = true;
+        playSound('levelup');
+        saveProfileData();
+        alert("👑 GM CHEAT: Kamu kini Level 100 dengan Badge [GM DIRECTOR]!");
+    }
+
+    function gmResetData() {
+        if (confirm("Reset seluruh progress ke awal (Level 1 & Koin 0)?")) {
+            localStorage.removeItem('remi_user_profile');
+            location.reload();
+        }
     }
 
     /* --- PATCH NOTES MODAL FUNCTIONS --- */
@@ -739,7 +742,7 @@
 
     const shopBackgrounds = [
         { name: "Volcanic Lava 🌋", class: "bg-volcano", price: 0 },
-        { name: "Cyberpunk Grid 🌆", class: "bg-cyber", price: 1000 },
+        { name: "Cyberpunk Grid 🌇", class: "bg-cyber", price: 1000 },
         { name: "Magic Forest 🌲", class: "bg-aurora-forest", price: 2000 },
         { name: "Cosmic Warp 🌌", class: "bg-cosmic", price: 3500 },
         { name: "Crystal Refract 💎", class: "bg-crystal", price: 5000 },
@@ -759,7 +762,7 @@
 
     function openShopModal() {
         playSound('dropdown');
-        document.getElementById('shop-coin-display').innerText = userProfile.coins;
+        document.getElementById('shop-coin-display').innerText = userProfile.coins.toLocaleString();
         renderShopItems();
         document.getElementById('modal-shop').style.display = 'flex';
     }
@@ -787,7 +790,7 @@
             let btnText = equipped ? "Dipakai" : (owned ? "Pakai" : `Beli 🪙${item.price}`);
 
             const div = document.createElement('div'); div.className = 'shop-item';
-            div.innerHTML = `<img src="${item.url}" alt="${item.name}"><div class="shop-item-title">${item.name}</div>
+            div.innerHTML = `<img src="${item.url}" class="preview-img" alt="${item.name}"><div class="shop-item-title">${item.name}</div>
                 <button class="${equipped?'btn-dark':(owned?'btn-secondary':'btn-shop')}" onclick="handleAvatarAction('${item.url}', ${item.price}, '${item.name}')" ${equipped?'disabled':''} style="font-size:8px; padding:6px 10px;">${btnText}</button>`;
             avGrid.appendChild(div);
         });
@@ -795,14 +798,16 @@
         // Borders
         const bdGrid = document.getElementById('shop-borders-grid'); bdGrid.innerHTML = '';
         shopBorders.forEach(item => {
-            const owned = userProfile.ownedBorders.includes(item.class);
-            const equipped = userProfile.equippedBorder === item.class;
+            const owned = userProfile.ownedBorders.includes(item.url);
+            const equipped = userProfile.equippedBorderUrl === item.url;
             let btnText = equipped ? "Dipakai" : (owned ? "Pakai" : `Beli 🪙${item.price}`);
 
+            const previewImg = item.url ? `<img src="${item.url}" style="width:55px; height:55px; object-fit:contain;">` : `<div style="font-size:10px; color:#aaa; line-height:55px;">(Polos)</div>`;
+
             const div = document.createElement('div'); div.className = 'shop-item';
-            div.innerHTML = `<div class="${item.class}" style="width:45px; height:45px; border-radius:50%; margin:0 auto; display:flex; align-items:center; justify-content:center; background:#222;"><div style="width:30px; height:30px; border-radius:50%; background:#444;"></div></div>
+            div.innerHTML = `<div style="width:55px; height:55px; display:flex; align-items:center; justify-content:center;">${previewImg}</div>
                 <div class="shop-item-title">${item.name}</div>
-                <button class="${equipped?'btn-dark':(owned?'btn-secondary':'btn-shop')}" onclick="handleBorderAction('${item.class}', ${item.price}, '${item.name}')" ${equipped?'disabled':''} style="font-size:8px; padding:6px 10px;">${btnText}</button>`;
+                <button class="${equipped?'btn-dark':(owned?'btn-secondary':'btn-shop')}" onclick="handleBorderAction('${item.url}', ${item.price}, '${item.name}')" ${equipped?'disabled':''} style="font-size:8px; padding:6px 10px;">${btnText}</button>`;
             bdGrid.appendChild(div);
         });
 
@@ -842,19 +847,19 @@
             if (userProfile.coins < price) { alert("Koin kamu tidak cukup!"); return; }
             askPurchaseConfirmation(name, price, () => {
                 userProfile.coins -= price; userProfile.ownedAvatars.push(url); userProfile.equippedAvatar = url;
-                saveProfileData(); document.getElementById('shop-coin-display').innerText = userProfile.coins; renderShopItems();
+                saveProfileData(); document.getElementById('shop-coin-display').innerText = userProfile.coins.toLocaleString(); renderShopItems();
             });
         }
     }
 
-    function handleBorderAction(borderClass, price, name) {
-        if (userProfile.ownedBorders.includes(borderClass)) {
-            userProfile.equippedBorder = borderClass; saveProfileData(); renderShopItems();
+    function handleBorderAction(borderUrl, price, name) {
+        if (userProfile.ownedBorders.includes(borderUrl)) {
+            userProfile.equippedBorderUrl = borderUrl; saveProfileData(); renderShopItems();
         } else {
             if (userProfile.coins < price) { alert("Koin kamu tidak cukup!"); return; }
             askPurchaseConfirmation(name, price, () => {
-                userProfile.coins -= price; userProfile.ownedBorders.push(borderClass); userProfile.equippedBorder = borderClass;
-                saveProfileData(); document.getElementById('shop-coin-display').innerText = userProfile.coins; renderShopItems();
+                userProfile.coins -= price; userProfile.ownedBorders.push(borderUrl); userProfile.equippedBorderUrl = borderUrl;
+                saveProfileData(); document.getElementById('shop-coin-display').innerText = userProfile.coins.toLocaleString(); renderShopItems();
             });
         }
     }
@@ -866,7 +871,7 @@
             if (userProfile.coins < price) { alert("Koin kamu tidak cukup!"); return; }
             askPurchaseConfirmation(name, price, () => {
                 userProfile.coins -= price; userProfile.ownedBgs.push(bgClass); userProfile.equippedBgClass = bgClass;
-                saveProfileData(); document.getElementById('shop-coin-display').innerText = userProfile.coins; renderShopItems();
+                saveProfileData(); document.getElementById('shop-coin-display').innerText = userProfile.coins.toLocaleString(); renderShopItems();
             });
         }
     }
@@ -878,14 +883,14 @@
             if (userProfile.coins < price) { alert("Koin kamu tidak cukup!"); return; }
             askPurchaseConfirmation(name, price, () => {
                 userProfile.coins -= price; userProfile.ownedCardThemes.push(themeClass); userProfile.equippedCardTheme = themeClass;
-                saveProfileData(); document.getElementById('shop-coin-display').innerText = userProfile.coins; renderShopItems();
+                saveProfileData(); document.getElementById('shop-coin-display').innerText = userProfile.coins.toLocaleString(); renderShopItems();
             });
         }
     }
 
     function askPurchaseConfirmation(itemName, price, onConfirmFn) {
         playSound('dropdown');
-        document.getElementById('confirm-item-text').innerText = `Membeli "${itemName}" seharga 🪙 ${price} Koin?`;
+        document.getElementById('confirm-item-text').innerText = `Membeli "${itemName}" seharga 🪙 ${price.toLocaleString()} Koin?`;
         pendingPurchase = onConfirmFn;
         document.getElementById('modal-confirm').style.display = 'flex';
     }
@@ -901,10 +906,10 @@
 
     let gameState = {
         players: [
-            { name: "Kamu", avatar: "", border: "", hand: [], submittedGroups: [], score: 0, isAi: false, isCekih: false },
-            { name: "Bot_Budi", avatar: "https://api.dicebear.com/7.x/bottts/svg?seed=Budi", border: "border-none", hand: [], submittedGroups: [], score: 0, isAi: true, isCekih: false },
-            { name: "Bot_Jono", avatar: "https://api.dicebear.com/7.x/bottts/svg?seed=Jono", border: "border-none", hand: [], submittedGroups: [], score: 0, isAi: true, isCekih: false },
-            { name: "Bot_Tono", avatar: "https://api.dicebear.com/7.x/bottts/svg?seed=Tono", border: "border-none", hand: [], submittedGroups: [], score: 0, isAi: true, isCekih: false }
+            { name: "Kamu", avatar: "", borderUrl: "", hand: [], submittedGroups: [], score: 0, isAi: false, isCekih: false },
+            { name: "Bot_Budi", avatar: "https://api.dicebear.com/7.x/bottts/svg?seed=Budi", borderUrl: "", hand: [], submittedGroups: [], score: 0, isAi: true, isCekih: false },
+            { name: "Bot_Jono", avatar: "https://api.dicebear.com/7.x/bottts/svg?seed=Jono", borderUrl: "", hand: [], submittedGroups: [], score: 0, isAi: true, isCekih: false },
+            { name: "Bot_Tono", avatar: "https://api.dicebear.com/7.x/bottts/svg?seed=Tono", borderUrl: "", hand: [], submittedGroups: [], score: 0, isAi: true, isCekih: false }
         ],
         deck: [], discardPile: [], tuyul: null, tuyulRevealed: false, turnOrder: [0,1,2,3],
         turnPtr: 0, currentTurn: 0, phase: 'drawing', roundCount: 1, selectedIndices: [], 
@@ -921,7 +926,7 @@
         initAudio();
         gameState.players[0].name = userProfile.name;
         gameState.players[0].avatar = userProfile.equippedAvatar;
-        gameState.players[0].border = userProfile.equippedBorder;
+        gameState.players[0].borderUrl = userProfile.equippedBorderUrl;
 
         document.getElementById('home-screen').style.display = 'none';
         document.getElementById('game-container').style.display = 'block';
@@ -1126,12 +1131,16 @@
             const activeClass = (idx === gameState.currentTurn && gameState.phase !== 'ended') ? 'active-player' : '';
             const cekihClass = p.isCekih ? 'is-cekih' : '';
             const scoreColor = p.score < 0 ? 'color: #f87171;' : '';
-            const userBorder = (idx === 0) ? userProfile.equippedBorder : 'border-none';
+            const borderUrl = (idx === 0) ? userProfile.equippedBorderUrl : p.borderUrl;
+            
+            const borderOverlayHtml = borderUrl ? `<img src="${borderUrl}" class="border-overlay">` : '';
+
             sbHtml += `
                 <div class="player-score ${activeClass} ${cekihClass}">
                     ${p.isCekih ? `<div class="cekih-bubble">⚡ CEKIH!</div>` : ''}
-                    <div class="player-score-avatar-box ${userBorder}">
-                        <img src="${p.avatar}" alt="${p.name}">
+                    <div class="player-score-avatar-box">
+                        <img src="${p.avatar}" class="avatar-img" alt="${p.name}">
+                        ${borderOverlayHtml}
                     </div>
                     <div>
                         <div class="player-name-text" title="${p.name}">${p.name}</div>
