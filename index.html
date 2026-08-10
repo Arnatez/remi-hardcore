@@ -3,22 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Remi Hardcore - Online Game Retro Edition v2.0 (English Rank Titles & Animated Shine)</title>
-    <!-- Google Fonts Gaming -->
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+    <title>Remi Hardcore - Modern Cyber Neon Edition v2.1</title>
+    <!-- Font TT Runs / Montserrat / Rajdhani -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
+        
         body {
-            font-family: 'Rajdhani', 'Segoe UI', Tahoma, sans-serif;
-            background: #09120b radial-gradient(circle at center, #15381f 0%, #08140c 100%);
-            color: #ffffff; text-align: center; margin: 0; padding: 15px; min-height: 100vh;
-            font-size: 16px;
+            font-family: 'TT Runs', 'Montserrat', 'Segoe UI', sans-serif;
+            background-color: #030712;
+            color: #f3f4f6; text-align: center; margin: 0; padding: 15px; min-height: 100vh;
+            font-size: 16px; position: relative; overflow-x: hidden;
+        }
+
+        /* DIGITAL RAIN CANVAS BACKGROUND */
+        #matrix-canvas {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1; pointer-events: none; opacity: 0.85;
         }
 
         /* ICON COIN GLOBAL STYLING */
         .coin-icon {
             width: 22px; height: 22px; vertical-align: middle;
-            margin-right: 4px; display: inline-block; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+            margin-right: 4px; display: inline-block; filter: drop-shadow(0 0 6px #00f3ff);
         }
 
         /* GM NICKNAME MAROON GRADIENT STYLING */
@@ -33,95 +40,80 @@
             filter: drop-shadow(0 0 6px #ff0055);
         }
 
-        /* --- RETRO ONLINE GAME HUD CONTAINER --- */
-        #game-container {
-            max-width: 1050px; margin: 0 auto;
-            background: rgba(12, 28, 16, 0.95);
-            padding: 20px; border-radius: 16px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.9), inset 0 0 0 2px #4ade80, inset 0 0 20px rgba(0,0,0,0.8);
-            border: 4px solid #1c4e25; display: none;
+        /* GLASSMORPHISM FRAME BASE */
+        .glass-panel {
+            background: rgba(10, 20, 35, 0.55) !important;
+            backdrop-filter: blur(12px) saturate(180%);
+            -webkit-backdrop-filter: blur(12px) saturate(180%);
+            border: 1px solid rgba(0, 243, 255, 0.3) !important;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.7), inset 0 0 15px rgba(0, 243, 255, 0.1);
         }
 
-        /* --- HOME LOBBY SCREEN --- */
-        #home-screen {
-            max-width: 680px; margin: 10px auto;
-            background: linear-gradient(180deg, rgba(16, 35, 20, 0.98) 0%, rgba(8, 20, 11, 0.98) 100%);
-            padding: 25px; border-radius: 20px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.9), inset 0 0 0 2px #ffd700, inset 0 0 25px rgba(255,215,0,0.2);
-            border: 5px solid #2d5a32; position: relative;
+        /* TITLE NEON GLOWING ANIMATION */
+        .neon-title {
+            font-size: 28px; font-weight: 900; color: #ffffff;
+            text-transform: uppercase; letter-spacing: 3px; margin-bottom: 4px;
+            text-shadow: 0 0 5px #00f3ff, 0 0 10px #00f3ff, 0 0 20px #00f3ff, 0 0 40px #00a2ff;
+            animation: neonPulse 2s infinite alternate;
         }
-        .menu-title {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 22px; color: #ffd700; margin-bottom: 6px;
-            text-shadow: 3px 3px 0px #000, 0 0 15px rgba(255, 215, 0, 0.6);
-            line-height: 1.4; letter-spacing: 1px;
+        @keyframes neonPulse {
+            0% { text-shadow: 0 0 5px #00f3ff, 0 0 10px #00f3ff, 0 0 20px #00f3ff, 0 0 40px #00a2ff; }
+            100% { text-shadow: 0 0 8px #00f3ff, 0 0 15px #00f3ff, 0 0 30px #00f3ff, 0 0 60px #00a2ff, 0 0 80px #00a2ff; }
         }
+
         .menu-subtitle {
-            font-size: 16px; color: #a3e635; font-weight: 700; margin-bottom: 20px;
-            text-transform: uppercase; letter-spacing: 2px; text-shadow: 1px 1px 2px #000;
+            font-size: 14px; color: #38bdf8; font-weight: 700; margin-bottom: 20px;
+            text-transform: uppercase; letter-spacing: 4px; text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
         }
-        
-        /* PROFILE PANEL DENGAN BACKGROUND ANIMATED CSS */
+
+        /* --- HUD CONTAINER & HOME SCREEN --- */
+        #game-container, #home-screen {
+            max-width: 950px; margin: 10px auto; border-radius: 20px; padding: 25px;
+            position: relative;
+        }
+        #game-container { display: none; }
+
+        /* PROFILE PANEL GLASSMORPHISM */
         .profile-card {
-            border: 3px solid #ffd700;
-            border-radius: 14px; padding: 25px 20px 20px; margin-bottom: 20px; position: relative;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.8), inset 0 0 15px rgba(0,0,0,0.5);
+            border-radius: 16px; padding: 25px 20px 20px; margin-bottom: 20px; position: relative;
             overflow: visible;
         }
         .profile-card-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.35); z-index: 1; backdrop-filter: blur(1px); border-radius: 10px;
+            background: rgba(0, 0, 0, 0.2); z-index: 1; border-radius: 16px;
         }
         .profile-content { position: relative; z-index: 2; }
 
-        /* ANIMATED BACKGROUNDS */
-        .bg-volcano { background: linear-gradient(180deg, #370000, #800000, #ff4500); background-size: 100% 200%; animation: lavaMotion 4s ease infinite alternate; }
-        @keyframes lavaMotion { 0% { background-position: 0% 0%; } 100% { background-position: 0% 100%; } }
-        .bg-cyber { background: linear-gradient(135deg, #050515 0%, #100b30 50%, #050515 100%); position: relative; }
-        .bg-cyber::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(90deg, rgba(0, 243, 255, 0.15) 1px, transparent 1px), linear-gradient(rgba(0, 243, 255, 0.15) 1px, transparent 1px);
-            background-size: 20px 20px; animation: cyberGridMove 3s linear infinite;
-        }
-        @keyframes cyberGridMove { 0% { background-position: 0 0; } 100% { background-position: 20px 20px; } }
-        .bg-aurora-forest { background: linear-gradient(120deg, #022013, #005c33, #022013, #008f51); background-size: 300% 300%; animation: auroraShift 6s ease infinite alternate; }
-        @keyframes auroraShift { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
-        .bg-cosmic { background: radial-gradient(circle, #2d0b5a 0%, #0a0118 100%); position: relative; }
-        .bg-crystal { background: linear-gradient(45deg, #1d0036, #4d006e, #00537a, #1d0036); background-size: 400% 400%; animation: crystalBlink 5s ease infinite; }
-        @keyframes crystalBlink { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        .bg-synthwave { background: linear-gradient(180deg, #1b003a 0%, #680058 60%, #ff5e00 100%); position: relative; }
-
-        /* OVERLAY BORDER SYSTEM (PRECISELY CENTERED) */
+        /* OVERLAY BORDER SYSTEM (CENTERED) */
         .avatar-preview-box {
-            width: 100px; height: 100px;
-            margin: 0 auto 8px; position: relative; display: flex;
-            justify-content: center; align-items: center; overflow: visible;
+            width: 90px; height: 90px; margin: 0 auto 8px; position: relative;
+            display: flex; justify-content: center; align-items: center; overflow: visible;
         }
         .avatar-preview-box img.avatar-img {
-            width: 62px; height: 62px; border-radius: 50%; object-fit: cover; z-index: 1;
+            width: 58px; height: 58px; border-radius: 50%; object-fit: cover; z-index: 1;
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
         }
         .avatar-preview-box img.border-overlay {
             width: 100%; height: 100%; object-fit: contain; z-index: 2;
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none;
         }
 
-        /* BADGES BASE STYLING */
+        /* BADGES BASE STYLING & ANIMATION */
         .lvl-badge {
-            display: inline-block; padding: 2px 8px; border-radius: 10px;
-            font-size: 10px; font-weight: bold; text-transform: uppercase; margin-left: 6px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-family: 'Press Start 2P', cursive;
-            position: relative; overflow: hidden; vertical-align: middle;
+            display: inline-block; padding: 3px 10px; border-radius: 20px;
+            font-size: 11px; font-weight: 800; text-transform: uppercase; margin-left: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5); font-family: 'TT Runs', 'Montserrat', sans-serif;
+            position: relative; overflow: hidden; vertical-align: middle; letter-spacing: 0.5px;
         }
-        .badge-wood     { background: #8d6e63; color: #fff; border: 1px solid #d7ccc8; }
-        .badge-iron     { background: #78909c; color: #fff; border: 1px solid #eceff1; }
-        .badge-bronze   { background: #a1887f; color: #fff; border: 1px solid #ffe0b2; }
-        .badge-silver   { background: #cfd8dc; color: #111; border: 1px solid #ffffff; }
+        .badge-wood     { background: #5d4037; color: #fff; border: 1px solid #8d6e63; }
+        .badge-iron     { background: #455a64; color: #fff; border: 1px solid #78909c; }
+        .badge-bronze   { background: #795548; color: #fff; border: 1px solid #a1887f; }
+        .badge-silver   { background: #90a4ae; color: #111; border: 1px solid #ffffff; }
 
-        /* ANIMATED SHINE BADGES (GOLD TO AURORA) */
         .badge-animated-shine {
             background-size: 200% auto !important;
-            animation: rankShineSweep 2.5s linear infinite !important;
+            animation: rankShineSweep 2s linear infinite !important;
         }
         @keyframes rankShineSweep {
             0% { background-position: 0% center; }
@@ -130,118 +122,114 @@
 
         .badge-gold {
             background: linear-gradient(90deg, #b8860b 0%, #ffd700 25%, #fff5a6 50%, #ffd700 75%, #b8860b 100%);
-            color: #000; border: 1px solid #fff;
+            color: #000; border: 1px solid #fff; box-shadow: 0 0 8px #ffd700;
         }
         .badge-platinum {
             background: linear-gradient(90deg, #0284c7 0%, #38bdf8 25%, #e0f2fe 50%, #38bdf8 75%, #0284c7 100%);
-            color: #fff; border: 1px solid #bae6fd;
+            color: #fff; border: 1px solid #bae6fd; box-shadow: 0 0 8px #0284c7;
         }
         .badge-emerald {
             background: linear-gradient(90deg, #047857 0%, #10b981 25%, #a7f3d0 50%, #10b981 75%, #047857 100%);
-            color: #fff; border: 1px solid #6ee7b7;
+            color: #fff; border: 1px solid #6ee7b7; box-shadow: 0 0 8px #10b981;
         }
         .badge-ruby {
             background: linear-gradient(90deg, #9f1239 0%, #f43f5e 25%, #fecdd3 50%, #f43f5e 75%, #9f1239 100%);
-            color: #fff; border: 1px solid #fda4af;
+            color: #fff; border: 1px solid #fda4af; box-shadow: 0 0 8px #f43f5e;
         }
         .badge-diamond {
             background: linear-gradient(90deg, #4338ca 0%, #38bdf8 25%, #ffffff 50%, #818cf8 75%, #4338ca 100%);
-            color: #fff; border: 1px solid #fff; box-shadow: 0 0 8px #38bdf8;
+            color: #fff; border: 1px solid #fff; box-shadow: 0 0 10px #38bdf8;
         }
         .badge-aurora {
             background: linear-gradient(90deg, #d500f9 0%, #00e5ff 25%, #ffffff 50%, #d500f9 75%, #00e5ff 100%);
-            color: #fff; border: 1px solid #fff; box-shadow: 0 0 10px #d500f9;
+            color: #fff; border: 1px solid #fff; box-shadow: 0 0 12px #00e5ff;
         }
 
         .currency-bar { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 12px; font-size: 20px; font-weight: bold; }
-        .coin-text { color: #ffd700; text-shadow: 0 0 8px rgba(255, 215, 0, 0.6); }
-        .exp-bar-bg { background: #0a140c; height: 14px; border-radius: 7px; border: 2px solid #ffd700; overflow: hidden; margin-top: 8px; }
-        .exp-bar-fill { background: linear-gradient(90deg, #00c6ff, #0072ff); height: 100%; width: 0%; transition: width 0.3s ease; }
+        .coin-text { color: #00f3ff; text-shadow: 0 0 8px rgba(0, 243, 255, 0.8); }
+        .exp-bar-bg { background: rgba(0,0,0,0.6); height: 12px; border-radius: 6px; border: 1px solid #00f3ff; overflow: hidden; margin-top: 8px; }
+        .exp-bar-fill { background: linear-gradient(90deg, #00f3ff, #3b82f6); height: 100%; width: 0%; transition: width 0.3s ease; box-shadow: 0 0 8px #00f3ff; }
 
-        /* BUTTONS */
+        /* BUTTONS CYBER MODERN STYLING */
         button, .menu-btn {
-            font-family: 'Press Start 2P', cursive; font-size: 10px;
-            position: relative; display: inline-block; padding: 12px 18px; margin: 5px;
-            border-radius: 8px; border: 2px solid #000; cursor: pointer; overflow: hidden;
-            text-shadow: 1px 1px 0px #000; box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 5px 0 #111, 0 8px 10px rgba(0,0,0,0.6);
-            transition: all 0.1s ease; user-select: none;
+            font-family: 'TT Runs', 'Montserrat', sans-serif; font-size: 12px; font-weight: 700;
+            position: relative; display: inline-block; padding: 12px 20px; margin: 6px;
+            border-radius: 10px; border: 1px solid rgba(0, 243, 255, 0.4); cursor: pointer; overflow: hidden;
+            background: rgba(15, 23, 42, 0.8); color: #f8fafc;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5), inset 0 0 10px rgba(0, 243, 255, 0.1);
+            transition: all 0.2s ease; user-select: none; letter-spacing: 1px;
         }
-        button::before, .menu-btn::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transform: skewX(-25deg); transition: 0.5s;
+        button:hover, .menu-btn:hover {
+            transform: translateY(-2px); border-color: #00f3ff;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.5); color: #ffffff;
         }
-        button:hover::before, .menu-btn:hover::before { left: 150%; }
-        button:hover, .menu-btn:hover { transform: translateY(-2px); filter: brightness(1.15); }
-        button:active, .menu-btn:active { transform: translateY(4px); box-shadow: inset 0 1px 0 rgba(0,0,0,0.4), 0 1px 0 #111; }
-        .menu-btn { display: block; width: 90%; margin: 12px auto; }
+        button:active, .menu-btn:active { transform: translateY(2px); }
+        .menu-btn { display: block; width: 85%; margin: 12px auto; }
         
-        .btn-primary { background: linear-gradient(180deg, #facc15 0%, #ca8a04 100%); color: #111; text-shadow: none; }
-        .btn-secondary { background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%); color: white; }
-        .btn-shop { background: linear-gradient(180deg, #f43f5e 0%, #be123c 100%); color: white; }
-        .btn-dark { background: linear-gradient(180deg, #4b5563 0%, #1f2937 100%); color: white; }
-        .btn-green { background: linear-gradient(180deg, #4ade80 0%, #16a34a 100%); color: #000; text-shadow:none; }
-        .btn-orange { background: linear-gradient(180deg, #fb923c 0%, #c2410c 100%); color: white; }
-        .btn-gm-purple { background: linear-gradient(180deg, #a855f7 0%, #6b21a8 100%); color: #fff; border-color: #ffd700; }
+        .btn-primary { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); border-color: #38bdf8; }
+        .btn-secondary { background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%); border-color: #2dd4bf; }
+        .btn-shop { background: linear-gradient(135deg, #e11d48 0%, #be123c 100%); border-color: #fb7185; }
+        .btn-dark { background: rgba(30, 41, 59, 0.8); border-color: #64748b; }
+        .btn-green { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); border-color: #4ade80; }
+        .btn-orange { background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%); border-color: #fb923c; }
+        .btn-gm-purple { background: linear-gradient(135deg, #9333ea 0%, #7e22ce 100%); border-color: #c084fc; }
 
-        button:disabled { background: #333 !important; color: #777 !important; cursor: not-allowed; box-shadow: none !important; transform: none !important; text-shadow: none !important; }
+        button:disabled { opacity: 0.4 !important; cursor: not-allowed !important; transform: none !important; box-shadow: none !important; }
 
         /* SCOREBOARD & BOARD UI */
         .scoreboard {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 12px; background: rgba(8, 20, 11, 0.85); padding: 12px;
-            border-radius: 12px; margin-bottom: 15px; border: 2px solid #2d5a32;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 12px; margin-bottom: 15px;
         }
         .player-score { 
-            font-size: 15px; background: rgba(255, 255, 255, 0.05); padding: 8px;
-            border-radius: 8px; position: relative; display: flex; align-items: center; gap: 10px; text-align: left;
+            font-size: 14px; background: rgba(15, 23, 42, 0.7); padding: 10px;
+            border-radius: 12px; position: relative; display: flex; align-items: center; gap: 10px; text-align: left;
+            border: 1px solid rgba(0, 243, 255, 0.2);
         }
-        .player-score-avatar-box { width: 55px; height: 55px; flex-shrink: 0; display: flex; justify-content: center; align-items: center; position: relative; }
-        .player-score-avatar-box img.avatar-img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; }
+        .player-score-avatar-box { width: 50px; height: 50px; flex-shrink: 0; display: flex; justify-content: center; align-items: center; position: relative; }
+        .player-score-avatar-box img.avatar-img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; }
         .player-score-avatar-box img.border-overlay { width: 100%; height: 100%; object-fit: contain; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2; pointer-events: none; }
         
-        .active-player { background: rgba(255, 215, 0, 0.15); border: 2px solid #ffd700; box-shadow: 0 0 10px rgba(255, 215, 0, 0.4); }
+        .active-player { border-color: #00f3ff !important; box-shadow: 0 0 15px rgba(0, 243, 255, 0.4); }
         .active-player::before {
             content: "▶ TURN"; position: absolute; top: -10px; right: 8px;
-            background: #ffd700; color: #000; font-family: 'Press Start 2P', cursive; font-size: 8px; padding: 2px 5px; border-radius: 3px;
+            background: #00f3ff; color: #000; font-size: 8px; font-weight: 900; padding: 2px 6px; border-radius: 4px;
         }
-        .player-score.is-cekih { border: 2px solid #ff4444 !important; animation: cekihPulse 1.2s infinite alternate; }
-        @keyframes cekihPulse { 0% { box-shadow: 0 0 5px #ff4444; } 100% { box-shadow: 0 0 20px #ff4444; } }
+        .player-score.is-cekih { border: 1px solid #f43f5e !important; animation: cekihPulse 1.2s infinite alternate; }
+        @keyframes cekihPulse { 0% { box-shadow: 0 0 5px #f43f5e; } 100% { box-shadow: 0 0 20px #f43f5e; } }
         .cekih-bubble {
-            position: absolute; top: -14px; left: 10px; font-family: 'Press Start 2P', cursive;
-            background: #dc2626; color: white; font-size: 8px; padding: 2px 6px; border-radius: 8px;
+            position: absolute; top: -12px; left: 10px;
+            background: #f43f5e; color: white; font-size: 8px; font-weight: bold; padding: 2px 6px; border-radius: 6px;
             border: 1px solid #fff; animation: bounceBubble 0.6s infinite alternate; z-index: 10;
         }
         @keyframes bounceBubble { from { transform: translateY(0); } to { transform: translateY(-3px); } }
         
-        /* AUTO-SIZE RESPONSIVE NICKNAME (PREVENTS OVERFLOW / CUTTING OFF) */
         .player-name-text {
-            font-weight: bold; font-size: clamp(11px, 2.8vw, 16px); color: #fff;
-            width: 100%; max-width: 130px; word-break: break-word; line-height: 1.2;
+            font-weight: 700; font-size: clamp(11px, 2.8vw, 15px); color: #fff;
+            width: 100%; max-width: 120px; word-break: break-word; line-height: 1.2;
             display: flex; align-items: center; gap: 2px; overflow: hidden;
         }
 
         #table-area {
             display: flex; justify-content: space-around; align-items: center;
-            background: radial-gradient(circle, #1e5229 0%, #103318 100%);
-            padding: 20px; border-radius: 35px; margin-bottom: 15px; min-height: 160px;
-            flex-wrap: wrap; border: 6px solid #4a2810; box-shadow: inset 0 0 25px rgba(0,0,0,0.8); gap: 15px;
+            background: rgba(15, 23, 42, 0.6); padding: 20px; border-radius: 20px; margin-bottom: 15px; min-height: 160px;
+            flex-wrap: wrap; border: 1px solid rgba(0, 243, 255, 0.25); gap: 15px;
         }
 
         /* GENERAL CARD BASE */
         .card {
             display: inline-block; width: 58px; height: 85px; background: #ffffff; color: #111111;
-            border-radius: 6px; font-weight: bold; margin: 4px; cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.5); user-select: none; position: relative;
+            border-radius: 8px; font-weight: bold; margin: 4px; cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.6); user-select: none; position: relative;
             box-sizing: border-box; transition: transform 0.2s ease, box-shadow 0.2s; border: 1.5px solid #ccc;
         }
-        .card:hover { transform: translateY(-6px); box-shadow: 0 8px 15px rgba(0,0,0,0.6); }
-        .card.red { color: #d32f2f; }
+        .card:hover { transform: translateY(-6px); box-shadow: 0 8px 18px rgba(0,243,255,0.4); }
+        .card.red { color: #e11d48; }
 
-        /* INDEPENDENT CARD THEMES (FIXED PREVIEW BUG IN SHOP) */
+        /* CARD THEMES */
         .theme-classic .card.face-down, .card.theme-classic.face-down {
-            background: linear-gradient(135deg, #a71d1d 25%, #7a1212 25%, #7a1212 50%, #a71d1d 50%, #a71d1d 75%, #7a1212 75%, #7a1212 100%) !important;
-            background-size: 10px 10px !important; border: 2px solid #ffffff !important; box-shadow: none !important;
+            background: linear-gradient(135deg, #0284c7 25%, #0369a1 25%, #0369a1 50%, #0284c7 50%, #0284c7 75%, #0369a1 75%, #0369a1 100%) !important;
+            background-size: 10px 10px !important; border: 2px solid #38bdf8 !important; box-shadow: none !important;
         }
 
         .theme-cyber .card.face-down, .card.theme-cyber.face-down {
@@ -279,7 +267,7 @@
             background-size: 8px 8px !important; border: 2px solid #ffd700 !important;
         }
         .card.disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
-        .card.selected { border: 3px solid #ffd700 !important; transform: translateY(-12px) scale(1.05); box-shadow: 0 0 15px #ffd700 !important; }
+        .card.selected { border: 3px solid #00f3ff !important; transform: translateY(-12px) scale(1.05); box-shadow: 0 0 15px #00f3ff !important; }
         .card.dragging { opacity: 0.3; transform: scale(0.9); }
         .card.drag-over-left { transform: translateX(-12px) translateY(-5px); }
         .card.drag-over-right { transform: translateX(12px) translateY(-5px); }
@@ -289,7 +277,6 @@
         .card-corner.bottom-right { bottom: 3px; right: 3px; transform: rotate(180deg); }
         .card-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 24px; line-height: 1; }
         
-        /* REALISTIC PLAYING CARD PIPS GRID LAYOUT */
         .pips-real-grid {
             position: absolute; top: 14px; left: 11px; right: 11px; bottom: 14px;
             display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: repeat(5, 1fr);
@@ -298,86 +285,88 @@
         .pip-cell { font-size: 9px; line-height: 1; display: flex; align-items: center; justify-content: center; }
         .pip-flip { transform: rotate(180deg); }
 
-        .card.face-card { border: 1.5px solid #b8860b; }
+        .card.face-card { border: 1.5px solid #38bdf8; }
         .card.face-card .card-face-avatar {
-            width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid #ffd700;
+            width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid #00f3ff;
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             box-shadow: 0 2px 4px rgba(0,0,0,0.3); background: #111;
         }
 
         .hand-container, .submitted-container, .opponents-submitted-container {
-            background: rgba(10, 25, 12, 0.6); padding: 12px 15px; border-radius: 12px; margin-top: 10px; border: 1px solid #234d27;
+            background: rgba(15, 23, 42, 0.6); padding: 12px 15px; border-radius: 12px; margin-top: 10px; border: 1px solid rgba(0, 243, 255, 0.2);
         }
         .hand-cards, .submitted-cards { display: flex; justify-content: center; flex-wrap: wrap; min-height: 45px; align-items: center; }
         
         #log-box {
-            background: #000; height: 110px; overflow-y: auto; text-align: left; padding: 10px; font-size: 16px;
-            border-radius: 8px; margin-top: 15px; border: 2px solid #3d7a46; font-family: 'Rajdhani', monospace; color: #4ade80;
+            background: rgba(3, 7, 18, 0.9); height: 110px; overflow-y: auto; text-align: left; padding: 10px; font-size: 15px;
+            border-radius: 10px; margin-top: 15px; border: 1px solid rgba(0, 243, 255, 0.3); font-family: 'Rajdhani', monospace; color: #38bdf8;
         }
-        .log-hl { color: #ffd700; font-weight: bold; }
-        .log-bad { color: #f87171; font-weight: bold; }
-        .discard-pile-container { display: flex; gap: 4px; overflow-x: auto; max-width: 420px; padding: 6px; background: rgba(0,0,0,0.3); border-radius: 8px; border: 1px dashed #447744; }
+        .log-hl { color: #00f3ff; font-weight: bold; }
+        .log-bad { color: #f43f5e; font-weight: bold; }
+        .discard-pile-container { display: flex; gap: 4px; overflow-x: auto; max-width: 420px; padding: 6px; background: rgba(0,0,0,0.3); border-radius: 8px; border: 1px dashed rgba(0,243,255,0.4); }
         .controls-row { margin-bottom: 8px; display: flex; justify-content: center; align-items: center; gap: 6px; flex-wrap: wrap; }
         
-        /* MODALS */
+        /* MODALS GLASSMORPHISM */
         .modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85);
-            justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(3px);
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 7, 18, 0.85);
+            justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(8px);
         }
         .modal-content {
-            background: #0d2111; padding: 25px; border-radius: 15px; width: 640px; max-width: 95vw; max-height: 85vh;
-            overflow-y: auto; text-align: center; border: 4px solid #ffd700; box-shadow: 0 0 35px rgba(0,0,0,0.9);
+            padding: 25px; border-radius: 20px; width: 620px; max-width: 95vw; max-height: 85vh;
+            overflow-y: auto; text-align: center;
             animation: modalSlideDown 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         @keyframes modalSlideDown {
-            from { transform: translateY(-50px) scale(0.9); opacity: 0; }
+            from { transform: translateY(-30px) scale(0.95); opacity: 0; }
             to { transform: translateY(0) scale(1); opacity: 1; }
         }
 
         .input-group { margin: 12px 0; text-align: left; }
-        .input-group label { display: block; font-size: 16px; margin-bottom: 4px; color: #ffd700; }
+        .input-group label { display: block; font-size: 15px; margin-bottom: 4px; color: #00f3ff; font-weight: 600; }
         .input-group input[type="text"], .input-group input[type="number"], .input-group input[type="password"] {
-            width: 100%; padding: 10px; border-radius: 6px; border: 2px solid #3d7a46; background: #051208; color: white; font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: bold;
+            width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(0, 243, 255, 0.4);
+            background: rgba(15, 23, 42, 0.8); color: white; font-family: 'TT Runs', 'Montserrat', sans-serif; font-size: 18px; font-weight: bold;
         }
         .slider-container { display: flex; align-items: center; gap: 10px; }
-        .slider-container input[type="range"] { flex-grow: 1; accent-color: #ffd700; cursor: pointer; }
+        .slider-container input[type="range"] { flex-grow: 1; accent-color: #00f3ff; cursor: pointer; }
         
         /* SHOP GRID */
         .shop-tabs { display: flex; justify-content: center; gap: 6px; margin-bottom: 15px; flex-wrap: wrap; }
         .shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
         .shop-item {
-            background: rgba(0,0,0,0.5); border: 2px solid #2d5a32; border-radius: 10px; padding: 10px;
+            background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(0, 243, 255, 0.25); border-radius: 12px; padding: 10px;
             display: flex; flex-direction: column; align-items: center; gap: 8px;
         }
-        .shop-item img.preview-img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
-        .shop-bg-preview { width: 100%; height: 55px; border-radius: 8px; border: 2px solid #ffd700; overflow: hidden; }
-        .shop-card-preview { width: 45px; height: 65px; border-radius: 5px; margin: 0 auto; }
-        .shop-item-title { font-size: 13px; font-weight: bold; color: #ffd700; text-align: center; }
+        .shop-item img.preview-img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; }
+        .shop-bg-preview { width: 100%; height: 50px; border-radius: 8px; border: 1px solid #00f3ff; overflow: hidden; }
+        .shop-card-preview { width: 42px; height: 60px; border-radius: 5px; margin: 0 auto; }
+        .shop-item-title { font-size: 12px; font-weight: bold; color: #00f3ff; text-align: center; }
         
         .end-cards-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 6px; }
 
-        /* PATCH NOTES STYLING */
         .patch-item {
-            background: rgba(0,0,0,0.4); border: 1px solid #3d7a46; border-radius: 8px;
+            background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(0, 243, 255, 0.3); border-radius: 10px;
             padding: 12px; margin-bottom: 12px; text-align: left;
         }
-        .patch-ver { font-family: 'Press Start 2P', cursive; font-size: 11px; color: #ffd700; margin-bottom: 6px; }
-        .patch-list { margin: 0; padding-left: 20px; font-size: 16px; color: #ddd; }
+        .patch-ver { font-weight: 800; font-size: 12px; color: #00f3ff; margin-bottom: 6px; letter-spacing: 1px; }
+        .patch-list { margin: 0; padding-left: 20px; font-size: 15px; color: #ddd; }
         .patch-list li { margin-bottom: 4px; }
     </style>
 </head>
 <body class="theme-classic">
 
-<!-- HOME SCREEN MENU -->
-<div id="home-screen">
-    <!-- TOMBOL DEV TOOLS DENGAN DILINDUNGI PASSWORD -->
-    <button class="btn-gm-purple" onclick="openGmLoginModal()" style="position: absolute; top: 15px; right: 15px; padding: 6px 10px; font-size: 8px; z-index: 10;">👑 DEV TOOLS</button>
+<!-- MATRIX RAIN CANVAS -->
+<canvas id="matrix-canvas"></canvas>
 
-    <div class="menu-title">♣ REMI HARDCORE ♠</div>
+<!-- HOME SCREEN MENU -->
+<div id="home-screen" class="glass-panel">
+    <button class="btn-gm-purple" onclick="openGmLoginModal()" style="position: absolute; top: 15px; right: 15px; padding: 6px 12px; font-size: 10px; z-index: 10;">👑 DEV TOOLS</button>
+
+    <div class="neon-title">♣ REMI HARDCORE ♠</div>
     <div class="menu-subtitle">~ ONLINE CASINO ARCADE ~</div>
 
     <!-- PROFILE PANEL -->
-    <div class="profile-card bg-volcano" id="home-profile-card">
+    <div class="profile-card bg-volcano glass-panel" id="home-profile-card">
         <div class="profile-card-overlay"></div>
         <div class="profile-content">
             <div class="avatar-preview-box" id="home-avatar-box">
@@ -385,17 +374,17 @@
                 <img id="border-preview" class="border-overlay" src="" alt="Border Overlay">
             </div>
             
-            <div style="font-size: 24px; font-weight: bold;" id="user-display-name-container">
+            <div style="font-size: 22px; font-weight: bold;" id="user-display-name-container">
                 <span id="user-display-name">Kamu</span>
             </div>
             
-            <div style="font-size: 18px; margin-top: 4px; display: flex; justify-content: center; align-items: center;">
+            <div style="font-size: 16px; margin-top: 4px; display: flex; justify-content: center; align-items: center;">
                 Level <b id="user-level-text" style="margin-left: 6px;">1</b> <span id="user-badge-container"></span>
             </div>
             <div class="exp-bar-bg">
                 <div id="user-exp-fill" class="exp-bar-fill"></div>
             </div>
-            <div style="font-size: 15px; color: #ddd; margin-top: 2px;" id="user-exp-text">0 / 100 EXP</div>
+            <div style="font-size: 14px; color: #ddd; margin-top: 2px;" id="user-exp-text">0 / 100 EXP</div>
 
             <div class="currency-bar">
                 <span><img src="star.png" class="coin-icon" alt="Coin"> Coin: <span class="coin-text" id="user-coin-text">0</span></span>
@@ -403,12 +392,12 @@
         </div>
     </div>
 
-    <!-- UPDATE MAKSIMAL 15 KARAKTER & BIAYA GANTI NAMA -->
+    <!-- CHANGE NAME PANEL -->
     <div class="input-group" style="margin-bottom: 15px; text-align: center;">
         <label for="player-name-input" style="text-align: center;">Ubah Nama Profil (Maks 15 Karakter):</label>
         <div style="display: flex; gap: 8px; justify-content: center; max-width: 420px; margin: 0 auto;">
             <input type="text" id="player-name-input" value="Kamu" maxlength="15" style="text-align: center; flex-grow: 1;" oninput="sanitizeNameInput(this)">
-            <button class="btn-primary" onclick="submitNameChange()" style="font-size: 8px; padding: 8px 12px; margin: 0;">SIMPAN NAMA</button>
+            <button class="btn-primary" onclick="submitNameChange()" style="font-size: 10px; padding: 8px 14px; margin: 0;">SIMPAN NAMA</button>
         </div>
         <div id="name-cost-info" style="font-size: 13px; color: #4ade80; margin-top: 4px;">* Ganti nama pertama GRATIS</div>
     </div>
@@ -421,38 +410,37 @@
 </div>
 
 <!-- GAME BOARD CONTAINER -->
-<div id="game-container">
+<div id="game-container" class="glass-panel">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-        <h3 style="margin: 0; color: #ffd700; font-family: 'Press Start 2P', cursive; font-size: 13px;">♣ REMI HARDCORE ♠</h3>
+        <h3 style="margin: 0; color: #00f3ff; font-size: 16px; letter-spacing: 2px;">♣ REMI HARDCORE ♠</h3>
         <div>
-            <!-- DEV TOOLS AKSES DARI IN-GAME BOARD -->
-            <button class="btn-gm-purple" onclick="openGmConsoleDirect()" style="padding: 6px 10px; font-size: 8px; margin-right: 5px;">👑 DEV TOOLS</button>
-            <button class="btn-dark" onclick="backToHomeMenu()" style="padding: 6px 10px; font-size: 9px;">🏠 Menu Utama</button>
+            <button class="btn-gm-purple" onclick="openGmConsoleDirect()" style="padding: 6px 10px; font-size: 10px; margin-right: 5px;">👑 DEV TOOLS</button>
+            <button class="btn-dark" onclick="backToHomeMenu()" style="padding: 6px 10px; font-size: 10px;">🏠 Menu Utama</button>
         </div>
     </div>
 
     <div class="scoreboard" id="scoreboard"></div>
 
     <div class="opponents-submitted-container">
-        <h4 style="margin: 0 0 6px 0; font-size: 16px; color: #ffd700; text-align: left;">👥 Kombinasi Poin Pemain Lain di Meja:</h4>
+        <h4 style="margin: 0 0 6px 0; font-size: 15px; color: #00f3ff; text-align: left;">👥 Kombinasi Poin Pemain Lain di Meja:</h4>
         <div id="opponents-submitted" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-start;"></div>
     </div>
 
     <div id="table-area">
         <div>
-            <div style="font-size: 16px; margin-bottom: 3px;"><strong>Dek</strong></div>
+            <div style="font-size: 15px; margin-bottom: 3px;"><strong>Dek</strong></div>
             <div id="deck-pile" class="card face-down" onclick="playerDrawDeck()"></div>
-            <div style="font-size: 14px; margin-top: 3px;" id="deck-count">Sisa: 0</div>
+            <div style="font-size: 13px; margin-top: 3px;" id="deck-count">Sisa: 0</div>
         </div>
         <div>
-            <div style="font-size: 16px; margin-bottom: 3px;"><strong>Tuyul (Wild)</strong></div>
+            <div style="font-size: 15px; margin-bottom: 3px;"><strong>Tuyul (Wild)</strong></div>
             <div id="tuyul-card" class="card face-down"></div>
-            <div style="font-size: 14px; margin-top: 3px; color: #ffd700;" id="tuyul-info">Tertutup</div>
+            <div style="font-size: 13px; margin-top: 3px; color: #00f3ff;" id="tuyul-info">Tertutup</div>
         </div>
         <div>
-            <div style="font-size: 16px; margin-bottom: 3px;">
+            <div style="font-size: 15px; margin-bottom: 3px;">
                 <strong>7 Buangan Terakhir</strong> 
-                <span id="discard-history-count" style="font-size: 14px; color: #aaa;">(Total: 0)</span>
+                <span id="discard-history-count" style="font-size: 13px; color: #aaa;">(Total: 0)</span>
             </div>
             <div id="discard-pile" class="discard-pile-container"></div>
         </div>
@@ -467,16 +455,16 @@
     </div>
 
     <div class="controls-row">
-        <span id="game-phase-info" style="font-weight: bold; color: #ffd700; font-size: 18px;"></span>
+        <span id="game-phase-info" style="font-weight: bold; color: #00f3ff; font-size: 16px;"></span>
     </div>
 
     <div class="submitted-container">
-        <h4 style="margin: 0 0 6px 0; font-size: 16px; color: #ddd; text-align: left;">👤 Kombinasi Poin Kamu:</h4>
+        <h4 style="margin: 0 0 6px 0; font-size: 15px; color: #ddd; text-align: left;">👤 Kombinasi Poin Kamu:</h4>
         <div id="my-submitted" class="submitted-cards" style="min-height: 35px; color: #aaa; font-style: italic;">Belum ada kombinasi yang disubmit</div>
     </div>
 
     <div class="hand-container">
-        <h3 style="margin: 0 0 6px 0; font-size: 18px;">Kartu Kamu <span style="font-size: 14px; color: #aaa; font-weight: normal;">(Klik pilih, Drag & Drop atur posisi)</span></h3>
+        <h3 style="margin: 0 0 6px 0; font-size: 16px;">Kartu Kamu <span style="font-size: 13px; color: #aaa; font-weight: normal;">(Klik pilih, Drag & Drop atur posisi)</span></h3>
         <div id="my-hand" class="hand-cards"></div>
     </div>
 
@@ -485,8 +473,8 @@
 
 <!-- Modal Rekap Skor -->
 <div id="modal-score" class="modal">
-    <div class="modal-content">
-        <h3 id="modal-title" style="color: #ffd700; margin-top: 0; font-family: 'Press Start 2P', cursive; font-size: 14px;">Ronde Selesai</h3>
+    <div class="modal-content glass-panel">
+        <h3 id="modal-title" style="color: #00f3ff; margin-top: 0; font-size: 18px;">Ronde Selesai</h3>
         <div id="modal-score-text" style="text-align: left; margin: 15px 0;"></div>
         <button class="btn-green" onclick="nextRound()">Lanjut Permainan</button>
         <button class="btn-shop" onclick="resetGameCompletely()" style="margin-left: 10px;">Reset Total</button>
@@ -495,8 +483,8 @@
 
 <!-- MODAL LOGIN IN-GAME GM / DEV MODE -->
 <div id="modal-gm-login" class="modal">
-    <div class="modal-content" style="max-width: 440px; border-color: #a855f7;">
-        <h3 style="color: #c084fc; margin-top: 0; font-family: 'Press Start 2P', cursive; font-size: 12px;">🔒 DEVELOPER ACCESS</h3>
+    <div class="modal-content glass-panel" style="max-width: 440px;">
+        <h3 style="color: #c084fc; margin-top: 0; font-size: 16px;">🔒 DEVELOPER ACCESS</h3>
         <p style="font-size: 15px; color: #ddd; margin-bottom: 15px;">Masukkan Kata Sandi Rahasia Game Master:</p>
         
         <div class="input-group">
@@ -510,16 +498,27 @@
     </div>
 </div>
 
-<!-- MODAL GAME MASTER / DEVELOPER TOOLS -->
+<!-- MODAL GAME MASTER / DEVELOPER TOOLS (DENGAN TEST LEVEL SLIDER) -->
 <div id="modal-gm" class="modal">
-    <div class="modal-content" style="border-color: #a855f7;">
-        <h3 style="color: #c084fc; margin-top: 0; font-family: 'Press Start 2P', cursive; font-size: 13px;">👑 GAME MASTER CONSOLE</h3>
-        <p style="font-size: 15px; color: #aaa;">Panel rahasia developer untuk testing dan debugging game.</p>
+    <div class="modal-content glass-panel">
+        <h3 style="color: #c084fc; margin-top: 0; font-size: 18px;">👑 GAME MASTER CONSOLE</h3>
+        <p style="font-size: 14px; color: #aaa;">Panel rahasia developer untuk testing dan debugging game.</p>
         
-        <div style="display: flex; flex-direction: column; gap: 10px; margin: 20px 0;">
+        <!-- DEV TOOLS TESTER LEVEL -->
+        <div style="background: rgba(0,0,0,0.4); border: 1px solid #c084fc; padding: 15px; border-radius: 12px; margin: 15px 0;">
+            <label style="font-weight: bold; color: #c084fc; display: block; margin-bottom: 8px;">⭐ TEST LEVEL PROFILE (1 - 100):</label>
+            <div style="display: flex; gap: 10px; align-items: center; justify-content: center;">
+                <input type="range" id="gm-level-slider" min="1" max="100" value="1" style="flex-grow:1; accent-color: #c084fc;" oninput="document.getElementById('gm-lvl-val').innerText = this.value">
+                <span id="gm-lvl-val" style="font-size: 18px; font-weight: bold; width: 35px; color: #00f3ff;">1</span>
+                <button class="btn-gm-purple" onclick="gmSetCustomLevel()" style="padding: 8px 14px; font-size: 10px; margin: 0;">SET LEVEL</button>
+            </div>
+            <div style="font-size: 12px; color: #aaa; margin-top: 6px;">* Ubah level ini untuk melihat langsung efek badge dan warna animasi per level!</div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px; margin: 15px 0;">
             <button class="btn-primary" onclick="gmAddCoins()">💰 TAMBAH +100.000 KOIN</button>
             <button class="btn-green" onclick="gmUnlockAll()">🔓 UNLOCK ALL ITEMS (Semua Border & Skin Toko)</button>
-            <button class="btn-secondary" onclick="gmMaxLevel()">⭐ MAX LEVEL (Level 100)</button>
+            <button class="btn-secondary" onclick="gmMaxLevel()">⭐ INSTANT MAX LEVEL (Level 100)</button>
             <button class="btn-shop" onclick="gmResetData()">⚠️ RESET PROFILE TO DEFAULT</button>
         </div>
 
@@ -531,15 +530,15 @@
 
 <!-- MODAL TOKO -->
 <div id="modal-shop" class="modal">
-    <div class="modal-content">
-        <h3 style="color: #ffd700; margin-top: 0; font-family: 'Press Start 2P', cursive; font-size: 12px;">🛒 TOKO CUSTOMIZATION</h3>
-        <div style="font-size: 20px; margin-bottom: 12px;">Koin Kamu: <img src="star.png" class="coin-icon" alt="Coin"> <b id="shop-coin-display" class="coin-text">0</b></div>
+    <div class="modal-content glass-panel">
+        <h3 style="color: #00f3ff; margin-top: 0; font-size: 18px;">🛒 TOKO CUSTOMIZATION</h3>
+        <div style="font-size: 18px; margin-bottom: 12px;">Koin Kamu: <img src="star.png" class="coin-icon" alt="Coin"> <b id="shop-coin-display" class="coin-text">0</b></div>
         
         <div class="shop-tabs">
-            <button class="btn-primary" onclick="switchShopTab('avatars')" id="btn-tab-avatars" style="font-size: 8px;">Avatar Hero</button>
-            <button class="btn-dark" onclick="switchShopTab('borders')" id="btn-tab-borders" style="font-size: 8px;">Avatar Border 🖼️</button>
-            <button class="btn-dark" onclick="switchShopTab('backgrounds')" id="btn-tab-backgrounds" style="font-size: 8px;">BG Profil</button>
-            <button class="btn-dark" onclick="switchShopTab('cards')" id="btn-tab-cards" style="font-size: 8px;">Desain Kartu 🃏</button>
+            <button class="btn-primary" onclick="switchShopTab('avatars')" id="btn-tab-avatars" style="font-size: 10px;">Avatar Hero</button>
+            <button class="btn-dark" onclick="switchShopTab('borders')" id="btn-tab-borders" style="font-size: 10px;">Avatar Border 🖼️</button>
+            <button class="btn-dark" onclick="switchShopTab('backgrounds')" id="btn-tab-backgrounds" style="font-size: 10px;">BG Profil</button>
+            <button class="btn-dark" onclick="switchShopTab('cards')" id="btn-tab-cards" style="font-size: 10px;">Desain Kartu 🃏</button>
         </div>
 
         <div id="shop-avatars-grid" class="shop-grid"></div>
@@ -555,15 +554,15 @@
 
 <!-- MODAL PATCH NOTES / UPDATE LOG -->
 <div id="modal-patch" class="modal">
-    <div class="modal-content">
-        <h3 style="color: #ffd700; margin-top: 0; font-family: 'Press Start 2P', cursive; font-size: 12px;">📜 PATCH NOTES & UPDATE LOG</h3>
+    <div class="modal-content glass-panel">
+        <h3 style="color: #00f3ff; margin-top: 0; font-size: 18px;">📜 PATCH NOTES & UPDATE LOG</h3>
         
         <div class="patch-item">
-            <div class="patch-ver">VERSION 2.0 (ENGLISH RANK TITLES & SHINE ANIMATIONS)</div>
+            <div class="patch-ver">VERSION 2.1 (MODERN CYBER NEON MATRIX)</div>
             <ul class="patch-list">
-                <li>🌐 <b>English Rank Names</b>: Nama rank diubah ke Bahasa Inggris (Wood, Iron, Bronze, Silver, Gold, Platinum, Emerald, Ruby, Diamond, MAX).</li>
-                <li>✨ <b>Animated Shine Sweep</b>: Rank Gold hingga Aurora memiliki efek cahaya kilap yang melintas halus tanpa emoji!</li>
-                <li>🔤 <b>Responsive Player Names</b>: Penataan font-size nama pemain in-game agar muat dan tidak pernah terpotong.</li>
+                <li>🌌 <b>Digital Matrix Rain BG</b>: Latar animasi hujan biner digital neon biru dengan simbol kartu ♠ ♥ ♣ ♦ melayang interaktif.</li>
+                <li>🔮 <b>Glassmorphism UI</b>: Frame semi-glass modern transparan dengan font TT Runs / Clean Modern.</li>
+                <li>👑 <b>Dev Level Tester</b>: Developer Console kini memiliki slider bebas set level (1-100) untuk uji coba efek rank.</li>
             </ul>
         </div>
 
@@ -575,9 +574,9 @@
 
 <!-- MODAL KONFIRMASI PEMBELIAN -->
 <div id="modal-confirm" class="modal">
-    <div class="modal-content" style="max-width: 420px; border-color: #facc15;">
-        <h3 style="color: #ffd700; margin-top: 0; font-family: 'Press Start 2P', cursive; font-size: 10px;">KONFIRMASI PEMBELIAN</h3>
-        <p id="confirm-item-text" style="font-size: 18px; margin: 15px 0; color: #fff;"></p>
+    <div class="modal-content glass-panel" style="max-width: 420px;">
+        <h3 style="color: #00f3ff; margin-top: 0; font-size: 16px;">KONFIRMASI PEMBELIAN</h3>
+        <p id="confirm-item-text" style="font-size: 16px; margin: 15px 0; color: #fff;"></p>
         <div>
             <button class="btn-green" id="btn-confirm-yes">YA, BELI!</button>
             <button class="btn-shop" onclick="closeConfirmModal()">BATAL</button>
@@ -587,11 +586,11 @@
 
 <!-- MODAL PENGATURAN -->
 <div id="modal-settings" class="modal">
-    <div class="modal-content">
-        <h3 style="color: #ffd700; margin-top: 0; font-family: 'Press Start 2P', cursive; font-size: 12px;">PENGATURAN GAME</h3>
+    <div class="modal-content glass-panel">
+        <h3 style="color: #00f3ff; margin-top: 0; font-size: 18px;">PENGATURAN GAME</h3>
         
-        <div class="input-group" style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px dashed #ffd700;">
-            <label style="font-weight: bold; color: #ffd700;">🔊 Volume Sound Effect:</label>
+        <div class="input-group" style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 10px; border: 1px solid rgba(0,243,255,0.3);">
+            <label style="font-weight: bold; color: #00f3ff;">🔊 Volume Sound Effect:</label>
             <div class="slider-container" style="margin-top: 6px;">
                 <input type="range" id="sfx-volume-slider" min="0" max="1" step="0.05" value="0.5" oninput="updateSfxVolume(this.value)">
                 <span id="sfx-vol-label" style="font-size: 16px; width: 45px; font-weight: bold;">50%</span>
@@ -599,11 +598,11 @@
         </div>
 
         <div class="input-group">
-            <label style="font-weight: bold; color: #ffd700;">🎯 Target Caps Poin (500 - 2000):</label>
+            <label style="font-weight: bold; color: #00f3ff;">🎯 Target Caps Poin (500 - 2000):</label>
             <input type="number" id="target-input" value="1000" min="500" max="2000">
         </div>
 
-        <div style="border-top: 1px solid #3d7a46; margin: 12px 0 8px; padding-top: 8px; font-weight: bold; color: #ffd700; text-align: left; font-size: 16px;">🤖 Nama Bot (Maks 15 Karakter):</div>
+        <div style="border-top: 1px solid rgba(0,243,255,0.3); margin: 12px 0 8px; padding-top: 8px; font-weight: bold; color: #00f3ff; text-align: left; font-size: 15px;">🤖 Nama Bot (Maks 15 Karakter):</div>
         <div class="input-group"><label for="input-p1">Bot 1:</label><input type="text" id="input-p1" maxlength="15" oninput="sanitizeNameInput(this)"></div>
         <div class="input-group"><label for="input-p2">Bot 2:</label><input type="text" id="input-p2" maxlength="15" oninput="sanitizeNameInput(this)"></div>
         <div class="input-group"><label for="input-p3">Bot 3:</label><input type="text" id="input-p3" maxlength="15" oninput="sanitizeNameInput(this)"></div>
@@ -616,6 +615,79 @@
 </div>
 
 <script>
+    /* --- DIGITAL MATRIX NEON RAIN CANVAS ANIMATION --- */
+    const canvas = document.getElementById('matrix-canvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    const suitSymbols = ['♠', '♥', '♣', '♦'];
+    const columns = Math.floor(window.innerWidth / 28);
+    const drops = [];
+
+    for (let i = 0; i < columns; i++) {
+        drops[i] = {
+            y: Math.random() * -1000,
+            speed: 2 + Math.random() * 3.5,
+            chars: []
+        };
+        const len = 12 + Math.floor(Math.random() * 10);
+        for (let j = 0; j < len; j++) {
+            drops[i].chars.push({
+                char: Math.random() < 0.7 ? (Math.random() < 0.5 ? '0' : '1') : suitSymbols[Math.floor(Math.random() * suitSymbols.length)],
+                isSuit: false
+            });
+        }
+        drops[i].chars[drops[i].chars.length - 1] = {
+            char: suitSymbols[Math.floor(Math.random() * suitSymbols.length)],
+            isSuit: true
+        };
+    }
+
+    function drawMatrix() {
+        ctx.fillStyle = 'rgba(3, 7, 18, 0.2)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.font = '16px "Rajdhani", monospace';
+
+        for (let i = 0; i < drops.length; i++) {
+            const drop = drops[i];
+            const x = i * 28;
+
+            for (let j = 0; j < drop.chars.length; j++) {
+                const item = drop.chars[j];
+                const charY = drop.y - (drop.chars.length - j) * 20;
+
+                if (charY > 0 && charY < canvas.height) {
+                    if (j === drop.chars.length - 1) {
+                        ctx.fillStyle = '#00f3ff';
+                        ctx.shadowColor = '#00f3ff';
+                        ctx.shadowBlur = 12;
+                        ctx.font = '20px Arial';
+                    } else {
+                        ctx.fillStyle = 'rgba(0, 243, 255, 0.45)';
+                        ctx.shadowBlur = 0;
+                        ctx.font = '15px "Rajdhani", monospace';
+                    }
+                    ctx.fillText(item.char, x, charY);
+                }
+            }
+
+            drop.y += drop.speed;
+
+            if (drop.y - drop.chars.length * 20 > canvas.height) {
+                drop.y = Math.random() * -200;
+                drop.speed = 2 + Math.random() * 3.5;
+            }
+        }
+        requestAnimationFrame(drawMatrix);
+    }
+    drawMatrix();
+
     /* --- AUDIO SFX SYNTHESIZER --- */
     let sfxVolume = 0.5;
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
@@ -768,7 +840,7 @@
         if (userProfile.isGm) {
             nameContainer.innerHTML = `<span class="gm-nickname"><img src="gm_logo.png" class="gm-badge-logo" alt="GM"> ${userProfile.name}</span>`;
         } else {
-            nameContainer.innerHTML = `<span id="user-display-name" style="color: #ffd700;">${userProfile.name}</span>`;
+            nameContainer.innerHTML = `<span id="user-display-name" style="color: #00f3ff;">${userProfile.name}</span>`;
         }
 
         document.getElementById('player-name-input').value = userProfile.name;
@@ -783,7 +855,7 @@
                 costInfoEl.style.color = "#4ade80";
             } else {
                 costInfoEl.innerText = "* Biaya ganti nama berikutnya: 2.000 Koin";
-                costInfoEl.style.color = "#ffd700";
+                costInfoEl.style.color = "#00f3ff";
             }
         }
 
@@ -800,7 +872,7 @@
             bPreview.style.display = 'none';
         }
 
-        document.getElementById('home-profile-card').className = `profile-card ${userProfile.equippedBgClass}`;
+        document.getElementById('home-profile-card').className = `profile-card ${userProfile.equippedBgClass} glass-panel`;
         document.body.className = userProfile.equippedCardTheme || "theme-classic";
     }
 
@@ -839,6 +911,16 @@
     }
 
     function closeGmModal() { document.getElementById('modal-gm').style.display = 'none'; }
+
+    function gmSetCustomLevel() {
+        const customLvl = parseInt(document.getElementById('gm-level-slider').value);
+        if (!isNaN(customLvl) && customLvl >= 1 && customLvl <= 100) {
+            userProfile.level = customLvl;
+            userProfile.exp = 0;
+            playSound('levelup'); saveProfileData();
+            alert(`👑 GM CHEAT: Level profil berhasil diubah ke Level ${customLvl}!`);
+        }
+    }
 
     function gmAddCoins() {
         userProfile.coins += 100000;
@@ -940,7 +1022,6 @@
     }
 
     function renderShopItems() {
-        // Avatars
         const avGrid = document.getElementById('shop-avatars-grid'); avGrid.innerHTML = '';
         shopAvatars.forEach(item => {
             const owned = userProfile.ownedAvatars.includes(item.url);
@@ -953,7 +1034,6 @@
             avGrid.appendChild(div);
         });
 
-        // Borders
         const bdGrid = document.getElementById('shop-borders-grid'); bdGrid.innerHTML = '';
         shopBorders.forEach(item => {
             const owned = userProfile.ownedBorders.includes(item.url);
@@ -972,7 +1052,6 @@
             bdGrid.appendChild(div);
         });
 
-        // Backgrounds
         const bgGrid = document.getElementById('shop-backgrounds-grid'); bgGrid.innerHTML = '';
         shopBackgrounds.forEach(item => {
             const owned = userProfile.ownedBgs.includes(item.class);
@@ -986,7 +1065,6 @@
             bgGrid.appendChild(div);
         });
 
-        // Cards (FIXED: Each card preview strictly maintains its own theme!)
         const cardGrid = document.getElementById('shop-cards-grid'); cardGrid.innerHTML = '';
         shopCards.forEach(item => {
             const owned = userProfile.ownedCardThemes.includes(item.themeClass);
@@ -1363,8 +1441,8 @@
                     </div>
                     <div style="flex-grow: 1; overflow: hidden;">
                         ${displayNameHtml}
-                        <div style="font-size:12px; color:#aaa; margin-top:2px;">Lvl ${idx === 0 ? userProfile.level : 1} ${renderLevelBadge(idx === 0 ? userProfile.level : 1)}</div>
-                        <span style="font-size:14px;">Poin: <b style="${scoreColor}">${p.score}</b> / ${targetScore}</span>
+                        <div style="font-size:11px; color:#aaa; margin-top:2px;">Lvl ${idx === 0 ? userProfile.level : 1} ${renderLevelBadge(idx === 0 ? userProfile.level : 1)}</div>
+                        <span style="font-size:13px;">Poin: <b style="${scoreColor}">${p.score}</b> / ${targetScore}</span>
                     </div>
                 </div>`;
         });
@@ -1417,11 +1495,11 @@
             if (opp.submittedGroups.length > 0) {
                 hasOpponentMeld = true;
                 const pBox = document.createElement('div');
-                pBox.style.cssText = 'background: rgba(0,0,0,0.3); border:1px solid #3d7a46; border-radius:6px; padding:4px 8px; display:flex; align-items:center; gap:6px;';
-                pBox.innerHTML = `<img src="${opp.avatar}" style="width:22px; height:22px; border-radius:50%;"><b style="color:#ffd700;" class="player-name-text">${opp.name}:</b> `;
+                pBox.style.cssText = 'background: rgba(0,0,0,0.3); border:1px solid rgba(0,243,255,0.3); border-radius:6px; padding:4px 8px; display:flex; align-items:center; gap:6px;';
+                pBox.innerHTML = `<img src="${opp.avatar}" style="width:22px; height:22px; border-radius:50%;"><b style="color:#00f3ff;" class="player-name-text">${opp.name}:</b> `;
                 opp.submittedGroups.forEach(group => {
                     const gDiv = document.createElement('span');
-                    gDiv.style.cssText = 'display:inline-block; border:1px dashed #4caf50; padding:2px; margin:2px; border-radius:4px; background: rgba(0,0,0,0.2);';
+                    gDiv.style.cssText = 'display:inline-block; border:1px dashed #38bdf8; padding:2px; margin:2px; border-radius:4px; background: rgba(0,0,0,0.2);';
                     group.forEach(c => gDiv.appendChild(createCardElement(c, '', null, true)));
                     pBox.appendChild(gDiv);
                 });
@@ -1437,7 +1515,7 @@
             subContainer.innerHTML = '';
             gameState.players[0].submittedGroups.forEach(group => {
                 const gDiv = document.createElement('div');
-                gDiv.style.cssText = 'display:inline-block; border:1px dashed #ffd700; padding:3px; margin:2px; border-radius:6px; background: rgba(0,0,0,0.2);';
+                gDiv.style.cssText = 'display:inline-block; border:1px dashed #00f3ff; padding:3px; margin:2px; border-radius:6px; background: rgba(0,0,0,0.2);';
                 group.forEach(c => gDiv.appendChild(createCardElement(c, '', null, true)));
                 subContainer.appendChild(gDiv);
             });
@@ -1718,7 +1796,7 @@
 
     function cardChipHtml(c, isCombo) {
         const isRed = (c.suit === '♥' || c.suit === '♦'); const isFace = isRoyalCard(c.value);
-        return `<span style="display:inline-block;color:${isRed ? '#c1152e' : '#111'};background:${isFace ? '#fdf5e6' : '#fff'};border:2px solid ${isCombo ? '#2e7d32' : '#d32f2f'};padding:1px 4px;border-radius:4px;font-weight:bold;font-size:14px;margin:1px;">${c.value}${c.suit}</span>`;
+        return `<span style="display:inline-block;color:${isRed ? '#e11d48' : '#111'};background:${isFace ? '#fdf5e6' : '#fff'};border:2px solid ${isCombo ? '#16a34a' : '#e11d48'};padding:1px 4px;border-radius:4px;font-weight:bold;font-size:14px;margin:1px;">${c.value}${c.suit}</span>`;
     }
 
     function renderPlayerFinalCards(hand) {
@@ -1733,25 +1811,25 @@
         let expGained = Math.max(0, humanScoreDelta); let coinsGained = 20;
         if (closerIdx === 0) coinsGained += 100 + Math.max(0, Math.floor(humanScoreDelta / 2));
         addExpAndCoins(expGained, coinsGained);
-        return `<div style="background: rgba(255,215,0,0.15); border:1px solid #ffd700; padding:8px; border-radius:8px; margin-top:8px; font-size:18px;">
+        return `<div style="background: rgba(0,243,255,0.15); border:1px solid #00f3ff; padding:8px; border-radius:10px; margin-top:8px; font-size:16px;">
             🎁 <b>HADIAH KAMU:</b> ⭐ <b>+${expGained} EXP</b> | <img src="star.png" class="coin-icon" alt="Coin"> <b>+${coinsGained} COIN</b>
         </div>`;
     }
 
     function endRoundByClose(closerIdx, melds, closerScoreRes, closingCard, isFromDeck, feederPlayer, feederPen, thrownTriggerCard) {
         playSound('dropdown'); gameState.phase = 'ended'; const closer = gameState.players[closerIdx];
-        let html = `<p style="margin:4px 0; font-size:18px;">🏁 <b>${closer.name}</b> TUTUP TANGAN! (<b>+${closerScoreRes.delta}</b> poin).</p>`;
+        let html = `<p style="margin:4px 0; font-size:16px;">🏁 <b>${closer.name}</b> TUTUP TANGAN! (<b>+${closerScoreRes.delta}</b> poin).</p>`;
         if (feederPlayer) {
             const cardName = thrownTriggerCard ? `${thrownTriggerCard.value}${thrownTriggerCard.suit}` : closingCard.value;
-            html += `<div style="background:#d32f2f; color:white; padding:6px; border-radius:5px; margin:6px 0; font-size:16px; font-weight:bold;">💥 UMPAN PAHIT! ${feederPlayer.name} membuang ${cardName}! Penalti -${feederPen} poin!</div>`;
+            html += `<div style="background:#e11d48; color:white; padding:6px; border-radius:6px; margin:6px 0; font-size:15px; font-weight:bold;">💥 UMPAN PAHIT! ${feederPlayer.name} membuang ${cardName}! Penalti -${feederPen} poin!</div>`;
         }
-        html += `<table style="width:100%;border-collapse:collapse;margin-top:8px;text-align:left;font-size:16px;"><tr style="border-bottom:1px solid #ffd700;"><th>Pemain</th><th>Poin</th><th>Total</th><th>Kartu Tangan</th></tr>`;
+        html += `<table style="width:100%;border-collapse:collapse;margin-top:8px;text-align:left;font-size:15px;"><tr style="border-bottom:1px solid #00f3ff;"><th>Pemain</th><th>Poin</th><th>Total</th><th>Kartu Tangan</th></tr>`;
         gameState.players.forEach((p, idx) => {
             let pointStr = ""; let sRes = null;
             if (idx === closerIdx) sRes = closerScoreRes;
             else sRes = (isFromDeck && closer.submittedGroups.length === 0) ? { delta: 0 } : addScoreWithCut(p, scorePartition(p.hand).total);
             pointStr = (sRes.delta >= 0 ? "+" : "") + sRes.delta;
-            html += `<tr style="border-bottom:1px dashed #555;"><td style="padding:6px 0; font-weight:bold;"><img src="${p.avatar}" style="width:20px;height:20px;border-radius:50%;vertical-align:middle;"> ${p.name}</td><td><b>${pointStr}</b></td><td style="font-size:18px;"><b>${p.score}</b></td><td style="width:50%;">${renderPlayerFinalCards(p.hand)}</td></tr>`;
+            html += `<tr style="border-bottom:1px dashed rgba(0,243,255,0.3);"><td style="padding:6px 0; font-weight:bold;"><img src="${p.avatar}" style="width:20px;height:20px;border-radius:50%;vertical-align:middle;"> ${p.name}</td><td><b>${pointStr}</b></td><td style="font-size:16px;"><b>${p.score}</b></td><td style="width:50%;">${renderPlayerFinalCards(p.hand)}</td></tr>`;
         });
         html += `</table>` + calculateRoundRewards(closerIdx);
         document.getElementById('modal-title').innerText = 'Ronde Selesai!';
@@ -1761,10 +1839,10 @@
 
     function endRoundDeckEmpty() {
         playSound('dropdown'); gameState.phase = 'ended';
-        let html = `<table style="width:100%;border-collapse:collapse;text-align:left;font-size:16px;"><tr style="border-bottom:1px solid #ffd700;"><th>Pemain</th><th>Poin</th><th>Total</th><th>Kartu Tangan</th></tr>`;
+        let html = `<table style="width:100%;border-collapse:collapse;text-align:left;font-size:15px;"><tr style="border-bottom:1px solid #00f3ff;"><th>Pemain</th><th>Poin</th><th>Total</th><th>Kartu Tangan</th></tr>`;
         gameState.players.forEach(p => {
             const sRes = addScoreWithCut(p, scorePartition(p.hand).total);
-            html += `<tr style="border-bottom:1px dashed #555;"><td style="padding:6px 0; font-weight:bold;"><img src="${p.avatar}" style="width:20px;height:20px;border-radius:50%;vertical-align:middle;"> ${p.name}</td><td><b>${(sRes.delta >= 0 ? "+" : "") + sRes.delta}</b></td><td style="font-size:18px;"><b>${p.score}</b></td><td style="width:50%;">${renderPlayerFinalCards(p.hand)}</td></tr>`;
+            html += `<tr style="border-bottom:1px dashed rgba(0,243,255,0.3);"><td style="padding:6px 0; font-weight:bold;"><img src="${p.avatar}" style="width:20px;height:20px;border-radius:50%;vertical-align:middle;"> ${p.name}</td><td><b>${(sRes.delta >= 0 ? "+" : "") + sRes.delta}</b></td><td style="font-size:16px;"><b>${p.score}</b></td><td style="width:50%;">${renderPlayerFinalCards(p.hand)}</td></tr>`;
         });
         html += `</table>` + calculateRoundRewards(-1);
         document.getElementById('modal-title').innerText = 'Ronde Selesai (Dek Habis)';
