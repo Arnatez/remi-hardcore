@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Remi Hardcore - Online Game Retro Edition v1.4 (Protected GM Mode)</title>
+    <title>Remi Hardcore - Online Game Retro Edition v1.5 (Strict Rules & Dynamic Pips)</title>
     <!-- Google Fonts Gaming -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <style>
@@ -161,7 +161,7 @@
             border: 1px solid #fff; animation: bounceBubble 0.6s infinite alternate; z-index: 10;
         }
         @keyframes bounceBubble { from { transform: translateY(0); } to { transform: translateY(-3px); } }
-        .player-name-text { font-weight: bold; font-size: 18px; color: #fff; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .player-name-text { font-weight: bold; font-size: 18px; color: #fff; max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
         #table-area {
             display: flex; justify-content: space-around; align-items: center;
@@ -170,7 +170,7 @@
             flex-wrap: wrap; border: 6px solid #4a2810; box-shadow: inset 0 0 25px rgba(0,0,0,0.8); gap: 15px;
         }
 
-        /* CUSTOM CARD DESIGNS */
+        /* CUSTOM CARD DESIGNS WITH DYNAMIC PIPS GRID */
         .card {
             display: inline-block; width: 58px; height: 85px; background: #ffffff; color: #111111;
             border-radius: 6px; font-weight: bold; margin: 4px; cursor: pointer;
@@ -225,13 +225,22 @@
         .card.drag-over-left { transform: translateX(-12px) translateY(-5px); }
         .card.drag-over-right { transform: translateX(12px) translateY(-5px); }
 
-        .card-corner { position: absolute; font-size: 12px; line-height: 1; text-align: center; font-family: Arial, sans-serif; z-index: 2; }
-        .card-corner.top-left { top: 4px; left: 4px; }
-        .card-corner.bottom-right { bottom: 4px; right: 4px; transform: rotate(180deg); }
-        .card-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 26px; line-height: 1; }
+        .card-corner { position: absolute; font-size: 11px; line-height: 1; text-align: center; font-family: Arial, sans-serif; z-index: 2; }
+        .card-corner.top-left { top: 3px; left: 3px; }
+        .card-corner.bottom-right { bottom: 3px; right: 3px; transform: rotate(180deg); }
+        .card-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 24px; line-height: 1; }
+        
+        /* PIPS GRID UNTUK ANGKAKARTU (2-10) */
+        .pips-container {
+            position: absolute; top: 16px; left: 12px; right: 12px; bottom: 16px;
+            display: flex; flex-wrap: wrap; align-content: space-between; justify-content: space-between;
+            pointer-events: none;
+        }
+        .pip-icon { width: 33%; height: 25%; display: flex; align-items: center; justify-content: center; font-size: 10px; line-height: 1; }
+
         .card.face-card { border: 1.5px solid #b8860b; }
         .card.face-card .card-face-avatar {
-            width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #ffd700;
+            width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid #ffd700;
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             box-shadow: 0 2px 4px rgba(0,0,0,0.3); background: #111;
         }
@@ -332,9 +341,14 @@
         </div>
     </div>
 
-    <div class="input-group" style="margin-bottom: 15px;">
-        <label for="player-name-input" style="text-align: center;">Ubah Nama Profil (Maks 10 Karakter):</label>
-        <input type="text" id="player-name-input" value="Kamu" maxlength="10" style="text-align: center;" oninput="updateProfileName(this.value)">
+    <!-- UPDATE MAKSIMAL 15 KARAKTER & BIAYA GANTI NAMA -->
+    <div class="input-group" style="margin-bottom: 15px; text-align: center;">
+        <label for="player-name-input" style="text-align: center;">Ubah Nama Profil (Maks 15 Karakter):</label>
+        <div style="display: flex; gap: 8px; justify-content: center; max-width: 420px; margin: 0 auto;">
+            <input type="text" id="player-name-input" value="Kamu" maxlength="15" style="text-align: center; flex-grow: 1;" oninput="sanitizeNameInput(this)">
+            <button class="btn-primary" onclick="submitNameChange()" style="font-size: 8px; padding: 8px 12px; margin: 0;">SIMPAN NAMA</button>
+        </div>
+        <div id="name-cost-info" style="font-size: 13px; color: #4ade80; margin-top: 4px;">* Ganti nama pertama GRATIS</div>
     </div>
 
     <button class="menu-btn btn-primary" onclick="startVsBotMode()">🤖 MAIN VS BOT (OFFLINE)</button>
@@ -462,10 +476,12 @@
         <h3 style="color: #ffd700; margin-top: 0; font-family: 'Press Start 2P', cursive; font-size: 12px;">📜 PATCH NOTES & UPDATE LOG</h3>
         
         <div class="patch-item">
-            <div class="patch-ver">VERSION 1.4 (SECURITY UPDATE)</div>
+            <div class="patch-ver">VERSION 1.5 (GAMEPLAY & STRICT RULES UPDATE)</div>
             <ul class="patch-list">
-                <li>🔒 <b>Proteksi GM Tools</b>: Tombol Dev Tools kini dilindungi password rahasia GM.</li>
-                <li>👑 <b>Game Master Console</b>: Fitur Cheat Tambah Koin & Unlock All Item hanya dapat diakses oleh Developer resmi.</li>
+                <li>🎴 <b>Visual Dynamic Pips</b>: Kartu angka (2-10) kini menampilkan jumlah daun/pips yang presisi sesuai nilainya!</li>
+                <li>👑 <b>Aturan Kombinasi As & Kerajaan Baru</b>: As bersifat standalone (hanya dengan sesama As). Kerajaan (J, Q, K) hanya bisa dikombinasikan antar sesama Kerajaan.</li>
+                <li>⚡ <b>Aturan Ambil Buangan Diperketat</b>: Pengambilan kartu buangan pertama di tiap ronde WAJIB menjadi Seri/Four-of-a-Kind. Tris baru bisa diambil setelah memiliki minimal 1 Seri/Four-of-a-Kind.</li>
+                <li>✏️ <b>Perpanjang Nama & Biaya</b>: Nama maks 15 karakter. Gratis ganti nama pertama kali, selanjutnya 2.000 Koin per ganti nama.</li>
             </ul>
         </div>
 
@@ -505,10 +521,10 @@
             <input type="number" id="target-input" value="1000" min="500" max="2000">
         </div>
 
-        <div style="border-top: 1px solid #3d7a46; margin: 12px 0 8px; padding-top: 8px; font-weight: bold; color: #ffd700; text-align: left; font-size: 16px;">🤖 Nama Bot (Maks 10 Karakter):</div>
-        <div class="input-group"><label for="input-p1">Bot 1:</label><input type="text" id="input-p1" maxlength="10" oninput="sanitizeNameInput(this)"></div>
-        <div class="input-group"><label for="input-p2">Bot 2:</label><input type="text" id="input-p2" maxlength="10" oninput="sanitizeNameInput(this)"></div>
-        <div class="input-group"><label for="input-p3">Bot 3:</label><input type="text" id="input-p3" maxlength="10" oninput="sanitizeNameInput(this)"></div>
+        <div style="border-top: 1px solid #3d7a46; margin: 12px 0 8px; padding-top: 8px; font-weight: bold; color: #ffd700; text-align: left; font-size: 16px;">🤖 Nama Bot (Maks 15 Karakter):</div>
+        <div class="input-group"><label for="input-p1">Bot 1:</label><input type="text" id="input-p1" maxlength="15" oninput="sanitizeNameInput(this)"></div>
+        <div class="input-group"><label for="input-p2">Bot 2:</label><input type="text" id="input-p2" maxlength="15" oninput="sanitizeNameInput(this)"></div>
+        <div class="input-group"><label for="input-p3">Bot 3:</label><input type="text" id="input-p3" maxlength="15" oninput="sanitizeNameInput(this)"></div>
 
         <div style="margin-top: 20px;">
             <button class="btn-green" onclick="saveAllSettings()">Simpan</button>
@@ -580,11 +596,11 @@
         if (e.target.tagName === 'BUTTON' || e.target.classList.contains('menu-btn')) playSound('click');
     });
 
-    function sanitizeNameInput(el) { el.value = el.value.replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 10); }
+    function sanitizeNameInput(el) { el.value = el.value.replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 15); }
 
     /* --- USER PROFILE & DATA --- */
     let userProfile = {
-        name: "Kamu", level: 1, exp: 0, coins: 0, isGm: false,
+        name: "Kamu", level: 1, exp: 0, coins: 0, isGm: false, hasChangedName: false,
         equippedAvatar: "https://api.dicebear.com/7.x/bottts/svg?seed=King",
         equippedBorderUrl: "",
         equippedBgClass: "bg-volcano",
@@ -634,7 +650,32 @@
         saveProfileData();
     }
 
-    function updateProfileName(val) { userProfile.name = val ? val.slice(0, 10) : "Kamu"; saveProfileData(); }
+    function submitNameChange() {
+        const val = document.getElementById('player-name-input').value.trim();
+        if (!val) return;
+        
+        if (!userProfile.hasChangedName) {
+            userProfile.name = val.slice(0, 15);
+            userProfile.hasChangedName = true;
+            saveProfileData();
+            alert("✅ Nama profil berhasil diperbarui!");
+        } else {
+            const RENAME_COST = 2000;
+            if (userProfile.coins < RENAME_COST) {
+                alert(`🚨 Koin kamu tidak cukup! Mengubah nama profil butuh 🪙 ${RENAME_COST.toLocaleString()} Koin.`);
+                document.getElementById('player-name-input').value = userProfile.name;
+                return;
+            }
+            if (confirm(`Ubah nama profil menjadi "${val}" seharga 🪙 ${RENAME_COST.toLocaleString()} Koin?`)) {
+                userProfile.coins -= RENAME_COST;
+                userProfile.name = val.slice(0, 15);
+                saveProfileData();
+                alert("✅ Nama profil berhasil diubah!");
+            } else {
+                document.getElementById('player-name-input').value = userProfile.name;
+            }
+        }
+    }
 
     function updateProfileUI() {
         document.getElementById('user-display-name').innerText = userProfile.name;
@@ -643,6 +684,17 @@
         document.getElementById('user-badge-container').innerHTML = renderLevelBadge(userProfile.level);
         document.getElementById('user-coin-text').innerText = userProfile.coins.toLocaleString();
         
+        const costInfoEl = document.getElementById('name-cost-info');
+        if (costInfoEl) {
+            if (!userProfile.hasChangedName) {
+                costInfoEl.innerText = "* Ganti nama pertama GRATIS";
+                costInfoEl.style.color = "#4ade80";
+            } else {
+                costInfoEl.innerText = "* Biaya ganti nama berikutnya: 🪙 2.000 Koin";
+                costInfoEl.style.color = "#ffd700";
+            }
+        }
+
         const reqExp = getExpForNextLevel(userProfile.level);
         const expPct = Math.min(100, (userProfile.exp / reqExp) * 100);
         document.getElementById('user-exp-fill').style.width = expPct + "%";
@@ -661,19 +713,18 @@
     }
 
     /* --- GAME MASTER (GM) SECURITY & FUNCTIONS --- */
-    const GM_PASSWORD_SECRET = "gm123"; // GANTI KATA SANDI RAHASIA GM KAMU DI SINI!
+    const GM_PASSWORD_SECRET = "gm123"; // PASSWORD DEVELOPER
 
     function openGmModal() {
         const inputPassword = prompt("🔒 MASUKKAN PASSWORD GAME MASTER / DEVELOPER:");
-        
-        if (inputPassword === null) return; // Batal diklik
+        if (inputPassword === null) return;
 
         if (inputPassword === GM_PASSWORD_SECRET) {
             playSound('levelup');
             document.getElementById('modal-gm').style.display = 'flex';
         } else {
             playSound('bad');
-            alert("🚨 AKSES DITOLAK!\nPassword yang Anda masukkan salah. Halaman ini khusus untuk Game Master / Developer.");
+            alert("🚨 AKSES DITOLAK!\nPassword yang Anda masukkan salah.");
         }
     }
 
@@ -681,8 +732,7 @@
 
     function gmAddCoins() {
         userProfile.coins += 100000;
-        playSound('levelup');
-        saveProfileData();
+        playSound('levelup'); saveProfileData();
         alert("👑 GM CHEAT: Sukses menambah +100.000 Koin!");
     }
 
@@ -691,20 +741,18 @@
         userProfile.ownedBorders = shopBorders.map(b => b.url);
         userProfile.ownedBgs = shopBackgrounds.map(bg => bg.class);
         userProfile.ownedCardThemes = shopCards.map(c => c.themeClass);
-        playSound('levelup');
-        saveProfileData();
-        alert("👑 GM CHEAT: Semua Avatar, Border, Background & Tema Kartu BERHASIL DI-UNLOCK!");
+        playSound('levelup'); saveProfileData();
+        alert("👑 GM CHEAT: Semua Item Berhasil Di-Unlock!");
     }
 
     function gmMaxLevel() {
         userProfile.level = 100; userProfile.exp = 0; userProfile.isGm = true;
-        playSound('levelup');
-        saveProfileData();
-        alert("👑 GM CHEAT: Kamu kini Level 100 dengan Badge [GM DIRECTOR]!");
+        playSound('levelup'); saveProfileData();
+        alert("👑 GM CHEAT: Level 100 + GM Badge Aktif!");
     }
 
     function gmResetData() {
-        if (confirm("Reset seluruh progress ke awal (Level 1 & Koin 0)?")) {
+        if (confirm("Reset seluruh progress ke awal?")) {
             localStorage.removeItem('remi_user_profile');
             location.reload();
         }
@@ -940,8 +988,9 @@
     }
 
     function isWildCard(card) { return gameState.tuyul && card.value === gameState.tuyul.value; }
-    function pointValue(v) { return v === 'A' ? 15 : (['J','Q','K'].includes(v) ? 10 : 5); }
-    function penaltyValue(v) { return v === 'A' ? 150 : (['J','Q','K'].includes(v) ? 100 : 50); }
+    function isRoyalCard(v) { return ['J', 'Q', 'K'].includes(v); }
+    function pointValue(v) { return v === 'A' ? 15 : (isRoyalCard(v) ? 10 : 5); }
+    function penaltyValue(v) { return v === 'A' ? 150 : (isRoyalCard(v) ? 100 : 50); }
     
     function combinations(arr, k) {
         const res = [];
@@ -951,16 +1000,25 @@
         })(0, []); return res;
     }
     
+    /* LOGIKA BARU: KOMBINASI SET (TRIS & FOUR) */
     function isValidSet(cards) {
         if (cards.length < 3 || cards.length > 4) return false;
         const nonWild = cards.filter(c => !isWildCard(c));
         if (nonWild.length === 0) return true;
-        const v = nonWild[0].value;
-        if (!nonWild.every(c => c.value === v)) return false;
+
+        const firstVal = nonWild[0].value;
+        // Semua non-wild harus bernilai sama
+        if (!nonWild.every(c => c.value === firstVal)) return false;
+
+        // Tidak boleh ada suit/daun ganda
         const suitsUsed = nonWild.map(c => c.suit);
-        return new Set(suitsUsed).size === suitsUsed.length;
+        if (new Set(suitsUsed).size !== suitsUsed.length) return false;
+
+        // Jika Kerajaan, semua non-wild harus Kerajaan (sudah pasti terpenuhi)
+        return true;
     }
     
+    /* LOGIKA BARU: KOMBINASI SERI (RUN) */
     function isValidRun(cards) {
         if (cards.length < 3) return false;
         const nonWild = cards.filter(c => !isWildCard(c));
@@ -969,7 +1027,17 @@
         
         const suit = nonWild[0].suit;
         if (!nonWild.every(c => c.suit === suit)) return false;
-        
+
+        // ATURAN BARU: AS TIDAK BISA IKUT SERI
+        if (nonWild.some(c => c.value === 'A')) return false;
+
+        // CEK APAKAH SERI KERAJAAN (J, Q, K saja)
+        const isAllRoyal = nonWild.every(c => isRoyalCard(c.value));
+        const isAnyRoyal = nonWild.some(c => isRoyalCard(c.value));
+
+        // KERAJAAN TIDAK BISA DICAMPUR DENGAN ANGKA (10-J-Q ILLEGAL)
+        if (isAnyRoyal && !isAllRoyal) return false;
+
         const idxs = nonWild.map(c => values.indexOf(c.value)).sort((a, b) => a - b);
         if (new Set(idxs).size !== idxs.length) return false;
         
@@ -1032,11 +1100,26 @@
         return best;
     }
 
-    function cardCompletesMeld(hand, card) {
-        if (isWildCard(card)) return false; 
+    /* ATURAN BARU: CEK BISA AMBIL BUANGAN (FIRST DRAW HARUS SERI ATAU FOUR) */
+    function cardCompletesMeld(player, hand, card) {
+        if (isWildCard(card)) return false;
+        
+        // Cek apakah pemain sudah pernah submit Seri/Four sebelumnya di ronde ini
+        const hasSubmittedRunOrFour = player.submittedGroups.some(g => isValidRun(g) || (isValidSet(g) && g.length === 4));
+
         for (const size of [2, 3, 6]) {
             for (const combo of combinations(hand, size)) {
-                if (isValidGroup([card, ...combo])) return true;
+                const testGroup = [card, ...combo];
+                if (isValidGroup(testGroup)) {
+                    // Jika belum punya Seri/Four di meja, kombinasi yang dibentuk WAJIB Seri atau Four! (Tidak boleh Tris dulu)
+                    if (!hasSubmittedRunOrFour) {
+                        if (isValidRun(testGroup) || (isValidSet(testGroup) && testGroup.length === 4)) {
+                            return true;
+                        }
+                    } else {
+                        return true; // Sudah ada Seri/Four, boleh ambil untuk Tris
+                    }
+                }
             }
         }
         return false;
@@ -1101,16 +1184,31 @@
 
     function getCardClass(card, extra) {
         const isRed = (card.suit === '♥' || card.suit === '♦');
-        const isFace = ['J', 'Q', 'K'].includes(card.value);
+        const isFace = isRoyalCard(card.value);
         return `card ${isRed ? 'red' : ''} ${isFace ? 'face-card' : ''} ${extra || ''}`;
     }
 
+    /* ATURAN BARU: VISUAL PIPS DINAMIS SESUAI ANGKA KARTU (2-10) */
     function renderCardInner(card, isSmallScale = false) {
         if (isSmallScale) return `<div style="line-height:35px; text-align:center;">${card.value}${card.suit}</div>`;
-        let centerHtml = `<div class="card-center">${card.suit}</div>`;
-        if (['J', 'Q', 'K'].includes(card.value)) {
+        
+        let centerHtml = '';
+        const numVal = parseInt(card.value);
+
+        if (!isNaN(numVal) && numVal >= 2 && numVal <= 10) {
+            // Render Pips dinamis sebanyak angka kartu
+            let pipsHtml = '';
+            for (let i = 0; i < numVal; i++) {
+                pipsHtml += `<div class="pip-icon">${card.suit}</div>`;
+            }
+            centerHtml = `<div class="pips-container">${pipsHtml}</div>`;
+        } else if (isRoyalCard(card.value)) {
             centerHtml = `<img class="card-face-avatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=${card.value}Robot">`;
+        } else {
+            // Kartu As (A)
+            centerHtml = `<div class="card-center" style="font-size:28px;">${card.suit}</div>`;
         }
+
         return `<div class="card-corner top-left">${card.value}<br>${card.suit}</div>${centerHtml}<div class="card-corner bottom-right">${card.value}<br>${card.suit}</div>`;
     }
 
@@ -1182,7 +1280,7 @@
                 div.innerHTML = `<div style="font-size: 20px; line-height: 80px;">🔒</div>`;
                 dpEl.appendChild(div);
             } else {
-                const usable = humanDrawPhase && !isBlockedByTuyul && cardCompletesMeld(gameState.players[0].hand, card);
+                const usable = humanDrawPhase && !isBlockedByTuyul && cardCompletesMeld(gameState.players[0], gameState.players[0].hand, card);
                 const extra = (humanDrawPhase && (!usable || isBlockedByTuyul)) ? 'disabled' : '';
                 const div = createCardElement(card, extra, (usable && !isBlockedByTuyul) ? () => playerDrawDiscard(actualIdx) : null);
                 dpEl.appendChild(div);
@@ -1282,9 +1380,9 @@
         const p1 = document.getElementById('input-p1').value.trim();
         const p2 = document.getElementById('input-p2').value.trim();
         const p3 = document.getElementById('input-p3').value.trim();
-        if (p1) gameState.players[1].name = p1.slice(0, 10);
-        if (p2) gameState.players[2].name = p2.slice(0, 10);
-        if (p3) gameState.players[3].name = p3.slice(0, 10);
+        if (p1) gameState.players[1].name = p1.slice(0, 15);
+        if (p2) gameState.players[2].name = p2.slice(0, 15);
+        if (p3) gameState.players[3].name = p3.slice(0, 15);
         let val = parseInt(document.getElementById('target-input').value);
         if (!isNaN(val)) targetScore = val;
         closeSettingsModal(); updateUI();
@@ -1397,7 +1495,8 @@
         if (gameState.currentTurn !== 0 || gameState.phase !== 'discarding') return;
         if (gameState.selectedIndices.length < 3) { alert('Pilih minimal 3 kartu!'); return; }
         const hand = gameState.players[0].hand; const chosen = gameState.selectedIndices.map(i => hand[i]);
-        if (!isValidGroup(chosen)) { alert('Kombinasi tidak valid!'); return; }
+        
+        if (!isValidGroup(chosen)) { alert('Kombinasi tidak valid! (Ingat: As bersifat standalone & Kerajaan hanya bisa dengan Kerajaan).'); return; }
 
         if (gameState.drawnFromDiscardCard) {
             const includesDrawn = chosen.some(c => c.value === gameState.drawnFromDiscardCard.value && c.suit === gameState.drawnFromDiscardCard.suit);
@@ -1440,7 +1539,7 @@
         for (let i = 0; i < visible.length; i++) { if (isWildCard(visible[i])) { firstTuyulOffset = i; break; } }
 
         const usableFromDiscard = visible.map((c, i) => ({ c, visibleIdx: i, actualIdx: gameState.discardPile.length - visible.length + i }))
-                                         .filter(o => !isWildCard(o.c) && (firstTuyulOffset === -1 || o.visibleIdx > firstTuyulOffset) && cardCompletesMeld(ai.hand, o.c));
+                                         .filter(o => !isWildCard(o.c) && (firstTuyulOffset === -1 || o.visibleIdx > firstTuyulOffset) && cardCompletesMeld(ai, ai.hand, o.c));
 
         let drewFromDiscard = false; let pickedCard = null;
         if (usableFromDiscard.length > 0 && Math.random() < 0.5) {
@@ -1496,7 +1595,7 @@
     }
 
     function cardChipHtml(c, isCombo) {
-        const isRed = (c.suit === '♥' || c.suit === '♦'); const isFace = ['J', 'Q', 'K'].includes(c.value);
+        const isRed = (c.suit === '♥' || c.suit === '♦'); const isFace = isRoyalCard(c.value);
         return `<span style="display:inline-block;color:${isRed ? '#c1152e' : '#111'};background:${isFace ? '#fdf5e6' : '#fff'};border:2px solid ${isCombo ? '#2e7d32' : '#d32f2f'};padding:1px 4px;border-radius:4px;font-weight:bold;font-size:14px;margin:1px;">${c.value}${c.suit}</span>`;
     }
 
