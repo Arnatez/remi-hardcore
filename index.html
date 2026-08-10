@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Remi Hardcore - Online Game Retro Edition v1.8 (Fixed Shop Card Preview)</title>
+    <title>Remi Hardcore - Online Game Retro Edition v2.0 (English Rank Titles & Animated Shine)</title>
     <!-- Google Fonts Gaming -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <style>
@@ -26,10 +26,10 @@
             background: linear-gradient(180deg, #ff80df 0%, #ff1a75 40%, #80002a 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             font-weight: bold; text-shadow: 0 0 10px rgba(255, 26, 117, 0.5);
-            display: inline-flex; align-items: center; gap: 6px;
+            display: inline-flex; align-items: center; gap: 4px;
         }
         .gm-badge-logo {
-            width: 28px; height: 28px; object-fit: contain; vertical-align: middle;
+            width: 24px; height: 24px; object-fit: contain; vertical-align: middle; flex-shrink: 0;
             filter: drop-shadow(0 0 6px #ff0055);
         }
 
@@ -106,18 +106,52 @@
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none;
         }
 
-        /* BADGES & STATS */
+        /* BADGES BASE STYLING */
         .lvl-badge {
             display: inline-block; padding: 2px 8px; border-radius: 10px;
             font-size: 10px; font-weight: bold; text-transform: uppercase; margin-left: 6px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-family: 'Press Start 2P', cursive;
+            position: relative; overflow: hidden; vertical-align: middle;
         }
-        .badge-wood { background: #8d6e63; color: #fff; border: 1px solid #d7ccc8; }
-        .badge-bronze { background: #a1887f; color: #fff; border: 1px solid #ffe0b2; }
-        .badge-silver { background: #cfd8dc; color: #111; border: 1px solid #ffffff; }
-        .badge-gold { background: linear-gradient(180deg, #ffd700, #ff8f00); color: #000; border: 1px solid #fff; }
-        .badge-ruby { background: linear-gradient(180deg, #ff1744, #d50000); color: #fff; border: 1px solid #ff80ab; }
-        .badge-aurora { background: linear-gradient(90deg, #d500f9, #00e5ff); color: #fff; border: 1px solid #fff; }
+        .badge-wood     { background: #8d6e63; color: #fff; border: 1px solid #d7ccc8; }
+        .badge-iron     { background: #78909c; color: #fff; border: 1px solid #eceff1; }
+        .badge-bronze   { background: #a1887f; color: #fff; border: 1px solid #ffe0b2; }
+        .badge-silver   { background: #cfd8dc; color: #111; border: 1px solid #ffffff; }
+
+        /* ANIMATED SHINE BADGES (GOLD TO AURORA) */
+        .badge-animated-shine {
+            background-size: 200% auto !important;
+            animation: rankShineSweep 2.5s linear infinite !important;
+        }
+        @keyframes rankShineSweep {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .badge-gold {
+            background: linear-gradient(90deg, #b8860b 0%, #ffd700 25%, #fff5a6 50%, #ffd700 75%, #b8860b 100%);
+            color: #000; border: 1px solid #fff;
+        }
+        .badge-platinum {
+            background: linear-gradient(90deg, #0284c7 0%, #38bdf8 25%, #e0f2fe 50%, #38bdf8 75%, #0284c7 100%);
+            color: #fff; border: 1px solid #bae6fd;
+        }
+        .badge-emerald {
+            background: linear-gradient(90deg, #047857 0%, #10b981 25%, #a7f3d0 50%, #10b981 75%, #047857 100%);
+            color: #fff; border: 1px solid #6ee7b7;
+        }
+        .badge-ruby {
+            background: linear-gradient(90deg, #9f1239 0%, #f43f5e 25%, #fecdd3 50%, #f43f5e 75%, #9f1239 100%);
+            color: #fff; border: 1px solid #fda4af;
+        }
+        .badge-diamond {
+            background: linear-gradient(90deg, #4338ca 0%, #38bdf8 25%, #ffffff 50%, #818cf8 75%, #4338ca 100%);
+            color: #fff; border: 1px solid #fff; box-shadow: 0 0 8px #38bdf8;
+        }
+        .badge-aurora {
+            background: linear-gradient(90deg, #d500f9 0%, #00e5ff 25%, #ffffff 50%, #d500f9 75%, #00e5ff 100%);
+            color: #fff; border: 1px solid #fff; box-shadow: 0 0 10px #d500f9;
+        }
 
         .currency-bar { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 12px; font-size: 20px; font-weight: bold; }
         .coin-text { color: #ffd700; text-shadow: 0 0 8px rgba(255, 215, 0, 0.6); }
@@ -179,7 +213,13 @@
             border: 1px solid #fff; animation: bounceBubble 0.6s infinite alternate; z-index: 10;
         }
         @keyframes bounceBubble { from { transform: translateY(0); } to { transform: translateY(-3px); } }
-        .player-name-text { font-weight: bold; font-size: 17px; color: #fff; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: flex; align-items: center; }
+        
+        /* AUTO-SIZE RESPONSIVE NICKNAME (PREVENTS OVERFLOW / CUTTING OFF) */
+        .player-name-text {
+            font-weight: bold; font-size: clamp(11px, 2.8vw, 16px); color: #fff;
+            width: 100%; max-width: 130px; word-break: break-word; line-height: 1.2;
+            display: flex; align-items: center; gap: 2px; overflow: hidden;
+        }
 
         #table-area {
             display: flex; justify-content: space-around; align-items: center;
@@ -199,41 +239,35 @@
         .card.red { color: #d32f2f; }
 
         /* INDEPENDENT CARD THEMES (FIXED PREVIEW BUG IN SHOP) */
-        /* Theme Classic */
         .theme-classic .card.face-down, .card.theme-classic.face-down {
             background: linear-gradient(135deg, #a71d1d 25%, #7a1212 25%, #7a1212 50%, #a71d1d 50%, #a71d1d 75%, #7a1212 75%, #7a1212 100%) !important;
             background-size: 10px 10px !important; border: 2px solid #ffffff !important; box-shadow: none !important;
         }
 
-        /* Theme Cyber */
         .theme-cyber .card.face-down, .card.theme-cyber.face-down {
             background: linear-gradient(45deg, #00f3ff, #e040fb) !important; border: 2px solid #00f3ff !important; box-shadow: 0 0 8px #00f3ff !important;
         }
         .theme-cyber .card, .card.theme-cyber { background: #090b10; color: #00f3ff; border: 2px solid #00f3ff; box-shadow: 0 0 5px rgba(0,243,255,0.4); }
         .theme-cyber .card.red, .card.theme-cyber.red { color: #ff007f; }
 
-        /* Theme Gold */
         .theme-gold .card.face-down, .card.theme-gold.face-down {
             background: linear-gradient(135deg, #ffd700, #b8860b, #ffd700) !important; border: 2px solid #fff !important; box-shadow: 0 0 8px #ffd700 !important;
         }
         .theme-gold .card, .card.theme-gold { background: linear-gradient(180deg, #fffcf0 0%, #f7e7b4 100%); color: #7a5200; border: 2px solid #ffd700; }
         .theme-gold .card.red, .card.theme-gold.red { color: #b91c1c; }
 
-        /* Theme Dragon */
         .theme-dragon .card.face-down, .card.theme-dragon.face-down {
             background: radial-gradient(circle, #ff3d00, #880000) !important; border: 2px solid #ffea00 !important; box-shadow: none !important;
         }
         .theme-dragon .card, .card.theme-dragon { background: linear-gradient(180deg, #2b0303 0%, #150000 100%); color: #ffeb3b; border: 2px solid #ff3d00; }
         .theme-dragon .card.red, .card.theme-dragon.red { color: #ff5252; }
 
-        /* Theme Royal */
         .theme-royal .card.face-down, .card.theme-royal.face-down {
             background: linear-gradient(135deg, #7b1fa2, #4a148c) !important; border: 2px solid #e040fb !important; box-shadow: none !important;
         }
         .theme-royal .card, .card.theme-royal { background: linear-gradient(180deg, #fcf4ff 0%, #e1bee7 100%); color: #4a148c; border: 2px solid #ab47bc; }
         .theme-royal .card.red, .card.theme-royal.red { color: #c2185b; }
 
-        /* Theme Dark */
         .theme-dark .card.face-down, .card.theme-dark.face-down {
             background: linear-gradient(135deg, #222, #000) !important; border: 2px solid #555 !important; box-shadow: none !important;
         }
@@ -525,10 +559,11 @@
         <h3 style="color: #ffd700; margin-top: 0; font-family: 'Press Start 2P', cursive; font-size: 12px;">📜 PATCH NOTES & UPDATE LOG</h3>
         
         <div class="patch-item">
-            <div class="patch-ver">VERSION 1.8 (FIXED SHOP CARDS PREVIEW BUG)</div>
+            <div class="patch-ver">VERSION 2.0 (ENGLISH RANK TITLES & SHINE ANIMATIONS)</div>
             <ul class="patch-list">
-                <li>🛠️ <b>Fixed Shop Card Preview</b>: Sekarang semua sampel kartu di toko mempertahankan temanya masing-masing dan tidak ikut berubah saat memilih kartu baru!</li>
-                <li>🏅 <b>Level Rank Titles</b>: Sistem titel level kini aktif dari Level 1 (Kayu), Perunggu, Perak, Emas, Ruby, hingga MAX (Aurora).</li>
+                <li>🌐 <b>English Rank Names</b>: Nama rank diubah ke Bahasa Inggris (Wood, Iron, Bronze, Silver, Gold, Platinum, Emerald, Ruby, Diamond, MAX).</li>
+                <li>✨ <b>Animated Shine Sweep</b>: Rank Gold hingga Aurora memiliki efek cahaya kilap yang melintas halus tanpa emoji!</li>
+                <li>🔤 <b>Responsive Player Names</b>: Penataan font-size nama pemain in-game agar muat dan tidak pernah terpotong.</li>
             </ul>
         </div>
 
@@ -671,13 +706,18 @@
 
     function getExpForNextLevel(lvl) { return lvl * 100; }
 
+    /* RANK BADGES PER 10 LEVEL WITH SHINE ANIMATION (ENGLISH TITLES) */
     function renderLevelBadge(lvl) {
-        if (lvl <= 10) return `<span class="lvl-badge badge-wood">Kayu</span>`;
-        if (lvl <= 30) return `<span class="lvl-badge badge-bronze">Perunggu</span>`;
-        if (lvl <= 60) return `<span class="lvl-badge badge-silver">Perak</span>`;
-        if (lvl <= 90) return `<span class="lvl-badge badge-gold">Emas</span>`;
-        if (lvl <= 94) return `<span class="lvl-badge badge-ruby">Ruby</span>`;
-        return `<span class="lvl-badge badge-aurora">MAX</span>`;
+        if (lvl <= 10) return `<span class="lvl-badge badge-wood">Wood</span>`;
+        if (lvl <= 20) return `<span class="lvl-badge badge-iron">Iron</span>`;
+        if (lvl <= 30) return `<span class="lvl-badge badge-bronze">Bronze</span>`;
+        if (lvl <= 40) return `<span class="lvl-badge badge-silver">Silver</span>`;
+        if (lvl <= 50) return `<span class="lvl-badge badge-gold badge-animated-shine">Gold</span>`;
+        if (lvl <= 60) return `<span class="lvl-badge badge-platinum badge-animated-shine">Platinum</span>`;
+        if (lvl <= 70) return `<span class="lvl-badge badge-emerald badge-animated-shine">Emerald</span>`;
+        if (lvl <= 80) return `<span class="lvl-badge badge-ruby badge-animated-shine">Ruby</span>`;
+        if (lvl <= 90) return `<span class="lvl-badge badge-diamond badge-animated-shine">Diamond</span>`;
+        return `<span class="lvl-badge badge-aurora badge-animated-shine">MAX</span>`;
     }
 
     function addExpAndCoins(expGained, coinsGained) {
@@ -1321,9 +1361,9 @@
                         <img src="${p.avatar}" class="avatar-img" alt="${p.name}">
                         ${borderOverlayHtml}
                     </div>
-                    <div>
+                    <div style="flex-grow: 1; overflow: hidden;">
                         ${displayNameHtml}
-                        <div style="font-size:13px; color:#aaa;">Lvl ${idx === 0 ? userProfile.level : 1} ${renderLevelBadge(idx === 0 ? userProfile.level : 1)}</div>
+                        <div style="font-size:12px; color:#aaa; margin-top:2px;">Lvl ${idx === 0 ? userProfile.level : 1} ${renderLevelBadge(idx === 0 ? userProfile.level : 1)}</div>
                         <span style="font-size:14px;">Poin: <b style="${scoreColor}">${p.score}</b> / ${targetScore}</span>
                     </div>
                 </div>`;
