@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Remi Hardcore - Cyber Edition v2.3</title>
+    <title>Remi Hardcore - Cyber Edition v2.5</title>
     <!-- Font TT Runs / Montserrat / Rajdhani -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <style>
@@ -37,7 +37,7 @@
             display: inline-flex; align-items: center; gap: 4px;
         }
         .gm-badge-logo {
-            width: 24px; height: 24px; object-fit: contain; vertical-align: middle; flex-shrink: 0;
+            width: 20px; height: 20px; object-fit: contain; vertical-align: middle; flex-shrink: 0;
             border-radius: 4px; filter: drop-shadow(0 0 6px #ff0055);
         }
 
@@ -100,12 +100,13 @@
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none;
         }
 
-        /* BADGES BASE STYLING & ANIMATION */
+        /* BADGES BASE STYLING & COMPACT SIZE */
         .lvl-badge {
-            display: inline-block; padding: 3px 10px; border-radius: 20px;
-            font-size: 11px; font-weight: 800; text-transform: uppercase; margin-left: 6px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.5); font-family: 'TT Runs', 'Montserrat', sans-serif;
+            display: inline-block; padding: 2px 7px; border-radius: 12px;
+            font-size: 9px; font-weight: 800; text-transform: uppercase; margin-left: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-family: 'TT Runs', 'Montserrat', sans-serif;
             position: relative; overflow: hidden; vertical-align: middle; letter-spacing: 0.5px;
+            line-height: 1.1;
         }
         .badge-wood     { background: #5d4037; color: #fff; border: 1px solid #8d6e63; }
         .badge-iron     { background: #455a64; color: #fff; border: 1px solid #78909c; }
@@ -123,27 +124,31 @@
 
         .badge-gold {
             background: linear-gradient(90deg, #b8860b 0%, #ffd700 25%, #fff5a6 50%, #ffd700 75%, #b8860b 100%);
-            color: #000; border: 1px solid #fff; box-shadow: 0 0 8px #ffd700;
+            color: #000; border: 1px solid #fff; box-shadow: 0 0 6px #ffd700;
         }
         .badge-platinum {
             background: linear-gradient(90deg, #0284c7 0%, #38bdf8 25%, #e0f2fe 50%, #38bdf8 75%, #0284c7 100%);
-            color: #fff; border: 1px solid #bae6fd; box-shadow: 0 0 8px #0284c7;
+            color: #fff; border: 1px solid #bae6fd; box-shadow: 0 0 6px #0284c7;
         }
         .badge-emerald {
             background: linear-gradient(90deg, #047857 0%, #10b981 25%, #a7f3d0 50%, #10b981 75%, #047857 100%);
-            color: #fff; border: 1px solid #6ee7b7; box-shadow: 0 0 8px #10b981;
+            color: #fff; border: 1px solid #6ee7b7; box-shadow: 0 0 6px #10b981;
         }
         .badge-ruby {
             background: linear-gradient(90deg, #9f1239 0%, #f43f5e 25%, #fecdd3 50%, #f43f5e 75%, #9f1239 100%);
-            color: #fff; border: 1px solid #fda4af; box-shadow: 0 0 8px #f43f5e;
+            color: #fff; border: 1px solid #fda4af; box-shadow: 0 0 6px #f43f5e;
         }
         .badge-diamond {
             background: linear-gradient(90deg, #4338ca 0%, #38bdf8 25%, #ffffff 50%, #818cf8 75%, #4338ca 100%);
-            color: #fff; border: 1px solid #fff; box-shadow: 0 0 10px #38bdf8;
+            color: #fff; border: 1px solid #fff; box-shadow: 0 0 8px #38bdf8;
+        }
+        .badge-mythic {
+            background: linear-gradient(90deg, #86198f 0%, #d946ef 25%, #f0abfc 50%, #d946ef 75%, #86198f 100%);
+            color: #fff; border: 1px solid #f5d0fe; box-shadow: 0 0 8px #e879f9;
         }
         .badge-aurora {
-            background: linear-gradient(90deg, #d500f9 0%, #00e5ff 25%, #ffffff 50%, #d500f9 75%, #00e5ff 100%);
-            color: #fff; border: 1px solid #fff; box-shadow: 0 0 12px #00e5ff;
+            background: linear-gradient(90deg, #ff007f 0%, #00e5ff 25%, #ffffff 50%, #ffd700 75%, #ff007f 100%);
+            color: #fff; border: 1px solid #fff; box-shadow: 0 0 10px #00e5ff;
         }
 
         .currency-bar { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 12px; font-size: 20px; font-weight: bold; }
@@ -177,18 +182,18 @@
 
         button:disabled { opacity: 0.4 !important; cursor: not-allowed !important; transform: none !important; box-shadow: none !important; }
 
-        /* SCOREBOARD & BOARD UI */
+        /* SCOREBOARD & BOARD UI - SINGLE LINE PLAYER NAME FIX */
         .scoreboard {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
             gap: 12px; margin-bottom: 15px;
         }
         .player-score { 
-            font-size: 14px; background: rgba(15, 23, 42, 0.7); padding: 10px;
-            border-radius: 12px; position: relative; display: flex; align-items: center; gap: 10px; text-align: left;
-            border: 1px solid rgba(0, 243, 255, 0.2);
+            font-size: 13px; background: rgba(15, 23, 42, 0.7); padding: 8px 10px;
+            border-radius: 12px; position: relative; display: flex; align-items: center; gap: 8px; text-align: left;
+            border: 1px solid rgba(0, 243, 255, 0.2); overflow: hidden;
         }
-        .player-score-avatar-box { width: 50px; height: 50px; flex-shrink: 0; display: flex; justify-content: center; align-items: center; position: relative; }
-        .player-score-avatar-box img.avatar-img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; }
+        .player-score-avatar-box { width: 44px; height: 44px; flex-shrink: 0; display: flex; justify-content: center; align-items: center; position: relative; }
+        .player-score-avatar-box img.avatar-img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; }
         .player-score-avatar-box img.border-overlay { width: 100%; height: 100%; object-fit: contain; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2; pointer-events: none; }
         
         .active-player { border-color: #00f3ff !important; box-shadow: 0 0 15px rgba(0, 243, 255, 0.4); }
@@ -205,10 +210,11 @@
         }
         @keyframes bounceBubble { from { transform: translateY(0); } to { transform: translateY(-3px); } }
         
+        /* STRICT SINGLE LINE NICKNAME */
         .player-name-text {
-            font-weight: 700; font-size: clamp(11px, 2.8vw, 15px); color: #fff;
-            width: 100%; max-width: 120px; word-break: break-word; line-height: 1.2;
-            display: flex; align-items: center; gap: 2px; overflow: hidden;
+            font-weight: 700; font-size: 13px; color: #fff;
+            width: 100%; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important;
+            display: inline-block !important; vertical-align: middle; line-height: 1.2;
         }
 
         #table-area {
@@ -379,7 +385,7 @@
                 <span id="user-display-name">Kamu</span>
             </div>
             
-            <div style="font-size: 16px; margin-top: 4px; display: flex; justify-content: center; align-items: center;">
+            <div style="font-size: 15px; margin-top: 4px; display: flex; justify-content: center; align-items: center;">
                 Level <b id="user-level-text" style="margin-left: 6px;">1</b> <span id="user-badge-container"></span>
             </div>
             <div class="exp-bar-bg">
@@ -499,11 +505,17 @@
     </div>
 </div>
 
-<!-- MODAL GAME MASTER / DEVELOPER TOOLS (DENGAN TEST LEVEL SLIDER) -->
+<!-- MODAL GAME MASTER / DEVELOPER TOOLS (DENGAN EKSKLUSIF GM ITEMS & LEVEL SLIDER) -->
 <div id="modal-gm" class="modal">
     <div class="modal-content glass-panel">
         <h3 style="color: #c084fc; margin-top: 0; font-size: 18px;">👑 GAME MASTER CONSOLE</h3>
-        <p style="font-size: 14px; color: #aaa;">Panel rahasia developer untuk testing dan debugging game.</p>
+        <p style="font-size: 14px; color: #aaa;">Panel rahasia developer untuk testing dan kustomisasi eksklusif.</p>
+
+        <!-- EKSKLUSIF ITEM GM BUTTON -->
+        <div style="background: rgba(147, 51, 234, 0.2); border: 1px solid #c084fc; padding: 12px; border-radius: 12px; margin-bottom: 15px;">
+            <div style="font-size: 13px; font-weight: bold; color: #e9d5ff; margin-bottom: 6px;">✨ PERLENGKAPAN KHUSUS GAME MASTER:</div>
+            <button class="btn-gm-purple" onclick="gmEquipExclusiveItems()" style="width: 100%; margin: 0; font-size: 11px;">👑 EQUIP GM AVATAR & BORDER EKSKLUSIF</button>
+        </div>
         
         <!-- DEV TOOLS TESTER LEVEL -->
         <div style="background: rgba(0,0,0,0.4); border: 1px solid #c084fc; padding: 15px; border-radius: 12px; margin: 15px 0;">
@@ -513,7 +525,7 @@
                 <span id="gm-lvl-val" style="font-size: 18px; font-weight: bold; width: 35px; color: #00f3ff;">1</span>
                 <button class="btn-gm-purple" onclick="gmSetCustomLevel()" style="padding: 8px 14px; font-size: 10px; margin: 0;">SET LEVEL</button>
             </div>
-            <div style="font-size: 12px; color: #aaa; margin-top: 6px;">* Ubah level ini untuk melihat langsung efek badge dan warna animasi per level!</div>
+            <div style="font-size: 12px; color: #aaa; margin-top: 6px;">* Ubah level ini untuk menguji rank Mythic (91-99) & Max (100)!</div>
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 10px; margin: 15px 0;">
@@ -559,11 +571,11 @@
         <h3 style="color: #00f3ff; margin-top: 0; font-size: 18px;">📜 PATCH NOTES & UPDATE LOG</h3>
         
         <div class="patch-item">
-            <div class="patch-ver">VERSION 2.3 (RPG AVATARS & SYSTEM UPDATES)</div>
+            <div class="patch-ver">VERSION 2.5 (GM BORDER FILE RENAME)</div>
             <ul class="patch-list">
-                <li>🎨 <b>New Avatar Set</b>: 10 Avatar pahlawan RPG gratis yang bisa dipilih kapan saja!</li>
-                <li>🤖 <b>Random Bot Avatars</b>: AI Bot akan mengambil avatar secara acak dari koleksi baru setiap kali permainan dimulai.</li>
-                <li>👑 <b>Official GM Emblem</b>: Logo GM disesuaikan dengan file `gm_logo.png`.</li>
+                <li>✨ <b>Mythic Rank (91-99)</b>: Kasta anyar sebelum Max Level! Badge MAX kini spesial untuk Level 100.</li>
+                <li>👑 <b>GM Exclusive Items</b>: Avatar (`gm_avatar.webp`) dan Border Kristal Sayap GM (`gm_border.jpg`) hanya bisa dipasang via Dev Console.</li>
+                <li>📏 <b>Single Line Names & Compact Badges</b>: Nama pemain dipaksa 1 baris utuh rapi dan badge level dibuat lebih proporsional.</li>
             </ul>
         </div>
 
@@ -779,7 +791,7 @@
 
     function getExpForNextLevel(lvl) { return lvl * 100; }
 
-    /* RANK BADGES PER 10 LEVEL WITH SHINE ANIMATION (ENGLISH TITLES) */
+    /* RANK BADGES PER 10 LEVEL (91-99: MYTHIC, 100: MAX) */
     function renderLevelBadge(lvl) {
         if (lvl <= 10) return `<span class="lvl-badge badge-wood">Wood</span>`;
         if (lvl <= 20) return `<span class="lvl-badge badge-iron">Iron</span>`;
@@ -790,6 +802,7 @@
         if (lvl <= 70) return `<span class="lvl-badge badge-emerald badge-animated-shine">Emerald</span>`;
         if (lvl <= 80) return `<span class="lvl-badge badge-ruby badge-animated-shine">Ruby</span>`;
         if (lvl <= 90) return `<span class="lvl-badge badge-diamond badge-animated-shine">Diamond</span>`;
+        if (lvl <= 99) return `<span class="lvl-badge badge-mythic badge-animated-shine">Mythic</span>`;
         return `<span class="lvl-badge badge-aurora badge-animated-shine">MAX</span>`;
     }
 
@@ -877,7 +890,7 @@
         document.body.className = userProfile.equippedCardTheme || "theme-classic";
     }
 
-    /* --- GAME MASTER (GM) SECURITY & FUNCTIONS --- */
+    /* --- GAME MASTER (GM) SECURITY & EXCLUSIVE FUNCTIONS --- */
     const GM_PASSWORD_SECRET = "gm123";
 
     function openGmLoginModal() {
@@ -912,6 +925,16 @@
     }
 
     function closeGmModal() { document.getElementById('modal-gm').style.display = 'none'; }
+
+    function gmEquipExclusiveItems() {
+        userProfile.equippedAvatar = "gm_avatar.webp";
+        userProfile.equippedBorderUrl = "gm_border.jpg";
+        if (!userProfile.ownedAvatars.includes("gm_avatar.webp")) userProfile.ownedAvatars.push("gm_avatar.webp");
+        if (!userProfile.ownedBorders.includes("gm_border.jpg")) userProfile.ownedBorders.push("gm_border.jpg");
+        playSound('levelup');
+        saveProfileData();
+        alert("👑 SUKSES: Avatar & Border Eksklusif GM berhasil dipasangkan ke Profil!");
+    }
 
     function gmSetCustomLevel() {
         const customLvl = parseInt(document.getElementById('gm-level-slider').value);
@@ -1439,10 +1462,10 @@
                         <img src="${p.avatar}" class="avatar-img" alt="${p.name}">
                         ${borderOverlayHtml}
                     </div>
-                    <div style="flex-grow: 1; overflow: hidden;">
+                    <div style="flex-grow: 1; overflow: hidden; min-width: 0;">
                         ${displayNameHtml}
-                        <div style="font-size:11px; color:#aaa; margin-top:2px;">Lvl ${idx === 0 ? userProfile.level : 1} ${renderLevelBadge(idx === 0 ? userProfile.level : 1)}</div>
-                        <span style="font-size:13px;">Poin: <b style="${scoreColor}">${p.score}</b> / ${targetScore}</span>
+                        <div style="font-size:10px; color:#aaa; margin-top:2px; white-space:nowrap;">Lvl ${idx === 0 ? userProfile.level : 1} ${renderLevelBadge(idx === 0 ? userProfile.level : 1)}</div>
+                        <div style="font-size:12px; white-space:nowrap; margin-top:1px;">Poin: <b style="${scoreColor}">${p.score}</b> / ${targetScore}</div>
                     </div>
                 </div>`;
         });
@@ -1495,8 +1518,8 @@
             if (opp.submittedGroups.length > 0) {
                 hasOpponentMeld = true;
                 const pBox = document.createElement('div');
-                pBox.style.cssText = 'background: rgba(0,0,0,0.3); border:1px solid rgba(0,243,255,0.3); border-radius:6px; padding:4px 8px; display:flex; align-items:center; gap:6px;';
-                pBox.innerHTML = `<img src="${opp.avatar}" style="width:22px; height:22px; border-radius:50%;"><b style="color:#00f3ff;" class="player-name-text">${opp.name}:</b> `;
+                pBox.style.cssText = 'background: rgba(0,0,0,0.3); border:1px solid rgba(0,243,255,0.3); border-radius:6px; padding:4px 8px; display:flex; align-items:center; gap:6px; max-width: 100%; overflow: hidden;';
+                pBox.innerHTML = `<img src="${opp.avatar}" style="width:22px; height:22px; border-radius:50%; flex-shrink: 0;"><b style="color:#00f3ff;" class="player-name-text">${opp.name}:</b> `;
                 opp.submittedGroups.forEach(group => {
                     const gDiv = document.createElement('span');
                     gDiv.style.cssText = 'display:inline-block; border:1px dashed #38bdf8; padding:2px; margin:2px; border-radius:4px; background: rgba(0,0,0,0.2);';
