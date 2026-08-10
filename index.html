@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Remi Hardcore - Online Game Retro Edition v1.7 (GM Identity & Custom Coin Update)</title>
+    <title>Remi Hardcore - Online Game Retro Edition v1.8 (Fixed Shop Card Preview)</title>
     <!-- Google Fonts Gaming -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <style>
@@ -188,7 +188,7 @@
             flex-wrap: wrap; border: 6px solid #4a2810; box-shadow: inset 0 0 25px rgba(0,0,0,0.8); gap: 15px;
         }
 
-        /* CUSTOM CARD DESIGNS WITH INDEPENDENT THEME CLASSES FOR PREVIEW FIX */
+        /* GENERAL CARD BASE */
         .card {
             display: inline-block; width: 58px; height: 85px; background: #ffffff; color: #111111;
             border-radius: 6px; font-weight: bold; margin: 4px; cursor: pointer;
@@ -198,45 +198,51 @@
         .card:hover { transform: translateY(-6px); box-shadow: 0 8px 15px rgba(0,0,0,0.6); }
         .card.red { color: #d32f2f; }
 
-        /* CARD THEMES */
+        /* INDEPENDENT CARD THEMES (FIXED PREVIEW BUG IN SHOP) */
+        /* Theme Classic */
         .theme-classic .card.face-down, .card.theme-classic.face-down {
-            background: linear-gradient(135deg, #a71d1d 25%, #7a1212 25%, #7a1212 50%, #a71d1d 50%, #a71d1d 75%, #7a1212 75%, #7a1212 100%);
-            background-size: 10px 10px; border: 2px solid #ffffff;
+            background: linear-gradient(135deg, #a71d1d 25%, #7a1212 25%, #7a1212 50%, #a71d1d 50%, #a71d1d 75%, #7a1212 75%, #7a1212 100%) !important;
+            background-size: 10px 10px !important; border: 2px solid #ffffff !important; box-shadow: none !important;
         }
 
+        /* Theme Cyber */
         .theme-cyber .card.face-down, .card.theme-cyber.face-down {
-            background: linear-gradient(45deg, #00f3ff, #e040fb); border: 2px solid #00f3ff; box-shadow: 0 0 8px #00f3ff;
+            background: linear-gradient(45deg, #00f3ff, #e040fb) !important; border: 2px solid #00f3ff !important; box-shadow: 0 0 8px #00f3ff !important;
         }
         .theme-cyber .card, .card.theme-cyber { background: #090b10; color: #00f3ff; border: 2px solid #00f3ff; box-shadow: 0 0 5px rgba(0,243,255,0.4); }
         .theme-cyber .card.red, .card.theme-cyber.red { color: #ff007f; }
 
+        /* Theme Gold */
         .theme-gold .card.face-down, .card.theme-gold.face-down {
-            background: linear-gradient(135deg, #ffd700, #b8860b, #ffd700); border: 2px solid #fff; box-shadow: 0 0 8px #ffd700;
+            background: linear-gradient(135deg, #ffd700, #b8860b, #ffd700) !important; border: 2px solid #fff !important; box-shadow: 0 0 8px #ffd700 !important;
         }
         .theme-gold .card, .card.theme-gold { background: linear-gradient(180deg, #fffcf0 0%, #f7e7b4 100%); color: #7a5200; border: 2px solid #ffd700; }
         .theme-gold .card.red, .card.theme-gold.red { color: #b91c1c; }
 
+        /* Theme Dragon */
         .theme-dragon .card.face-down, .card.theme-dragon.face-down {
-            background: radial-gradient(circle, #ff3d00, #880000); border: 2px solid #ffea00;
+            background: radial-gradient(circle, #ff3d00, #880000) !important; border: 2px solid #ffea00 !important; box-shadow: none !important;
         }
         .theme-dragon .card, .card.theme-dragon { background: linear-gradient(180deg, #2b0303 0%, #150000 100%); color: #ffeb3b; border: 2px solid #ff3d00; }
         .theme-dragon .card.red, .card.theme-dragon.red { color: #ff5252; }
 
+        /* Theme Royal */
         .theme-royal .card.face-down, .card.theme-royal.face-down {
-            background: linear-gradient(135deg, #7b1fa2, #4a148c); border: 2px solid #e040fb;
+            background: linear-gradient(135deg, #7b1fa2, #4a148c) !important; border: 2px solid #e040fb !important; box-shadow: none !important;
         }
         .theme-royal .card, .card.theme-royal { background: linear-gradient(180deg, #fcf4ff 0%, #e1bee7 100%); color: #4a148c; border: 2px solid #ab47bc; }
         .theme-royal .card.red, .card.theme-royal.red { color: #c2185b; }
 
+        /* Theme Dark */
         .theme-dark .card.face-down, .card.theme-dark.face-down {
-            background: linear-gradient(135deg, #222, #000); border: 2px solid #555;
+            background: linear-gradient(135deg, #222, #000) !important; border: 2px solid #555 !important; box-shadow: none !important;
         }
         .theme-dark .card, .card.theme-dark { background: #1e1e1e; color: #4ade80; border: 2px solid #555; }
         .theme-dark .card.red, .card.theme-dark.red { color: #f87171; }
 
         .card.tuyul-locked {
-            background: linear-gradient(135deg, #881111 25%, #440000 25%, #440000 50%, #881111 50%, #881111 75%, #440000 75%, #440000 100%);
-            background-size: 8px 8px; border: 2px solid #ffd700 !important;
+            background: linear-gradient(135deg, #881111 25%, #440000 25%, #440000 50%, #881111 50%, #881111 75%, #440000 75%, #440000 100%) !important;
+            background-size: 8px 8px !important; border: 2px solid #ffd700 !important;
         }
         .card.disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
         .card.selected { border: 3px solid #ffd700 !important; transform: translateY(-12px) scale(1.05); box-shadow: 0 0 15px #ffd700 !important; }
@@ -519,12 +525,10 @@
         <h3 style="color: #ffd700; margin-top: 0; font-family: 'Press Start 2P', cursive; font-size: 12px;">📜 PATCH NOTES & UPDATE LOG</h3>
         
         <div class="patch-item">
-            <div class="patch-ver">VERSION 1.7 (GM IDENTITY & CUSTOM COIN)</div>
+            <div class="patch-ver">VERSION 1.8 (FIXED SHOP CARDS PREVIEW BUG)</div>
             <ul class="patch-list">
-                <li>⭐ <b>Star Coin Currency</b>: Logo koin in-game kini menggunakan file kustom <code>star.png</code>!</li>
-                <li>👑 <b>GM Maroon Identity</b>: Mode GM menghapus [GM DIRECTOR] dan menampilkan Logo GM (<code>gm_logo.png</code>) + Nama Maroon Gradasi Glowing.</li>
-                <li>🎯 <b>Precise Centered Borders</b>: Avatar & Border tersusun presisi di tengah baik di Profil, Toko, maupun Meja Permainan.</li>
-                <li>🃏 <b>Fixed Shop Cards Preview Bug</b>: Preview desain kartu di toko tidak lagi tertukar/mengikuti kartu terpilih.</li>
+                <li>🛠️ <b>Fixed Shop Card Preview</b>: Sekarang semua sampel kartu di toko mempertahankan temanya masing-masing dan tidak ikut berubah saat memilih kartu baru!</li>
+                <li>🏅 <b>Level Rank Titles</b>: Sistem titel level kini aktif dari Level 1 (Kayu), Perunggu, Perak, Emas, Ruby, hingga MAX (Aurora).</li>
             </ul>
         </div>
 
@@ -909,7 +913,7 @@
             avGrid.appendChild(div);
         });
 
-        // Borders (Centered Fix)
+        // Borders
         const bdGrid = document.getElementById('shop-borders-grid'); bdGrid.innerHTML = '';
         shopBorders.forEach(item => {
             const owned = userProfile.ownedBorders.includes(item.url);
@@ -942,7 +946,7 @@
             bgGrid.appendChild(div);
         });
 
-        // Cards (Preview Fix - Each Card keeps its own Theme)
+        // Cards (FIXED: Each card preview strictly maintains its own theme!)
         const cardGrid = document.getElementById('shop-cards-grid'); cardGrid.innerHTML = '';
         shopCards.forEach(item => {
             const owned = userProfile.ownedCardThemes.includes(item.themeClass);
@@ -1303,7 +1307,6 @@
             
             const borderOverlayHtml = borderUrl ? `<img src="${borderUrl}" class="border-overlay">` : '';
 
-            // IN-GAME SCOREBOARD DISPLAY (WITH GM NICKNAME & BADGE FOR PLAYER 0)
             let displayNameHtml = `<span class="player-name-text" title="${p.name}">${p.name}</span>`;
             if (idx === 0) {
                 if (userProfile.isGm) {
