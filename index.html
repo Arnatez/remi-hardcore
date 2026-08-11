@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Remi Hardcore - Oval Table Edition v3.0</title>
+    <title>Remi Hardcore - Oval Table Edition v3.1</title>
+    <!-- Font TT Runs / Montserrat / Rajdhani -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
@@ -15,12 +16,14 @@
             font-size: 15px; position: relative; overflow-x: hidden;
         }
 
+        /* MATRIX RAIN CANVAS BACKGROUND */
         #matrix-canvas {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             z-index: -1; pointer-events: none; opacity: 0.85;
             background-color: #030712;
         }
 
+        /* ICON COIN & GM STYLING */
         .coin-icon {
             width: 20px; height: 20px; vertical-align: middle;
             margin-right: 4px; display: inline-block; filter: drop-shadow(0 0 6px #00f3ff);
@@ -79,7 +82,7 @@
             display: none;
         }
 
-        /* FULL BADGE RANK SYSTEM */
+        /* BADGES SYSTEM */
         .lvl-badge {
             display: inline-block; padding: 2px 7px; border-radius: 12px;
             font-size: 9px; font-weight: 800; text-transform: uppercase; margin-left: 4px;
@@ -174,13 +177,10 @@
             content: "▶ TURN"; position: absolute; top: -9px; right: 6px;
             background: #00f3ff; color: #000; font-size: 8px; font-weight: 900; padding: 1px 5px; border-radius: 3px; z-index: 15;
         }
-        .player-score.is-cekih { border: 1px solid #f43f5e !important; animation: cekihPulse 1.2s infinite alternate; }
-        @keyframes cekihPulse { 0% { box-shadow: 0 0 5px #f43f5e; } 100% { box-shadow: 0 0 18px #f43f5e; } }
-        .cekih-bubble { position: absolute; top: -10px; left: 8px; background: #f43f5e; color: white; font-size: 8px; font-weight: bold; padding: 1px 5px; border-radius: 4px; border: 1px solid #fff; z-index: 15; }
 
         .player-name-text { font-weight: 700; font-size: 11px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; max-width: 100px; }
 
-        /* CARDS STYLING */
+        /* CARDS & DRAG DROP STYLING */
         .card {
             display: inline-block; width: 48px; height: 70px; background: #ffffff; color: #111111;
             border-radius: 6px; font-weight: bold; margin: 2px; cursor: pointer;
@@ -190,6 +190,10 @@
         .card:hover { transform: translateY(-5px); box-shadow: 0 6px 14px rgba(0,243,255,0.4); }
         .card.red { color: #e11d48; }
 
+        .card.dragging { opacity: 0.35; transform: scale(0.9); }
+        .card.drag-over-left { transform: translateX(-8px) translateY(-4px); }
+        .card.drag-over-right { transform: translateX(8px) translateY(-4px); }
+
         .theme-classic .card.face-down, .card.theme-classic.face-down {
             background: linear-gradient(135deg, #0284c7 25%, #0369a1 25%, #0369a1 50%, #0284c7 50%, #0284c7 75%, #0369a1 75%, #0369a1 100%) !important;
             background-size: 8px 8px !important; border: 1.5px solid #38bdf8 !important;
@@ -198,7 +202,10 @@
         .theme-cyber .card, .card.theme-cyber { background: #090b10; color: #00f3ff; border: 1.5px solid #00f3ff; }
         .theme-cyber .card.red, .card.theme-cyber.red { color: #ff007f; }
 
-        .card.tuyul-locked { background: linear-gradient(135deg, #881111 25%, #440000 25%, #440000 50%, #881111 50%, #881111 75%, #440000 75%, #440000 100%) !important; border: 2px solid #ffd700 !important; }
+        .theme-gold .card.face-down, .card.theme-gold.face-down { background: linear-gradient(135deg, #ffd700, #b8860b, #ffd700) !important; border: 1.5px solid #fff !important; }
+        .theme-gold .card, .card.theme-gold { background: linear-gradient(180deg, #fffcf0 0%, #f7e7b4 100%); color: #7a5200; border: 1.5px solid #ffd700; }
+        .theme-gold .card.red, .card.theme-gold.red { color: #b91c1c; }
+
         .card.disabled { opacity: 0.35; cursor: not-allowed; transform: none !important; }
         .card.selected { border: 2.5px solid #00f3ff !important; transform: translateY(-10px) scale(1.05); box-shadow: 0 0 12px #00f3ff !important; }
 
@@ -206,19 +213,6 @@
         .card-corner.top-left { top: 2px; left: 2px; }
         .card-corner.bottom-right { bottom: 2px; right: 2px; transform: rotate(180deg); }
         .card-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 20px; }
-
-        .pips-real-grid {
-            position: absolute; top: 12px; left: 8px; right: 8px; bottom: 12px;
-            display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: repeat(5, 1fr);
-            pointer-events: none; align-items: center; justify-items: center;
-        }
-        .pip-cell { font-size: 8px; line-height: 1; display: flex; align-items: center; justify-content: center; }
-        .pip-flip { transform: rotate(180deg); }
-
-        .card.face-card .card-face-avatar {
-            width: 24px; height: 24px; border-radius: 50%; border: 1px solid #00f3ff;
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #111;
-        }
 
         .bot-submitted-mini { display: flex; flex-wrap: wrap; gap: 2px; max-width: 180px; margin-top: 4px; justify-content: center; }
         .my-submitted-area {
@@ -232,18 +226,23 @@
             background: rgba(3, 7, 18, 0.9); height: 75px; overflow-y: auto; text-align: left; padding: 6px 10px; font-size: 13px;
             border-radius: 8px; border: 1px solid rgba(0, 243, 255, 0.3); font-family: 'Rajdhani', monospace; color: #38bdf8; margin-top: 6px;
         }
-        .log-hl { color: #00f3ff; font-weight: bold; }
-        .log-bad { color: #f43f5e; font-weight: bold; }
         .discard-pile-container { display: flex; gap: 3px; overflow-x: auto; max-width: 350px; padding: 4px; background: rgba(0,0,0,0.3); border-radius: 8px; border: 1px dashed rgba(0,243,255,0.3); }
 
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 7, 18, 0.85); justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(8px); }
-        .modal-content { padding: 22px; border-radius: 18px; width: 600px; max-width: 95vw; max-height: 85vh; overflow-y: auto; text-align: center; }
+        .modal-content { padding: 22px; border-radius: 18px; width: 620px; max-width: 95vw; max-height: 85vh; overflow-y: auto; text-align: center; }
 
-        .end-cards-row { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 4px; background: rgba(0,0,0,0.3); padding: 4px; border-radius: 6px; }
+        /* SHOP GRID */
+        .shop-tabs { display: flex; justify-content: center; gap: 6px; margin-bottom: 15px; flex-wrap: wrap; }
+        .shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
+        .shop-item { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(0, 243, 255, 0.25); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .shop-item img.preview-img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; }
+        .shop-card-preview { width: 38px; height: 55px; border-radius: 5px; margin: 0 auto; }
+        .shop-item-title { font-size: 11px; font-weight: bold; color: #00f3ff; text-align: center; }
     </style>
 </head>
 <body class="theme-classic">
 
+<!-- MATRIX RAIN CANVAS -->
 <canvas id="matrix-canvas"></canvas>
 
 <!-- HOME SCREEN MENU -->
@@ -293,7 +292,6 @@
         </div>
     </div>
 
-    <!-- OVAL POKER TABLE FELT -->
     <div class="poker-table">
         <div class="seat seat-top">
             <div id="seat-player-2"></div>
@@ -386,17 +384,32 @@
     </div>
 </div>
 
-<!-- MODAL TOKO -->
+<!-- MODAL TOKO FULL CUSTOMIZATION -->
 <div id="modal-shop" class="modal">
     <div class="modal-content glass-panel">
         <h3 style="color: #00f3ff; margin-top: 0; font-size: 18px;">🛒 TOKO CUSTOMIZATION</h3>
         <div style="font-size: 16px; margin-bottom: 12px;">Koin Kamu: <img src="star.png" class="coin-icon" alt="Coin"> <b id="shop-coin-display" class="coin-text">0</b></div>
-        <div style="text-align: center; padding: 15px; background: rgba(15,23,42,0.6); border-radius: 10px; border: 1px solid #00f3ff;">
-            <div style="font-weight: bold; color: #00f3ff; margin-bottom: 6px;">Ganti Nama Profil:</div>
-            <input type="text" id="player-name-input" value="Kamu" maxlength="15" style="padding: 6px; border-radius: 6px; text-align: center; background: #0f172a; color: white; border: 1px solid #00f3ff;">
+        
+        <div class="shop-tabs">
+            <button class="btn-primary" onclick="switchShopTab('rename')" id="btn-tab-rename" style="font-size: 10px;">🏷️ Ubah Nama</button>
+            <button class="btn-dark" onclick="switchShopTab('avatars')" id="btn-tab-avatars" style="font-size: 10px;">Avatar Hero</button>
+            <button class="btn-dark" onclick="switchShopTab('borders')" id="btn-tab-borders" style="font-size: 10px;">Avatar Border 🖼️</button>
+            <button class="btn-dark" onclick="switchShopTab('cards')" id="btn-tab-cards" style="font-size: 10px;">Desain Kartu 🃏</button>
+        </div>
+
+        <div id="shop-rename-panel" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(0, 243, 255, 0.3); border-radius: 12px; padding: 15px; text-align: center;">
+            <div style="font-size: 14px; font-weight: bold; color: #00f3ff; margin-bottom: 8px;">Ubah Nama Profil (Maks 15 Karakter):</div>
+            <input type="text" id="player-name-input" value="Kamu" maxlength="15" style="text-align: center; max-width: 250px; padding: 6px; border-radius: 6px; border: 1px solid #00f3ff; background: #0f172a; color: white;">
             <button class="btn-primary" onclick="submitNameChange()" style="margin-top: 8px;">Simpan Nama</button>
         </div>
-        <div style="margin-top: 20px;"><button class="btn-dark" onclick="closeShopModal()">Tutup Toko</button></div>
+
+        <div id="shop-avatars-grid" class="shop-grid" style="display: none;"></div>
+        <div id="shop-borders-grid" class="shop-grid" style="display: none;"></div>
+        <div id="shop-cards-grid" class="shop-grid" style="display: none;"></div>
+
+        <div style="margin-top: 20px;">
+            <button class="btn-dark" onclick="closeShopModal()">Tutup Toko</button>
+        </div>
     </div>
 </div>
 
@@ -405,10 +418,11 @@
     <div class="modal-content glass-panel">
         <h3 style="color: #00f3ff; margin-top: 0; font-size: 18px;">📜 PATCH NOTES & UPDATE LOG</h3>
         <div style="text-align: left; background: rgba(15,23,42,0.6); padding: 12px; border-radius: 10px; border: 1px solid #00f3ff;">
-            <div style="font-weight: bold; color: #00f3ff;">VERSION 3.0 (OVAL TABLE + FULL LOGIC RECOVERY)</div>
+            <div style="font-weight: bold; color: #00f3ff;">VERSION 3.1 (FULL FEATURE FIX & DRAG-DROP RECOVERY)</div>
             <ul style="margin: 5px 0 0 18px; padding: 0; font-size: 13px; color: #ddd;">
-                <li>🔒 <b>Strict Discard Rule Fixed</b>: Hanya bisa ambil kartu buangan jika BISA LANGSUNG dibentuk kombinasi valid dengan kartu tangan!</li>
-                <li>🏅 <b>Badge Rank Restored</b>: Tampilan Rank Badge level (Wood, Gold, Mythic, Aurora) kembali aktif sempurna di dalam game.</li>
+                <li>✨ <b>Matrix Rain Background</b>: Background animasi Hujan Matrix Neon diaktifkan penuh!</li>
+                <li>🛒 <b>Full Shop Customization</b>: Menu Toko kembali lengkap (Avatar, Border, Skin Kartu, Rename).</li>
+                <li>🖐️ <b>Drag & Drop Card Swapping</b>: Menggeser dan menukar posisi kartu tangan manual berfungsi kembali sempurna.</li>
             </ul>
         </div>
         <div style="margin-top: 20px;"><button class="btn-green" onclick="closePatchNotesModal()">Tutup</button></div>
@@ -429,7 +443,7 @@
 </div>
 
 <script>
-    /* MATRIX CANVAS */
+    /* MATRIX NEON RAIN CANVAS ANIMATION */
     const canvas = document.getElementById('matrix-canvas');
     const ctx = canvas.getContext('2d');
     function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
@@ -438,14 +452,33 @@
     const suitSymbols = ['♠', '♥', '♣', '♦'];
     const columns = Math.floor(window.innerWidth / 28);
     const drops = [];
-    for (let i = 0; i < columns; i++) drops[i] = { y: Math.random() * -1000, speed: 2 + Math.random() * 3 };
+
+    for (let i = 0; i < columns; i++) {
+        drops[i] = { y: Math.random() * -1000, speed: 2 + Math.random() * 3.5, chars: [] };
+        for (let j = 0; j < 12; j++) {
+            drops[i].chars.push(Math.random() < 0.6 ? (Math.random() < 0.5 ? '0' : '1') : suitSymbols[Math.floor(Math.random() * 4)]);
+        }
+    }
 
     function drawMatrix() {
         ctx.fillStyle = '#030712'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.font = '14px "Rajdhani", monospace';
+        ctx.font = '15px "Rajdhani", monospace';
+
         for (let i = 0; i < drops.length; i++) {
-            ctx.fillStyle = 'rgba(0, 243, 255, 0.35)'; ctx.fillText(suitSymbols[i % 4], i * 28, drops[i].y);
-            drops[i].y += drops[i].speed; if (drops[i].y > canvas.height) drops[i].y = -20;
+            const drop = drops[i]; const x = i * 28;
+            for (let j = 0; j < drop.chars.length; j++) {
+                const charY = drop.y - (drop.chars.length - j) * 18;
+                if (charY > 0 && charY < canvas.height) {
+                    if (j === drop.chars.length - 1) {
+                        ctx.fillStyle = '#00f3ff'; ctx.shadowBlur = 8; ctx.shadowColor = '#00f3ff';
+                    } else {
+                        ctx.fillStyle = 'rgba(0, 243, 255, 0.35)'; ctx.shadowBlur = 0;
+                    }
+                    ctx.fillText(drop.chars[j], x, charY);
+                }
+            }
+            drop.y += drop.speed;
+            if (drop.y - drop.chars.length * 18 > canvas.height) { drop.y = Math.random() * -200; }
         }
         requestAnimationFrame(drawMatrix);
     }
@@ -465,10 +498,12 @@
         else if (type === 'bad') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(180, now); gain.gain.setValueAtTime(0.4, now); osc.start(now); osc.stop(now + 0.2); }
     }
 
-    /* USER PROFILE & BADGES */
+    /* USER PROFILE & DATA */
     let userProfile = {
         name: "Kamu", level: 1, exp: 0, coins: 0, isGm: false,
-        equippedAvatar: "avatar_1.webp", equippedBorderUrl: "", equippedCardTheme: "theme-classic"
+        equippedAvatar: "avatar_1.webp", equippedBorderUrl: "", equippedCardTheme: "theme-classic",
+        ownedAvatars: ["avatar_1.webp", "avatar_2.webp", "avatar_3.webp", "avatar_4.webp", "avatar_5.webp"],
+        ownedBorders: [""], ownedCardThemes: ["theme-classic"]
     };
 
     function loadProfileData() {
@@ -524,6 +559,100 @@
         document.body.className = userProfile.equippedCardTheme || "theme-classic";
     }
 
+    /* DATA TOKO CUSTOMIZATION LENGKAP */
+    const shopAvatars = [
+        { name: "Hero 1", url: "avatar_1.webp" }, { name: "Dwarf", url: "avatar_2.webp" },
+        { name: "Rogue", url: "avatar_3.webp" }, { name: "Gnome", url: "avatar_4.webp" },
+        { name: "Barbarian", url: "avatar_5.webp" }, { name: "Ranger", url: "avatar_6.webp" }
+    ];
+    const shopBorders = [
+        { name: "Tanpa Border", url: "", price: 0 },
+        { name: "Entangled 🌸", url: "border_entangled.png", price: 5000 },
+        { name: "Fox Border 🦊", url: "border_fox.png", price: 5000 },
+        { name: "Alchemy 🧙‍♀️", url: "border_alchemy.png", price: 8000 },
+        { name: "Butterfly 🦋", url: "border_butterfly.png", price: 10000 }
+    ];
+    const shopCards = [
+        { name: "Klasik Merah", themeClass: "theme-classic", price: 0 },
+        { name: "Cyber Neon ⚡", themeClass: "theme-cyber", price: 1500 },
+        { name: "Gold Luxury 👑", themeClass: "theme-gold", price: 3500 }
+    ];
+
+    function openShopModal() {
+        document.getElementById('shop-coin-display').innerText = userProfile.coins.toLocaleString();
+        switchShopTab('rename'); renderShopItems();
+        document.getElementById('modal-shop').style.display = 'flex';
+    }
+    function closeShopModal() { document.getElementById('modal-shop').style.display = 'none'; }
+    function openPatchNotesModal() { document.getElementById('modal-patch').style.display = 'flex'; }
+    function closePatchNotesModal() { document.getElementById('modal-patch').style.display = 'none'; }
+
+    function switchShopTab(tab) {
+        document.getElementById('shop-rename-panel').style.display = (tab === 'rename') ? 'block' : 'none';
+        document.getElementById('shop-avatars-grid').style.display = (tab === 'avatars') ? 'grid' : 'none';
+        document.getElementById('shop-borders-grid').style.display = (tab === 'borders') ? 'grid' : 'none';
+        document.getElementById('shop-cards-grid').style.display = (tab === 'cards') ? 'grid' : 'none';
+
+        document.getElementById('btn-tab-rename').className = (tab === 'rename') ? 'btn-primary' : 'btn-dark';
+        document.getElementById('btn-tab-avatars').className = (tab === 'avatars') ? 'btn-primary' : 'btn-dark';
+        document.getElementById('btn-tab-borders').className = (tab === 'borders') ? 'btn-primary' : 'btn-dark';
+        document.getElementById('btn-tab-cards').className = (tab === 'cards') ? 'btn-primary' : 'btn-dark';
+    }
+
+    function renderShopItems() {
+        const avGrid = document.getElementById('shop-avatars-grid'); avGrid.innerHTML = '';
+        shopAvatars.forEach(item => {
+            const equipped = userProfile.equippedAvatar === item.url;
+            const div = document.createElement('div'); div.className = 'shop-item';
+            div.innerHTML = `<img src="${item.url}" class="preview-img"><div class="shop-item-title">${item.name}</div>
+                <button class="${equipped?'btn-dark':'btn-secondary'}" onclick="userProfile.equippedAvatar='${item.url}'; saveProfileData(); renderShopItems();" ${equipped?'disabled':''} style="font-size:9px; padding:4px 8px;">${equipped?'Dipakai':'Pakai'}</button>`;
+            avGrid.appendChild(div);
+        });
+
+        const bdGrid = document.getElementById('shop-borders-grid'); bdGrid.innerHTML = '';
+        shopBorders.forEach(item => {
+            const owned = userProfile.ownedBorders.includes(item.url);
+            const equipped = userProfile.equippedBorderUrl === item.url;
+            const div = document.createElement('div'); div.className = 'shop-item';
+            div.innerHTML = `<div class="shop-item-title">${item.name}</div>
+                <button class="${equipped?'btn-dark':(owned?'btn-secondary':'btn-shop')}" onclick="handleBorderShop('${item.url}', ${item.price})" ${equipped?'disabled':''} style="font-size:8px; padding:4px 8px;">${equipped?'Dipakai':(owned?'Pakai':`Beli ${item.price}`)}</button>`;
+            bdGrid.appendChild(div);
+        });
+
+        const cardGrid = document.getElementById('shop-cards-grid'); cardGrid.innerHTML = '';
+        shopCards.forEach(item => {
+            const owned = userProfile.ownedCardThemes.includes(item.themeClass);
+            const equipped = userProfile.equippedCardTheme === item.themeClass;
+            const div = document.createElement('div'); div.className = 'shop-item';
+            div.innerHTML = `<div class="card face-down shop-card-preview ${item.themeClass}"></div><div class="shop-item-title">${item.name}</div>
+                <button class="${equipped?'btn-dark':(owned?'btn-secondary':'btn-shop')}" onclick="handleCardShop('${item.themeClass}', ${item.price})" ${equipped?'disabled':''} style="font-size:8px; padding:4px 8px;">${equipped?'Dipakai':(owned?'Pakai':`Beli ${item.price}`)}</button>`;
+            cardGrid.appendChild(div);
+        });
+    }
+
+    function handleBorderShop(url, price) {
+        if (userProfile.ownedBorders.includes(url)) {
+            userProfile.equippedBorderUrl = url; saveProfileData(); renderShopItems();
+        } else if (userProfile.coins >= price) {
+            userProfile.coins -= price; userProfile.ownedBorders.push(url); userProfile.equippedBorderUrl = url;
+            saveProfileData(); renderShopItems();
+        } else { alert("Koin tidak cukup!"); }
+    }
+
+    function handleCardShop(themeClass, price) {
+        if (userProfile.ownedCardThemes.includes(themeClass)) {
+            userProfile.equippedCardTheme = themeClass; saveProfileData(); renderShopItems();
+        } else if (userProfile.coins >= price) {
+            userProfile.coins -= price; userProfile.ownedCardThemes.push(themeClass); userProfile.equippedCardTheme = themeClass;
+            saveProfileData(); renderShopItems();
+        } else { alert("Koin tidak cukup!"); }
+    }
+
+    function submitNameChange() {
+        const val = document.getElementById('player-name-input').value.trim();
+        if (val) { userProfile.name = val.slice(0, 15); saveProfileData(); alert("✅ Nama disimpan!"); }
+    }
+
     /* GM CONSOLE */
     function openGmLoginModal() { document.getElementById('modal-gm-login').style.display = 'flex'; }
     function closeGmLoginModal() { document.getElementById('modal-gm-login').style.display = 'none'; }
@@ -538,17 +667,7 @@
     function gmAddCoins() { userProfile.coins += 100000; saveProfileData(); }
     function gmMaxLevel() { userProfile.level = 100; userProfile.exp = 0; saveProfileData(); }
 
-    /* TOKO & MODALS */
-    function openShopModal() { document.getElementById('shop-coin-display').innerText = userProfile.coins.toLocaleString(); document.getElementById('modal-shop').style.display = 'flex'; }
-    function closeShopModal() { document.getElementById('modal-shop').style.display = 'none'; }
-    function openPatchNotesModal() { document.getElementById('modal-patch').style.display = 'flex'; }
-    function closePatchNotesModal() { document.getElementById('modal-patch').style.display = 'none'; }
-    function submitNameChange() {
-        const val = document.getElementById('player-name-input').value.trim();
-        if (val) { userProfile.name = val.slice(0, 15); saveProfileData(); alert("✅ Nama disimpan!"); }
-    }
-
-    /* --- FULL GAME ENGINE (RESTORED RULES) --- */
+    /* --- GAME ENGINE (FULL RULES & DRAG DROP) --- */
     let suits = ['♠', '♣', '♥', '♦']; let values = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
     let targetScore = 1000;
 
@@ -621,7 +740,6 @@
     function isValidGroup(cards) { return isValidSet(cards) || isValidRun(cards); }
     function groupValue(group) { return group.reduce((sum, c) => sum + pointValue(c.value), 0); }
 
-    /* VALIDASI AMBIL BUANGAN KETAT */
     function cardCompletesMeld(hand, card) {
         if (!card || isWildCard(card) || hand.length > 10) return false;
         for (const size of [2, 3, 6]) {
@@ -706,6 +824,8 @@
         return div;
     }
 
+    let draggedCardIndex = null;
+
     function updateUI() {
         gameState.players.forEach((p, idx) => {
             const seatEl = document.getElementById(`seat-player-${idx}`);
@@ -744,7 +864,6 @@
             document.getElementById('tuyul-info').innerText = `${gameState.tuyul.value}=Wild`;
         }
 
-        /* RENDER DISCARD PILE WITH STRICT VALIDATION */
         const dpEl = document.getElementById('discard-pile'); dpEl.innerHTML = '';
         const visible = gameState.discardPile.slice(-7);
         const humanDrawPhase = gameState.currentTurn === 0 && gameState.phase === 'drawing';
@@ -769,10 +888,39 @@
             });
         }
 
+        /* RENDER HAND CARDS + FULL DRAG & DROP SUPPORT */
         const handEl = document.getElementById('my-hand'); handEl.innerHTML = '';
         gameState.players[0].hand.forEach((card, idx) => {
             const sel = gameState.selectedIndices.includes(idx) ? 'selected' : '';
-            handEl.appendChild(createCardElement(card, sel, () => handleCardClick(idx)));
+            const div = createCardElement(card, sel, () => handleCardClick(idx));
+            
+            div.draggable = true;
+            div.ondragstart = (e) => {
+                draggedCardIndex = idx; e.dataTransfer.setData('text/plain', idx);
+                setTimeout(() => div.classList.add('dragging'), 0);
+            };
+            div.ondragend = () => {
+                div.classList.remove('dragging');
+                document.querySelectorAll('.card').forEach(c => c.classList.remove('drag-over-left', 'drag-over-right'));
+            };
+            div.ondragover = (e) => {
+                e.preventDefault(); if (draggedCardIndex === null || draggedCardIndex === idx) return;
+                const bounding = div.getBoundingClientRect(); const offset = e.clientX - bounding.left;
+                document.querySelectorAll('.card').forEach(c => c.classList.remove('drag-over-left', 'drag-over-right'));
+                if (offset < bounding.width / 2) div.classList.add('drag-over-left'); else div.classList.add('drag-over-right');
+            };
+            div.ondragleave = () => { div.classList.remove('drag-over-left', 'drag-over-right'); };
+            div.ondrop = (e) => {
+                e.preventDefault(); const fromIdx = parseInt(e.dataTransfer.getData('text/plain')); let toIdx = idx;
+                const bounding = div.getBoundingClientRect(); const offset = e.clientX - bounding.left;
+                if (offset > bounding.width / 2 && fromIdx < toIdx) toIdx = Math.min(gameState.players[0].hand.length - 1, toIdx);
+                if (!isNaN(fromIdx) && fromIdx !== toIdx) {
+                    const hand = gameState.players[0].hand; const [movedCard] = hand.splice(fromIdx, 1);
+                    hand.splice(toIdx, 0, movedCard); gameState.selectedIndices = []; updateUI();
+                }
+            };
+
+            handEl.appendChild(div);
         });
 
         if (gameState.drawnFromDiscardCard) {
