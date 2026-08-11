@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Remi Hardcore - Oval Table Edition v3.2</title>
+    <title>Remi Hardcore - Oval Table Edition v3.4</title>
     <!-- Font TT Runs / Montserrat / Rajdhani -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <style>
@@ -180,7 +180,7 @@
 
         .player-name-text { font-weight: 700; font-size: 11px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; max-width: 100px; }
 
-        /* CARDS & DRAG DROP STYLING */
+        /* CARDS STYLING */
         .card {
             display: inline-block; width: 48px; height: 70px; background: #ffffff; color: #111111;
             border-radius: 6px; font-weight: bold; margin: 2px; cursor: pointer;
@@ -429,10 +429,10 @@
     <div class="modal-content glass-panel">
         <h3 style="color: #00f3ff; margin-top: 0; font-size: 18px;">📜 PATCH NOTES & UPDATE LOG</h3>
         <div style="text-align: left; background: rgba(15,23,42,0.6); padding: 12px; border-radius: 10px; border: 1px solid #00f3ff;">
-            <div style="font-weight: bold; color: #00f3ff;">VERSION 3.2 (STRICT FIRST DISCARD RULE & FULL SHOP)</div>
+            <div style="font-weight: bold; color: #00f3ff;">VERSION 3.4 (CLOSING CARD TIERED BONUS)</div>
             <ul style="margin: 5px 0 0 18px; padding: 0; font-size: 13px; color: #ddd;">
-                <li>🎯 <b>Strict First Discard Rule</b>: Ambil buangan pertama kali WAJIB membentuk Seri/Run, Four-of-a-Kind, atau Triple As! Tris biasa baru bisa diambil jika sudah submit.</li>
-                <li>🛒 <b>Full Avatar & Card Skins Catalog</b>: Semua daftar Avatar (1-8 & GM) dan Skin Kartu (Klasik, Cyber, Gold, Dragon, Royal, Dark) tampil lengkap.</li>
+                <li>🃏 <b>Tiered Closing Card Bonus</b>: Bonus tutup tangan biasa disesuaikan jenis kartu penutup: Kartu Angka (+50 Poin), Kerajaan (+100 Poin), dan As (+150 Poin)!</li>
+                <li>⚡ <b>Pure Close Instant Win</b>: Kocokan murni tanpa pernah submit tetap mendapat +250 (Seri+Four) atau +300 (Tris+Four).</li>
             </ul>
         </div>
         <div style="margin-top: 20px;"><button class="btn-green" onclick="closePatchNotesModal()">Tutup</button></div>
@@ -569,7 +569,7 @@
         document.body.className = userProfile.equippedCardTheme || "theme-classic";
     }
 
-    /* FULL CATALOG SHOP CUSTOMIZATION */
+    /* SHOP CUSTOMIZATION */
     const shopAvatars = [
         { name: "Hero 1", url: "avatar_1.webp" }, { name: "Dwarf", url: "avatar_2.webp" },
         { name: "Rogue", url: "avatar_3.webp" }, { name: "Gnome", url: "avatar_4.webp" },
@@ -683,7 +683,7 @@
     function gmAddCoins() { userProfile.coins += 100000; saveProfileData(); }
     function gmMaxLevel() { userProfile.level = 100; userProfile.exp = 0; saveProfileData(); }
 
-    /* --- GAME ENGINE (PRECISE FIRST DISCARD RULE) --- */
+    /* --- GAME ENGINE (PRECISE CLOSING BONUS RULES) --- */
     let suits = ['♠', '♣', '♥', '♦']; let values = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
     let targetScore = 1000;
 
@@ -726,6 +726,14 @@
     function penaltyValue(v) { return v === 'A' ? 150 : (isRoyalCard(v) ? 100 : 50); }
     function cardId(c){ return c ? (c.value + c.suit) : ''; }
 
+    /* MENGHITUNG BONUS PENUTUPAN TANGAN BERDASARKAN KARTU PENUTUP */
+    function getClosingCardBonus(closingCard) {
+        if (!closingCard) return 50;
+        if (closingCard.value === 'A') return 150; // Kartu As = +150
+        if (isRoyalCard(closingCard.value)) return 100; // Kartu Kerajaan (J, Q, K) = +100
+        return 50; // Kartu Angka (2-10) = +50
+    }
+
     function combinations(arr, k) {
         if (k > arr.length || k <= 0) return [];
         const res = [];
@@ -756,7 +764,6 @@
     function isValidGroup(cards) { return isValidSet(cards) || isValidRun(cards); }
     function groupValue(group) { return group.reduce((sum, c) => sum + pointValue(c.value), 0); }
 
-    /* LOGIKA KHUSUS VALIDASI AMBIL BUANGAN PERTAMA KALI VS SELANJUTNYA */
     function cardCompletesMeld(player, card) {
         if (!card || isWildCard(card) || player.hand.length > 10) return false;
         const hasSubmittedBefore = player.submittedGroups.length > 0;
@@ -766,10 +773,8 @@
             for (const combo of combinations(player.hand, size)) {
                 const testGroup = [card, ...combo];
                 if (isValidGroup(testGroup)) {
-                    // JIKA SUDAH PERNAH SUBMIT: Bebas kombinasi apa saja
                     if (hasSubmittedBefore) return true;
                     
-                    // JIKA PERTAMA KALI AMBIL BUANGAN: Harus SERI, FOUR-OF-A-KIND, atau TRIPLE AS
                     const isRun = isValidRun(testGroup);
                     const isFour = (testGroup.length === 4 && isValidSet(testGroup));
                     const isTripleAce = (testGroup.length === 3 && isValidSet(testGroup) && testGroup.some(c => c.value === 'A'));
@@ -991,7 +996,7 @@
         if (gameState.currentTurn !== 0 || gameState.phase !== 'discarding') return;
         if (gameState.drawnFromDiscardCard) { alert("Kartu buangan wajib di-submit!"); return; }
         const res = checkCanCloseHand(gameState.players[0].hand);
-        if (res) performCloseHand(0, res.melds);
+        if (res) performCloseHand(0, res.melds, res.closingCard);
     }
 
     function submitCombination() {
@@ -1043,7 +1048,7 @@
 
         setTimeout(() => {
             const closeRes = checkCanCloseHand(ai.hand);
-            if (closeRes) { performCloseHand(gameState.currentTurn, closeRes.melds); return; }
+            if (closeRes) { performCloseHand(gameState.currentTurn, closeRes.melds, closeRes.closingCard); return; }
 
             if (ai.hand.length > 0) {
                 const card = ai.hand.pop(); gameState.discardPile.push(card); playSound('discard');
@@ -1052,12 +1057,53 @@
         }, 800);
     }
 
-    function performCloseHand(pIdx, melds) {
+    /* LOGIKA HITUNG SKOR PENUTUPAN BERDASARKAN KARTU PENUTUP */
+    function performCloseHand(pIdx, melds, closingCard) {
         gameState.phase = 'ended'; playSound('submit');
-        const p = gameState.players[pIdx]; p.score += 250;
+        const winner = gameState.players[pIdx];
+        const isPureClose = (winner.submittedGroups.length === 0);
+
+        let roundBonus = 0; let closeTypeDesc = "";
+
+        if (isPureClose) {
+            // TUTUP TANGAN KOCOKAN MURNI (PURE)
+            let hasRun = melds.some(g => isValidRun(g));
+            let hasTris = melds.some(g => g.length === 3 && isValidSet(g));
+            let hasFour = melds.some(g => g.length === 4 && isValidSet(g));
+
+            if (hasRun && hasFour) {
+                roundBonus = 250; closeTypeDesc = "Pure Seri + Four-of-a-Kind (+250 Poin)";
+            } else if (hasTris && hasFour) {
+                roundBonus = 300; closeTypeDesc = "Pure Tris + Four-of-a-Kind (+300 Poin)";
+            } else {
+                roundBonus = 250; closeTypeDesc = "Pure Close Instant Win (+250 Poin)";
+            }
+
+            winner.score += roundBonus;
+        } else {
+            // TUTUP TANGAN BIASA -> BONUS DARI KARTU PENUTUP
+            let closingMeldsVal = melds.reduce((sum, g) => sum + groupValue(g), 0);
+            roundBonus = getClosingCardBonus(closingCard);
+            let cardLabel = closingCard ? `${closingCard.value}${closingCard.suit}` : 'Kartu';
+            
+            winner.score += (closingMeldsVal + roundBonus);
+            closeTypeDesc = `Tutup Tangan Biasa (Kombinasi Akhir: ${closingMeldsVal} Poin + Bonus Penutup ${cardLabel}: +${roundBonus} Poin)`;
+        }
+
         addExpAndCoins(pIdx === 0 ? 100 : 20, pIdx === 0 ? 150 : 20);
-        document.getElementById('modal-title').innerText = `${p.name} TUTUP TANGAN!`;
-        document.getElementById('modal-score-text').innerHTML = `<b>${p.name}</b> memenangkan ronde ini dan mendapatkan +250 Poin!`;
+
+        // REKAP SKOR PADA MODAL
+        document.getElementById('modal-title').innerText = `🏁 ${winner.name} TUTUP TANGAN!`;
+        let recapHtml = `<div style="font-size:13px; margin-bottom:10px; color:#00f3ff;"><b>Detail Tutupan:</b> ${closeTypeDesc}</div><hr style="border-color:rgba(0,243,255,0.2);">`;
+        
+        gameState.players.forEach((p, i) => {
+            recapHtml += `<div style="display:flex; justify-content:space-between; font-size:12px; margin:4px 0;">
+                <span>${p.name} ${i === pIdx ? '🏆' : ''}</span>
+                <span>Total Poin: <b>${p.score}</b></span>
+            </div>`;
+        });
+
+        document.getElementById('modal-score-text').innerHTML = recapHtml;
         document.getElementById('modal-score').style.display = 'flex';
     }
 
