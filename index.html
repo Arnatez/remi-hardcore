@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Remi Hardcore - Oval Table Edition v3.4</title>
+    <title>Remi Hardcore - Oval Table Edition v3.5</title>
     <!-- Font TT Runs / Montserrat / Rajdhani -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <style>
@@ -250,6 +250,10 @@
         .shop-item img.preview-img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; }
         .shop-card-preview { width: 38px; height: 55px; border-radius: 5px; margin: 0 auto; }
         .shop-item-title { font-size: 11px; font-weight: bold; color: #00f3ff; text-align: center; }
+
+        .setting-row { display: flex; justify-content: space-between; align-items: center; margin: 10px 0; text-align: left; }
+        .setting-row label { color: #00f3ff; font-weight: bold; font-size: 13px; }
+        .setting-input { padding: 6px; background: #0f172a; color: white; border: 1px solid #00f3ff; border-radius: 6px; font-size: 12px; }
     </style>
 </head>
 <body class="theme-classic">
@@ -289,7 +293,7 @@
     <button class="menu-btn btn-primary" onclick="startVsBotMode()">🤖 MAIN MEJA POKER OVAL (VS BOT)</button>
     <button class="menu-btn btn-shop" onclick="openShopModal()">🛒 TOKO CUSTOMIZATION</button>
     <button class="menu-btn btn-orange" onclick="openPatchNotesModal()">📜 PATCH NOTES (UPDATE LOG)</button>
-    <button class="menu-btn btn-dark" onclick="openSettingsModal()">⚙️ PENGATURAN & BOT</button>
+    <button class="menu-btn btn-dark" onclick="openSettingsModal(false)">⚙️ PENGATURAN & BOT</button>
 </div>
 
 <!-- FULLSCREEN POKER GAME BOARD CONTAINER -->
@@ -298,6 +302,7 @@
         <h3 style="margin: 0; color: #00f3ff; font-size: 14px; letter-spacing: 2px;">♣ REMI CASINO OVAL ♠</h3>
         <div id="game-phase-info" style="font-weight: bold; color: #00f3ff; font-size: 13px;"></div>
         <div>
+            <button class="btn-dark" onclick="openSettingsModal(true)" style="padding: 4px 8px; font-size: 9px;">⚙️ SETTING</button>
             <button class="btn-gm-purple" onclick="openGmConsoleDirect()" style="padding: 4px 8px; font-size: 9px;">👑 DEV</button>
             <button class="btn-dark" onclick="backToHomeMenu()" style="padding: 4px 8px; font-size: 9px;">🏠 MENU</button>
         </div>
@@ -429,26 +434,56 @@
     <div class="modal-content glass-panel">
         <h3 style="color: #00f3ff; margin-top: 0; font-size: 18px;">📜 PATCH NOTES & UPDATE LOG</h3>
         <div style="text-align: left; background: rgba(15,23,42,0.6); padding: 12px; border-radius: 10px; border: 1px solid #00f3ff;">
-            <div style="font-weight: bold; color: #00f3ff;">VERSION 3.4 (CLOSING CARD TIERED BONUS)</div>
+            <div style="font-weight: bold; color: #00f3ff;">VERSION 3.5 (SETTINGS & VOLUME & BOT RENAME RECOVERY)</div>
             <ul style="margin: 5px 0 0 18px; padding: 0; font-size: 13px; color: #ddd;">
-                <li>🃏 <b>Tiered Closing Card Bonus</b>: Bonus tutup tangan biasa disesuaikan jenis kartu penutup: Kartu Angka (+50 Poin), Kerajaan (+100 Poin), dan As (+150 Poin)!</li>
-                <li>⚡ <b>Pure Close Instant Win</b>: Kocokan murni tanpa pernah submit tetap mendapat +250 (Seri+Four) atau +300 (Tris+Four).</li>
+                <li>🔊 <b>Volume Slider & Bot Rename</b>: Slider Volume Suara & Pengubahan Nama Bot 1-3 kembali hadir di menu Pengaturan.</li>
+                <li>🔒 <b>In-Game Setting Lock</b>: Saat berada di dalam game, fitur ubah Caps Poin dikunci agar skor permainan aman.</li>
             </ul>
         </div>
         <div style="margin-top: 20px;"><button class="btn-green" onclick="closePatchNotesModal()">Tutup</button></div>
     </div>
 </div>
 
-<!-- MODAL PENGATURAN -->
+<!-- MODAL PENGATURAN LENGKAP -->
 <div id="modal-settings" class="modal">
-    <div class="modal-content glass-panel">
-        <h3 style="color: #00f3ff; margin-top: 0; font-size: 18px;">PENGATURAN GAME</h3>
-        <div style="text-align: left; margin: 10px 0;">
-            <label style="color: #00f3ff; font-weight: bold;">Target Caps Poin:</label>
-            <input type="number" id="target-input" value="1000" style="width: 100%; padding: 8px; background: #0f172a; color: white; border: 1px solid #00f3ff; border-radius: 6px;">
+    <div class="modal-content glass-panel" style="max-width: 480px;">
+        <h3 style="color: #00f3ff; margin-top: 0; font-size: 18px;">⚙️ PENGATURAN GAME</h3>
+        
+        <div class="setting-row">
+            <label for="sfx-volume-slider">🔊 Volume Suara (SFX):</label>
+            <input type="range" id="sfx-volume-slider" min="0" max="100" value="50" oninput="updateVolumeFromSlider(this.value)" style="width: 150px;">
         </div>
-        <button class="btn-green" onclick="saveAllSettings()">Simpan</button>
-        <button class="btn-dark" onclick="closeSettingsModal()">Batal</button>
+
+        <hr style="border-color: rgba(0, 243, 255, 0.2);">
+
+        <div style="text-align: left; color: #00f3ff; font-weight: bold; margin-bottom: 8px; font-size: 13px;">🤖 Ubah Nama Bot Lawan:</div>
+        <div class="setting-row">
+            <label for="bot1-name-input">Bot 1 (Kiri):</label>
+            <input type="text" id="bot1-name-input" class="setting-input" style="width: 160px;" maxlength="12">
+        </div>
+        <div class="setting-row">
+            <label for="bot2-name-input">Bot 2 (Atas):</label>
+            <input type="text" id="bot2-name-input" class="setting-input" style="width: 160px;" maxlength="12">
+        </div>
+        <div class="setting-row">
+            <label for="bot3-name-input">Bot 3 (Kanan):</label>
+            <input type="text" id="bot3-name-input" class="setting-input" style="width: 160px;" maxlength="12">
+        </div>
+
+        <hr style="border-color: rgba(0, 243, 255, 0.2);">
+
+        <div class="setting-row" id="caps-setting-row">
+            <label for="target-input">🏆 Target Caps Poin Maksimal:</label>
+            <input type="number" id="target-input" value="1000" class="setting-input" style="width: 100px;">
+        </div>
+        <div id="caps-locked-msg" style="display: none; color: #fb923c; font-size: 11px; text-align: left; margin-top: -5px; margin-bottom: 10px;">
+            🔒 Caps Poin dikunci selama permainan berlangsung.
+        </div>
+
+        <div style="margin-top: 20px;">
+            <button class="btn-green" onclick="saveAllSettings()">Simpan Pengaturan</button>
+            <button class="btn-dark" onclick="closeSettingsModal()">Batal</button>
+        </div>
     </div>
 </div>
 
@@ -494,18 +529,25 @@
     }
     drawMatrix();
 
-    /* AUDIO SFX SYNTH */
+    /* AUDIO SFX SYNTH & VOLUME CONTROL */
     let sfxVolume = 0.5; const AudioCtx = window.AudioContext || window.webkitAudioContext; let audioCtx = null;
     function initAudio() { if (!audioCtx) audioCtx = new AudioCtx(); }
+    function updateVolumeFromSlider(val) {
+        sfxVolume = parseFloat(val) / 100;
+        localStorage.setItem('remi_sfx_volume', sfxVolume);
+    }
+
     function playSound(type) {
         if (sfxVolume <= 0) return; initAudio(); if (!audioCtx) return;
         const now = audioCtx.currentTime; const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
         osc.connect(gain); gain.connect(audioCtx.destination);
-        if (type === 'click') { osc.frequency.setValueAtTime(600, now); gain.gain.setValueAtTime(0.2, now); osc.start(now); osc.stop(now + 0.04); }
-        else if (type === 'draw') { osc.frequency.setValueAtTime(300, now); gain.gain.setValueAtTime(0.3, now); osc.start(now); osc.stop(now + 0.06); }
-        else if (type === 'discard') { osc.frequency.setValueAtTime(400, now); gain.gain.setValueAtTime(0.3, now); osc.start(now); osc.stop(now + 0.06); }
-        else if (type === 'submit') { osc.frequency.setValueAtTime(523, now); gain.gain.setValueAtTime(0.4, now); osc.start(now); osc.stop(now + 0.15); }
-        else if (type === 'bad') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(180, now); gain.gain.setValueAtTime(0.4, now); osc.start(now); osc.stop(now + 0.2); }
+        gain.gain.setValueAtTime(sfxVolume * 0.5, now);
+
+        if (type === 'click') { osc.frequency.setValueAtTime(600, now); osc.start(now); osc.stop(now + 0.04); }
+        else if (type === 'draw') { osc.frequency.setValueAtTime(300, now); osc.start(now); osc.stop(now + 0.06); }
+        else if (type === 'discard') { osc.frequency.setValueAtTime(400, now); osc.start(now); osc.stop(now + 0.06); }
+        else if (type === 'submit') { osc.frequency.setValueAtTime(523, now); osc.start(now); osc.stop(now + 0.15); }
+        else if (type === 'bad') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(180, now); osc.start(now); osc.stop(now + 0.2); }
     }
 
     /* USER PROFILE & DATA */
@@ -513,12 +555,18 @@
         name: "Kamu", level: 1, exp: 0, coins: 0, isGm: false,
         equippedAvatar: "avatar_1.webp", equippedBorderUrl: "", equippedCardTheme: "theme-classic",
         ownedAvatars: ["avatar_1.webp", "avatar_2.webp", "avatar_3.webp", "avatar_4.webp", "avatar_5.webp"],
-        ownedBorders: [""], ownedCardThemes: ["theme-classic"]
+        ownedBorders: [""], ownedCardThemes: ["theme-classic"],
+        botNames: ["Bot_Budi", "Bot_Jono", "Bot_Tono"]
     };
 
     function loadProfileData() {
         const saved = localStorage.getItem('remi_user_profile');
         if (saved) { try { userProfile = Object.assign(userProfile, JSON.parse(saved)); } catch(e){} }
+        
+        const savedVol = localStorage.getItem('remi_sfx_volume');
+        if (savedVol !== null) { sfxVolume = parseFloat(savedVol); }
+        document.getElementById('sfx-volume-slider').value = Math.round(sfxVolume * 100);
+
         updateProfileUI();
     }
     function saveProfileData() { localStorage.setItem('remi_user_profile', JSON.stringify(userProfile)); updateProfileUI(); }
@@ -683,7 +731,7 @@
     function gmAddCoins() { userProfile.coins += 100000; saveProfileData(); }
     function gmMaxLevel() { userProfile.level = 100; userProfile.exp = 0; saveProfileData(); }
 
-    /* --- GAME ENGINE (PRECISE CLOSING BONUS RULES) --- */
+    /* --- GAME ENGINE --- */
     let suits = ['♠', '♣', '♥', '♦']; let values = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
     let targetScore = 1000;
 
@@ -709,6 +757,13 @@
         gameState.players[0].avatar = userProfile.equippedAvatar;
         gameState.players[0].borderUrl = userProfile.equippedBorderUrl;
 
+        // LOAD BOT NAMES FROM PROFILE
+        if (userProfile.botNames) {
+            gameState.players[1].name = userProfile.botNames[0] || "Bot_Budi";
+            gameState.players[2].name = userProfile.botNames[1] || "Bot_Jono";
+            gameState.players[3].name = userProfile.botNames[2] || "Bot_Tono";
+        }
+
         document.getElementById('home-screen').style.setProperty('display', 'none', 'important');
         document.getElementById('game-container').style.setProperty('display', 'flex', 'important');
         resetGameCompletely();
@@ -726,12 +781,11 @@
     function penaltyValue(v) { return v === 'A' ? 150 : (isRoyalCard(v) ? 100 : 50); }
     function cardId(c){ return c ? (c.value + c.suit) : ''; }
 
-    /* MENGHITUNG BONUS PENUTUPAN TANGAN BERDASARKAN KARTU PENUTUP */
     function getClosingCardBonus(closingCard) {
         if (!closingCard) return 50;
-        if (closingCard.value === 'A') return 150; // Kartu As = +150
-        if (isRoyalCard(closingCard.value)) return 100; // Kartu Kerajaan (J, Q, K) = +100
-        return 50; // Kartu Angka (2-10) = +50
+        if (closingCard.value === 'A') return 150;
+        if (isRoyalCard(closingCard.value)) return 100;
+        return 50;
     }
 
     function combinations(arr, k) {
@@ -1057,7 +1111,6 @@
         }, 800);
     }
 
-    /* LOGIKA HITUNG SKOR PENUTUPAN BERDASARKAN KARTU PENUTUP */
     function performCloseHand(pIdx, melds, closingCard) {
         gameState.phase = 'ended'; playSound('submit');
         const winner = gameState.players[pIdx];
@@ -1066,7 +1119,6 @@
         let roundBonus = 0; let closeTypeDesc = "";
 
         if (isPureClose) {
-            // TUTUP TANGAN KOCOKAN MURNI (PURE)
             let hasRun = melds.some(g => isValidRun(g));
             let hasTris = melds.some(g => g.length === 3 && isValidSet(g));
             let hasFour = melds.some(g => g.length === 4 && isValidSet(g));
@@ -1081,7 +1133,6 @@
 
             winner.score += roundBonus;
         } else {
-            // TUTUP TANGAN BIASA -> BONUS DARI KARTU PENUTUP
             let closingMeldsVal = melds.reduce((sum, g) => sum + groupValue(g), 0);
             roundBonus = getClosingCardBonus(closingCard);
             let cardLabel = closingCard ? `${closingCard.value}${closingCard.suit}` : 'Kartu';
@@ -1092,7 +1143,6 @@
 
         addExpAndCoins(pIdx === 0 ? 100 : 20, pIdx === 0 ? 150 : 20);
 
-        // REKAP SKOR PADA MODAL
         document.getElementById('modal-title').innerText = `🏁 ${winner.name} TUTUP TANGAN!`;
         let recapHtml = `<div style="font-size:13px; margin-bottom:10px; color:#00f3ff;"><b>Detail Tutupan:</b> ${closeTypeDesc}</div><hr style="border-color:rgba(0,243,255,0.2);">`;
         
@@ -1109,9 +1159,67 @@
 
     function nextRound() { document.getElementById('modal-score').style.display = 'none'; initGame(); }
     function resetGameCompletely() { document.getElementById('modal-score').style.display = 'none'; gameState.players.forEach(p => p.score = 0); initGame(); }
-    function openSettingsModal() { document.getElementById('modal-settings').style.display = 'flex'; }
+
+    /* MODAL PENGATURAN LOGIC */
+    let isInGameSettings = false;
+
+    function openSettingsModal(inGame = false) {
+        isInGameSettings = inGame;
+        
+        // POPULATE INPUTS
+        if (userProfile.botNames) {
+            document.getElementById('bot1-name-input').value = userProfile.botNames[0] || "Bot_Budi";
+            document.getElementById('bot2-name-input').value = userProfile.botNames[1] || "Bot_Jono";
+            document.getElementById('bot3-name-input').value = userProfile.botNames[2] || "Bot_Tono";
+        }
+        document.getElementById('target-input').value = targetScore;
+
+        // KONDISIONAL BISA MERUBAH CAPS POIN ATAU TIDAK
+        const capsRow = document.getElementById('caps-setting-row');
+        const capsInput = document.getElementById('target-input');
+        const capsMsg = document.getElementById('caps-locked-msg');
+
+        if (inGame) {
+            capsInput.disabled = true;
+            capsRow.style.opacity = '0.5';
+            capsMsg.style.display = 'block';
+        } else {
+            capsInput.disabled = false;
+            capsRow.style.opacity = '1';
+            capsMsg.style.display = 'none';
+        }
+
+        document.getElementById('modal-settings').style.display = 'flex';
+    }
+
     function closeSettingsModal() { document.getElementById('modal-settings').style.display = 'none'; }
-    function saveAllSettings() { closeSettingsModal(); }
+
+    function saveAllSettings() {
+        // SAVE BOT NAMES
+        const b1 = document.getElementById('bot1-name-input').value.trim() || "Bot_Budi";
+        const b2 = document.getElementById('bot2-name-input').value.trim() || "Bot_Jono";
+        const b3 = document.getElementById('bot3-name-input').value.trim() || "Bot_Tono";
+
+        userProfile.botNames = [b1, b2, b3];
+        saveProfileData();
+
+        // UPDATE BOT NAMES IN CURRENT GAME IF ACTIVE
+        if (gameState.players) {
+            gameState.players[1].name = b1;
+            gameState.players[2].name = b2;
+            gameState.players[3].name = b3;
+        }
+
+        // SAVE TARGET SCORE ONLY IF NOT IN GAME
+        if (!isInGameSettings) {
+            const val = parseInt(document.getElementById('target-input').value);
+            if (!isNaN(val) && val > 0) targetScore = val;
+        }
+
+        updateUI();
+        closeSettingsModal();
+        alert("✅ Pengaturan berhasil disimpan!");
+    }
 
     window.onload = function() { loadProfileData(); };
 </script>
