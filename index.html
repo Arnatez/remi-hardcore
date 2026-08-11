@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Remi Hardcore - Cyber Edition v2.5</title>
+    <title>Remi Hardcore - Cyber Edition v2.6</title>
     <!-- Font TT Runs / Montserrat / Rajdhani -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <style>
@@ -182,15 +182,15 @@
 
         button:disabled { opacity: 0.4 !important; cursor: not-allowed !important; transform: none !important; box-shadow: none !important; }
 
-        /* SCOREBOARD & BOARD UI - SINGLE LINE PLAYER NAME FIX */
+        /* SCOREBOARD & BOARD UI - FIX UNTUK TURN BADGE & PLAYER CARD */
         .scoreboard {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-            gap: 12px; margin-bottom: 15px;
+            gap: 12px; margin-bottom: 15px; margin-top: 10px;
         }
         .player-score { 
-            font-size: 13px; background: rgba(15, 23, 42, 0.7); padding: 8px 10px;
+            font-size: 13px; background: rgba(15, 23, 42, 0.7); padding: 10px;
             border-radius: 12px; position: relative; display: flex; align-items: center; gap: 8px; text-align: left;
-            border: 1px solid rgba(0, 243, 255, 0.2); overflow: hidden;
+            border: 1px solid rgba(0, 243, 255, 0.2); overflow: visible;
         }
         .player-score-avatar-box { width: 44px; height: 44px; flex-shrink: 0; display: flex; justify-content: center; align-items: center; position: relative; }
         .player-score-avatar-box img.avatar-img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; }
@@ -198,15 +198,16 @@
         
         .active-player { border-color: #00f3ff !important; box-shadow: 0 0 15px rgba(0, 243, 255, 0.4); }
         .active-player::before {
-            content: "▶ TURN"; position: absolute; top: -10px; right: 8px;
-            background: #00f3ff; color: #000; font-size: 8px; font-weight: 900; padding: 2px 6px; border-radius: 4px;
+            content: "▶ TURN"; position: absolute; top: -11px; right: 8px;
+            background: #00f3ff; color: #000; font-size: 8.5px; font-weight: 900; padding: 2px 7px; border-radius: 4px;
+            z-index: 15; box-shadow: 0 0 8px #00f3ff; letter-spacing: 0.5px;
         }
         .player-score.is-cekih { border: 1px solid #f43f5e !important; animation: cekihPulse 1.2s infinite alternate; }
         @keyframes cekihPulse { 0% { box-shadow: 0 0 5px #f43f5e; } 100% { box-shadow: 0 0 20px #f43f5e; } }
         .cekih-bubble {
             position: absolute; top: -12px; left: 10px;
             background: #f43f5e; color: white; font-size: 8px; font-weight: bold; padding: 2px 6px; border-radius: 6px;
-            border: 1px solid #fff; animation: bounceBubble 0.6s infinite alternate; z-index: 10;
+            border: 1px solid #fff; animation: bounceBubble 0.6s infinite alternate; z-index: 15;
         }
         @keyframes bounceBubble { from { transform: translateY(0); } to { transform: translateY(-3px); } }
         
@@ -399,16 +400,6 @@
         </div>
     </div>
 
-    <!-- CHANGE NAME PANEL -->
-    <div class="input-group" style="margin-bottom: 15px; text-align: center;">
-        <label for="player-name-input" style="text-align: center;">Ubah Nama Profil (Maks 15 Karakter):</label>
-        <div style="display: flex; gap: 8px; justify-content: center; max-width: 420px; margin: 0 auto;">
-            <input type="text" id="player-name-input" value="Kamu" maxlength="15" style="text-align: center; flex-grow: 1;" oninput="sanitizeNameInput(this)">
-            <button class="btn-primary" onclick="submitNameChange()" style="font-size: 10px; padding: 8px 14px; margin: 0;">SIMPAN NAMA</button>
-        </div>
-        <div id="name-cost-info" style="font-size: 13px; color: #4ade80; margin-top: 4px;">* Ganti nama pertama GRATIS</div>
-    </div>
-
     <button class="menu-btn btn-primary" onclick="startVsBotMode()">🤖 MAIN VS BOT (OFFLINE)</button>
     <button class="menu-btn btn-shop" onclick="openShopModal()">🛒 TOKO CUSTOMIZATION</button>
     <button class="menu-btn btn-orange" onclick="openPatchNotesModal()">📜 PATCH NOTES (UPDATE LOG)</button>
@@ -429,8 +420,8 @@
     <div class="scoreboard" id="scoreboard"></div>
 
     <div class="opponents-submitted-container">
-        <h4 style="margin: 0 0 6px 0; font-size: 15px; color: #00f3ff; text-align: left;">👥 Kombinasi Poin Pemain Lain di Meja:</h4>
-        <div id="opponents-submitted" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-start;"></div>
+        <h4 style="margin: 0 0 6px 0; font-size: 14px; color: #00f3ff; text-align: left;">👥 Kombinasi Poin Pemain Lain di Meja:</h4>
+        <div id="opponents-submitted" style="display: flex; flex-direction: column; gap: 8px; justify-content: flex-start;"></div>
     </div>
 
     <div id="table-area">
@@ -505,7 +496,7 @@
     </div>
 </div>
 
-<!-- MODAL GAME MASTER / DEVELOPER TOOLS (DENGAN EKSKLUSIF GM ITEMS & LEVEL SLIDER) -->
+<!-- MODAL GAME MASTER / DEVELOPER TOOLS -->
 <div id="modal-gm" class="modal">
     <div class="modal-content glass-panel">
         <h3 style="color: #c084fc; margin-top: 0; font-size: 18px;">👑 GAME MASTER CONSOLE</h3>
@@ -541,20 +532,31 @@
     </div>
 </div>
 
-<!-- MODAL TOKO -->
+<!-- MODAL TOKO (DENGAN TAB GANTI NAMA) -->
 <div id="modal-shop" class="modal">
     <div class="modal-content glass-panel">
         <h3 style="color: #00f3ff; margin-top: 0; font-size: 18px;">🛒 TOKO CUSTOMIZATION</h3>
         <div style="font-size: 18px; margin-bottom: 12px;">Koin Kamu: <img src="star.png" class="coin-icon" alt="Coin"> <b id="shop-coin-display" class="coin-text">0</b></div>
         
         <div class="shop-tabs">
-            <button class="btn-primary" onclick="switchShopTab('avatars')" id="btn-tab-avatars" style="font-size: 10px;">Avatar Hero</button>
+            <button class="btn-primary" onclick="switchShopTab('rename')" id="btn-tab-rename" style="font-size: 10px;">🏷️ Ubah Nama</button>
+            <button class="btn-dark" onclick="switchShopTab('avatars')" id="btn-tab-avatars" style="font-size: 10px;">Avatar Hero</button>
             <button class="btn-dark" onclick="switchShopTab('borders')" id="btn-tab-borders" style="font-size: 10px;">Avatar Border 🖼️</button>
             <button class="btn-dark" onclick="switchShopTab('backgrounds')" id="btn-tab-backgrounds" style="font-size: 10px;">BG Profil</button>
             <button class="btn-dark" onclick="switchShopTab('cards')" id="btn-tab-cards" style="font-size: 10px;">Desain Kartu 🃏</button>
         </div>
 
-        <div id="shop-avatars-grid" class="shop-grid"></div>
+        <!-- TAB UBAH NAMA -->
+        <div id="shop-rename-panel" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(0, 243, 255, 0.3); border-radius: 12px; padding: 20px; text-align: center;">
+            <div style="font-size: 15px; font-weight: bold; color: #00f3ff; margin-bottom: 8px;">Ubah Nama Profil (Maks 15 Karakter):</div>
+            <div style="display: flex; gap: 8px; justify-content: center; max-width: 420px; margin: 0 auto;">
+                <input type="text" id="player-name-input" value="Kamu" maxlength="15" style="text-align: center; flex-grow: 1;" oninput="sanitizeNameInput(this)">
+            </div>
+            <div id="name-cost-info" style="font-size: 13px; color: #4ade80; margin: 10px 0;">* Ganti nama pertama GRATIS</div>
+            <button class="btn-primary" onclick="submitNameChange()" style="font-size: 11px; padding: 10px 20px;">SIMPAN PERUBAHAN NAMA</button>
+        </div>
+
+        <div id="shop-avatars-grid" class="shop-grid" style="display: none;"></div>
         <div id="shop-borders-grid" class="shop-grid" style="display: none;"></div>
         <div id="shop-backgrounds-grid" class="shop-grid" style="display: none;"></div>
         <div id="shop-cards-grid" class="shop-grid" style="display: none;"></div>
@@ -571,11 +573,11 @@
         <h3 style="color: #00f3ff; margin-top: 0; font-size: 18px;">📜 PATCH NOTES & UPDATE LOG</h3>
         
         <div class="patch-item">
-            <div class="patch-ver">VERSION 2.5 (GM BORDER FILE RENAME)</div>
+            <div class="patch-ver">VERSION 2.6 (MEJA & SHOP UI OPTIMIZATION)</div>
             <ul class="patch-list">
-                <li>✨ <b>Mythic Rank (91-99)</b>: Kasta anyar sebelum Max Level! Badge MAX kini spesial untuk Level 100.</li>
-                <li>👑 <b>GM Exclusive Items</b>: Avatar (`gm_avatar.webp`) dan Border Kristal Sayap GM (`gm_border.jpg`) hanya bisa dipasang via Dev Console.</li>
-                <li>📏 <b>Single Line Names & Compact Badges</b>: Nama pemain dipaksa 1 baris utuh rapi dan badge level dibuat lebih proporsional.</li>
+                <li>✨ <b>Mini Horizontal Combinations</b>: Tampilan kombinasi poin bot di meja kini dibuat seragam mini berjejer ke samping.</li>
+                <li>🏷️ <b>Rename Move to Shop</b>: Menu ganti nama profil dipindahkan ke dalam Toko agar antarmuka utama makin rapi.</li>
+                <li>👑 <b>Turn Badge Fix</b>: Indikator giliran `▶ TURN` dipastikan utuh dan presisi di atas kartu profil pemain.</li>
             </ul>
         </div>
 
@@ -628,7 +630,7 @@
 </div>
 
 <script>
-    /* --- DIGITAL MATRIX NEON RAIN CANVAS ANIMATION (STABLE BLACK BG) --- */
+    /* --- DIGITAL MATRIX NEON RAIN CANVAS ANIMATION --- */
     const canvas = document.getElementById('matrix-canvas');
     const ctx = canvas.getContext('2d');
 
@@ -791,7 +793,6 @@
 
     function getExpForNextLevel(lvl) { return lvl * 100; }
 
-    /* RANK BADGES PER 10 LEVEL (91-99: MYTHIC, 100: MAX) */
     function renderLevelBadge(lvl) {
         if (lvl <= 10) return `<span class="lvl-badge badge-wood">Wood</span>`;
         if (lvl <= 20) return `<span class="lvl-badge badge-iron">Iron</span>`;
@@ -930,7 +931,7 @@
         userProfile.equippedAvatar = "gm_avatar.webp";
         userProfile.equippedBorderUrl = "gm_border.png";
         if (!userProfile.ownedAvatars.includes("gm_avatar.webp")) userProfile.ownedAvatars.push("gm_avatar.webp");
-        if (!userProfile.ownedBorders.includes("gm_border.jpg")) userProfile.ownedBorders.push("gm_border.jpg");
+        if (!userProfile.ownedBorders.includes("gm_border.png")) userProfile.ownedBorders.push("gm_border.png");
         playSound('levelup');
         saveProfileData();
         alert("👑 SUKSES: Avatar & Border Eksklusif GM berhasil dipasangkan ke Profil!");
@@ -1022,6 +1023,7 @@
     function openShopModal() {
         playSound('dropdown');
         document.getElementById('shop-coin-display').innerText = userProfile.coins.toLocaleString();
+        switchShopTab('rename');
         renderShopItems();
         document.getElementById('modal-shop').style.display = 'flex';
     }
@@ -1029,11 +1031,13 @@
     function closeShopModal() { document.getElementById('modal-shop').style.display = 'none'; }
 
     function switchShopTab(tab) {
+        document.getElementById('shop-rename-panel').style.display = (tab === 'rename') ? 'block' : 'none';
         document.getElementById('shop-avatars-grid').style.display = (tab === 'avatars') ? 'grid' : 'none';
         document.getElementById('shop-borders-grid').style.display = (tab === 'borders') ? 'grid' : 'none';
         document.getElementById('shop-backgrounds-grid').style.display = (tab === 'backgrounds') ? 'grid' : 'none';
         document.getElementById('shop-cards-grid').style.display = (tab === 'cards') ? 'grid' : 'none';
 
+        document.getElementById('btn-tab-rename').className = (tab === 'rename') ? 'btn-primary' : 'btn-dark';
         document.getElementById('btn-tab-avatars').className = (tab === 'avatars') ? 'btn-primary' : 'btn-dark';
         document.getElementById('btn-tab-borders').className = (tab === 'borders') ? 'btn-primary' : 'btn-dark';
         document.getElementById('btn-tab-backgrounds').className = (tab === 'backgrounds') ? 'btn-primary' : 'btn-dark';
@@ -1183,7 +1187,6 @@
         gameState.players[0].avatar = userProfile.equippedAvatar;
         gameState.players[0].borderUrl = userProfile.equippedBorderUrl;
 
-        // BOT AVATARS SECARA ACAK DARI DASHBOARD AVATAR RPG
         const availableBotAvatars = shopAvatars.map(a => a.url);
         for (let i = 1; i < gameState.players.length; i++) {
             const randomAvatar = availableBotAvatars[Math.floor(Math.random() * availableBotAvatars.length)];
@@ -1432,7 +1435,7 @@
         div.className = getCardClass(card, extraClass);
         div.innerHTML = renderCardInner(card, isSmallScale);
         if (onClickFn) div.onclick = onClickFn;
-        if (isSmallScale) { div.style.width = '38px'; div.style.height = '52px'; div.style.fontSize = '11px'; div.style.margin = '2px'; }
+        if (isSmallScale) { div.style.width = '32px'; div.style.height = '46px'; div.style.fontSize = '10px'; div.style.margin = '1px'; div.style.borderRadius = '4px'; }
         return div;
     }
 
@@ -1510,6 +1513,7 @@
             }
         });
 
+        /* COMPACT HORIZONTAL BOT COMBINATION DISPLAY */
         const oppContainer = document.getElementById('opponents-submitted');
         oppContainer.innerHTML = ''; let hasOpponentMeld = false;
 
@@ -1518,18 +1522,23 @@
             if (opp.submittedGroups.length > 0) {
                 hasOpponentMeld = true;
                 const pBox = document.createElement('div');
-                pBox.style.cssText = 'background: rgba(0,0,0,0.3); border:1px solid rgba(0,243,255,0.3); border-radius:6px; padding:4px 8px; display:flex; align-items:center; gap:6px; max-width: 100%; overflow: hidden;';
-                pBox.innerHTML = `<img src="${opp.avatar}" style="width:22px; height:22px; border-radius:50%; flex-shrink: 0;"><b style="color:#00f3ff;" class="player-name-text">${opp.name}:</b> `;
+                pBox.style.cssText = 'background: rgba(0,0,0,0.3); border:1px solid rgba(0,243,255,0.3); border-radius:6px; padding:3px 8px; display:flex; align-items:center; gap:8px; width: 100%; overflow-x: auto; white-space: nowrap;';
+                pBox.innerHTML = `<div style="display:flex; align-items:center; gap:4px; flex-shrink:0;"><img src="${opp.avatar}" style="width:20px; height:20px; border-radius:50%;"><b style="color:#00f3ff; font-size:12px;">${opp.name}:</b></div>`;
+                
+                const groupsWrapper = document.createElement('div');
+                groupsWrapper.style.cssText = 'display:flex; align-items:center; gap:6px;';
+
                 opp.submittedGroups.forEach(group => {
-                    const gDiv = document.createElement('span');
-                    gDiv.style.cssText = 'display:inline-block; border:1px dashed #38bdf8; padding:2px; margin:2px; border-radius:4px; background: rgba(0,0,0,0.2);';
+                    const gDiv = document.createElement('div');
+                    gDiv.style.cssText = 'display:inline-flex; border:1px dashed #38bdf8; padding:2px; border-radius:4px; background: rgba(0,0,0,0.2); gap:2px;';
                     group.forEach(c => gDiv.appendChild(createCardElement(c, '', null, true)));
-                    pBox.appendChild(gDiv);
+                    groupsWrapper.appendChild(gDiv);
                 });
+                pBox.appendChild(groupsWrapper);
                 oppContainer.appendChild(pBox);
             }
         }
-        if (!hasOpponentMeld) oppContainer.innerHTML = `<span style="color:#aaa; font-style:italic;">Belum ada bot yang submit kombinasi</span>`;
+        if (!hasOpponentMeld) oppContainer.innerHTML = `<span style="color:#aaa; font-style:italic; font-size:13px;">Belum ada bot yang submit kombinasi</span>`;
 
         const subContainer = document.getElementById('my-submitted');
         if (gameState.players[0].submittedGroups.length === 0) {
