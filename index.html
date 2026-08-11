@@ -2,9 +2,9 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Remi Hardcore - Firebase Complete Edition v5.1</title>
-    <!-- Font TT Runs / Montserrat / Rajdhani -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Remi Hardcore - Landscape Edition v5.3</title>
+    <!-- Font Montserrat & Rajdhani -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     
     <!-- FIREBASE SDK COMPAT -->
@@ -13,13 +13,14 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
     <style>
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body {
-            font-family: 'Montserrat', 'Segoe UI', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             background-color: #030712;
-            color: #f3f4f6; text-align: center; margin: 0; padding: 12px; min-height: 100vh;
-            font-size: 15px; position: relative; overflow-x: hidden;
+            color: #f3f4f6; text-align: center; margin: 0; padding: 8px;
+            width: 100vw; height: 100vh; overflow: hidden;
+            font-size: 13px; position: relative; user-select: none;
         }
 
         #matrix-canvas {
@@ -27,8 +28,18 @@
             z-index: -1; pointer-events: none; opacity: 0.85; background-color: #030712;
         }
 
+        /* PERINGATAN BILA LAYAR PORTRAIT (BERDIRI) */
+        #portrait-warning {
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #030712; z-index: 9999; flex-direction: column; justify-content: center; align-items: center;
+            color: #00f3ff; padding: 20px;
+        }
+        @media screen and (orientation: portrait) {
+            #portrait-warning { display: flex !important; }
+        }
+
         .coin-icon {
-            width: 20px; height: 20px; vertical-align: middle;
+            width: 18px; height: 18px; vertical-align: middle;
             margin-right: 4px; display: inline-block; filter: drop-shadow(0 0 6px #00f3ff);
         }
 
@@ -39,236 +50,220 @@
             display: inline-flex; align-items: center; gap: 4px;
         }
         .gm-badge-logo {
-            width: 18px; height: 18px; object-fit: contain; vertical-align: middle; flex-shrink: 0;
+            width: 16px; height: 16px; object-fit: contain; vertical-align: middle; flex-shrink: 0;
             border-radius: 4px; filter: drop-shadow(0 0 6px #ff0055);
         }
 
         .glass-panel {
-            background: rgba(10, 20, 35, 0.65) !important;
-            backdrop-filter: blur(12px) saturate(180%);
-            -webkit-backdrop-filter: blur(12px) saturate(180%);
+            background: rgba(10, 20, 35, 0.75) !important;
+            backdrop-filter: blur(14px) saturate(180%);
+            -webkit-backdrop-filter: blur(14px) saturate(180%);
             border: 1px solid rgba(0, 243, 255, 0.3) !important;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.7), inset 0 0 15px rgba(0, 243, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(0, 243, 255, 0.1);
         }
 
         .neon-title {
-            font-size: 28px; font-weight: 900; color: #ffffff;
-            text-transform: uppercase; letter-spacing: 3px; margin-bottom: 4px;
-            text-shadow: 0 0 5px #00f3ff, 0 0 10px #00f3ff, 0 0 20px #00f3ff;
-            animation: neonPulse 2s infinite alternate;
-        }
-        @keyframes neonPulse {
-            0% { text-shadow: 0 0 5px #00f3ff, 0 0 10px #00f3ff, 0 0 20px #00f3ff; }
-            100% { text-shadow: 0 0 8px #00f3ff, 0 0 15px #00f3ff, 0 0 30px #00f3ff, 0 0 50px #00a2ff; }
+            font-size: 22px; font-weight: 900; color: #ffffff;
+            text-transform: uppercase; letter-spacing: 2px; margin-bottom: 2px;
+            text-shadow: 0 0 5px #00f3ff, 0 0 10px #00f3ff;
         }
 
-        .menu-subtitle { font-size: 13px; color: #38bdf8; font-weight: 700; margin-bottom: 20px; letter-spacing: 4px; }
+        .menu-subtitle { font-size: 11px; color: #38bdf8; font-weight: 700; margin-bottom: 12px; letter-spacing: 2px; }
 
-        #home-screen { max-width: 850px; margin: 15px auto; border-radius: 20px; padding: 25px; position: relative; display: none; }
+        /* HOME SCREEN MENDATAR (LANDSCAPE OPTIMIZED) */
+        #home-screen {
+            max-width: 680px; width: 95vw; height: 92vh; margin: 0 auto;
+            border-radius: 20px; padding: 15px 25px; position: relative;
+            display: none; flex-direction: column; justify-content: space-between; box-sizing: border-box;
+        }
 
-        .profile-card { border-radius: 16px; padding: 20px; margin-bottom: 20px; position: relative; overflow: visible; }
-        .profile-card-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.2); z-index: 1; border-radius: 16px; }
+        .home-header-bar {
+            display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 5px;
+        }
+
+        .profile-card { border-radius: 14px; padding: 10px 15px; position: relative; overflow: visible; width: 100%; }
+        .profile-card-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.2); z-index: 1; border-radius: 14px; }
         .profile-content { position: relative; z-index: 2; }
 
         .avatar-preview-box {
-            width: 80px; height: 80px; margin: 0 auto 8px; position: relative;
+            width: 50px; height: 50px; margin: 0 auto 4px; position: relative;
             display: flex; justify-content: center; align-items: center; overflow: visible;
         }
         .avatar-preview-box img.avatar-img {
-            width: 52px; height: 52px; border-radius: 50%; object-fit: cover; z-index: 1;
+            width: 38px; height: 38px; border-radius: 50%; object-fit: cover; z-index: 1;
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
-        }
-        .avatar-preview-box img.border-overlay {
-            width: 100%; height: 100%; object-fit: contain; z-index: 2;
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none;
-            display: none;
+            box-shadow: 0 0 8px rgba(0, 243, 255, 0.5);
         }
 
         .lvl-badge {
-            display: inline-block; padding: 2px 7px; border-radius: 12px;
-            font-size: 9px; font-weight: 800; text-transform: uppercase; margin-left: 4px;
+            display: inline-block; padding: 1px 6px; border-radius: 10px;
+            font-size: 8px; font-weight: 800; text-transform: uppercase; margin-left: 4px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.5); font-family: 'Montserrat', sans-serif;
-            position: relative; overflow: hidden; vertical-align: middle; letter-spacing: 0.5px; line-height: 1.1;
+            position: relative; overflow: hidden; vertical-align: middle; line-height: 1.1;
         }
-        .badge-wood     { background: #5d4037; color: #fff; border: 1px solid #8d6e63; }
-        .badge-iron     { background: #455a64; color: #fff; border: 1px solid #78909c; }
-        .badge-bronze   { background: #795548; color: #fff; border: 1px solid #a1887f; }
-        .badge-silver   { background: #90a4ae; color: #111; border: 1px solid #ffffff; }
-        .badge-animated-shine { background-size: 200% auto !important; animation: rankShineSweep 2s linear infinite !important; }
-        @keyframes rankShineSweep { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
-        .badge-gold { background: linear-gradient(90deg, #b8860b, #ffd700, #fff5a6, #ffd700, #b8860b); color: #000; border: 1px solid #fff; box-shadow: 0 0 6px #ffd700; }
-        .badge-platinum { background: linear-gradient(90deg, #0284c7, #38bdf8, #e0f2fe, #38bdf8, #0284c7); color: #fff; border: 1px solid #bae6fd; box-shadow: 0 0 6px #0284c7; }
-        .badge-emerald { background: linear-gradient(90deg, #047857, #10b981, #a7f3d0, #10b981, #047857); color: #fff; border: 1px solid #6ee7b7; box-shadow: 0 0 6px #10b981; }
-        .badge-ruby { background: linear-gradient(90deg, #9f1239, #f43f5e, #fecdd3, #f43f5e, #9f1239); color: #fff; border: 1px solid #fda4af; box-shadow: 0 0 6px #f43f5e; }
-        .badge-diamond { background: linear-gradient(90deg, #4338ca, #38bdf8, #ffffff, #818cf8, #4338ca); color: #fff; border: 1px solid #fff; box-shadow: 0 0 8px #38bdf8; }
-        .badge-mythic { background: linear-gradient(90deg, #86198f, #d946ef, #f0abfc, #d946ef, #86198f); color: #fff; border: 1px solid #f5d0fe; box-shadow: 0 0 8px #e879f9; }
-        .badge-aurora { background: linear-gradient(90deg, #ff007f, #00e5ff, #ffffff, #ffd700, #ff007f); color: #fff; border: 1px solid #fff; box-shadow: 0 0 10px #00e5ff; }
+        .badge-wood { background: #5d4037; color: #fff; border: 1px solid #8d6e63; }
+        .badge-gold { background: linear-gradient(90deg, #b8860b, #ffd700, #fff5a6, #ffd700, #b8860b); color: #000; border: 1px solid #fff; }
+        .badge-aurora { background: linear-gradient(90deg, #ff007f, #00e5ff, #ffffff, #ffd700, #ff007f); color: #fff; border: 1px solid #fff; }
 
-        .currency-bar { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 10px; font-size: 18px; font-weight: bold; }
-        .coin-text { color: #00f3ff; text-shadow: 0 0 8px rgba(0, 243, 255, 0.8); }
-        .exp-bar-bg { background: rgba(0,0,0,0.6); height: 10px; border-radius: 5px; border: 1px solid #00f3ff; overflow: hidden; margin-top: 8px; }
-        .exp-bar-fill { background: linear-gradient(90deg, #00f3ff, #3b82f6); height: 100%; width: 0%; transition: width 0.3s ease; box-shadow: 0 0 8px #00f3ff; }
+        .currency-bar { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 6px; font-size: 14px; font-weight: bold; }
+        .coin-text { color: #00f3ff; text-shadow: 0 0 6px rgba(0, 243, 255, 0.8); }
+        .exp-bar-bg { background: rgba(0,0,0,0.6); height: 8px; border-radius: 4px; border: 1px solid #00f3ff; overflow: hidden; margin-top: 4px; width: 80%; margin-left: auto; margin-right: auto; }
+        .exp-bar-fill { background: linear-gradient(90deg, #00f3ff, #3b82f6); height: 100%; width: 0%; transition: width 0.3s ease; }
 
         button, .menu-btn {
-            font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 700;
-            position: relative; display: inline-block; padding: 10px 16px; margin: 4px;
-            border-radius: 9px; border: 1px solid rgba(0, 243, 255, 0.4); cursor: pointer; overflow: hidden;
+            font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 700;
+            position: relative; display: inline-block; padding: 8px 14px; margin: 2px;
+            border-radius: 8px; border: 1px solid rgba(0, 243, 255, 0.4); cursor: pointer;
             background: rgba(15, 23, 42, 0.85); color: #f8fafc;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5); transition: all 0.2s ease; user-select: none; letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5); transition: all 0.2s ease; user-select: none;
         }
-        button:hover, .menu-btn:hover { transform: translateY(-2px); border-color: #00f3ff; box-shadow: 0 0 12px rgba(0, 243, 255, 0.5); color: #ffffff; }
-        .menu-btn { display: block; width: 80%; margin: 10px auto; }
+        button:hover, .menu-btn:hover { border-color: #00f3ff; box-shadow: 0 0 10px rgba(0, 243, 255, 0.5); color: #ffffff; }
+        .menu-btn { display: block; width: 70%; margin: 6px auto; padding: 10px; font-size: 11px; }
         
         .btn-primary { background: linear-gradient(135deg, #0284c7, #0369a1); border-color: #38bdf8; }
         .btn-secondary { background: linear-gradient(135deg, #0d9488, #0f766e); border-color: #2dd4bf; }
-        .btn-shop { background: linear-gradient(135deg, #e11d48, #be123c); border-color: #fb7185; }
         .btn-dark { background: rgba(30, 41, 59, 0.85); border-color: #64748b; }
         .btn-green { background: linear-gradient(135deg, #16a34a, #15803d); border-color: #4ade80; }
         .btn-orange { background: linear-gradient(135deg, #ea580c, #c2410c); border-color: #fb923c; }
         .btn-gm-purple { background: linear-gradient(135deg, #9333ea, #7e22ce); border-color: #c084fc; }
         .btn-google { background: linear-gradient(135deg, #ea4335, #c5221f); border-color: #f87171; }
-        button:disabled { opacity: 0.4 !important; cursor: not-allowed !important; transform: none !important; }
 
-        /* FULLSCREEN POKER GAME BOARD LAYOUT */
+        .game-input-field {
+            width: 100%; padding: 10px 14px; font-family: 'Montserrat', sans-serif;
+            font-size: 12px; font-weight: 600; text-align: center; color: #00f3ff;
+            background: rgba(3, 7, 18, 0.8); border: 1.5px solid rgba(0, 243, 255, 0.4);
+            border-radius: 8px; outline: none;
+        }
+
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(3, 7, 18, 0.88); justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(8px); }
+        .modal-content { padding: 18px; border-radius: 16px; width: 380px; max-width: 90vw; text-align: center; }
+
+        /* LANDSCAPE GAME CONTAINER PAS LAYAR */
         #game-container {
-            display: none !important;
-            width: 100%; max-width: 1350px; height: 95vh; margin: 0 auto;
-            border-radius: 24px; padding: 12px; position: relative; overflow: hidden;
-            flex-direction: column; justify-content: space-between;
+            display: none !important; width: 98vw; height: 96vh; margin: 0 auto;
+            border-radius: 16px; padding: 6px; position: relative; overflow: hidden;
+            flex-direction: column; justify-content: space-between; box-sizing: border-box;
         }
 
         .poker-table {
             position: relative; width: 100%; flex-grow: 1;
-            border-radius: 120px; border: 10px solid #0f172a;
-            box-shadow: inset 0 0 50px rgba(0,0,0,0.85), 0 0 25px rgba(0, 243, 255, 0.3);
+            border-radius: 80px; border: 6px solid #0f172a;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.85), 0 0 15px rgba(0, 243, 255, 0.2);
             background: radial-gradient(ellipse at center, #022c22 0%, #064e3b 65%, #022c22 100%);
             display: grid;
             grid-template-areas: 
                 "top-seat top-seat top-seat"
                 "left-seat center-table right-seat"
                 "bottom-seat bottom-seat bottom-seat";
-            grid-template-columns: 230px 1fr 230px;
-            grid-template-rows: 95px 1fr auto;
-            gap: 8px; padding: 10px; align-items: center;
+            grid-template-columns: 140px 1fr 140px;
+            grid-template-rows: 40px 1fr auto;
+            gap: 4px; padding: 6px; align-items: center;
         }
 
         .seat { display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; z-index: 5; }
         .seat-top { grid-area: top-seat; justify-self: center; }
-        .seat-left { grid-area: left-seat; justify-self: start; margin-left: 10px; }
-        .seat-right { grid-area: right-seat; justify-self: end; margin-right: 10px; }
+        .seat-left { grid-area: left-seat; justify-self: start; }
+        .seat-right { grid-area: right-seat; justify-self: end; }
         .seat-bottom { grid-area: bottom-seat; justify-self: center; width: 100%; }
 
         .center-table {
             grid-area: center-table;
-            background: rgba(3, 7, 18, 0.7); border: 1px dashed rgba(0, 243, 255, 0.4);
-            border-radius: 20px; padding: 10px; display: flex; justify-content: space-around;
-            align-items: center; gap: 10px; backdrop-filter: blur(4px);
+            background: rgba(3, 7, 18, 0.65); border: 1px dashed rgba(0, 243, 255, 0.4);
+            border-radius: 12px; padding: 6px; display: flex; justify-content: space-around;
+            align-items: center; gap: 6px; backdrop-filter: blur(4px);
         }
-
-        .player-score {
-            font-size: 11px; background: rgba(15, 23, 42, 0.85); padding: 6px 10px;
-            border-radius: 12px; position: relative; display: flex; align-items: center; gap: 8px; text-align: left;
-            border: 1px solid rgba(0, 243, 255, 0.3); min-width: 180px; box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-        }
-        .player-score-avatar-box { width: 38px; height: 38px; flex-shrink: 0; position: relative; display: flex; justify-content: center; align-items: center; }
-        .player-score-avatar-box img.avatar-img { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; position: absolute; transform: translate(-50%, -50%); top: 50%; left: 50%; z-index: 1; }
-        .player-score-avatar-box img.border-overlay { width: 100%; height: 100%; object-fit: contain; position: absolute; transform: translate(-50%, -50%); top: 50%; left: 50%; z-index: 2; pointer-events: none; display: none; }
-        
-        .active-player { border-color: #00f3ff !important; box-shadow: 0 0 15px rgba(0, 243, 255, 0.6); }
-        .active-player::before {
-            content: "▶ TURN"; position: absolute; top: -9px; right: 6px;
-            background: #00f3ff; color: #000; font-size: 8px; font-weight: 900; padding: 1px 5px; border-radius: 3px; z-index: 15;
-        }
-
-        .player-name-text { font-weight: 700; font-size: 11px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; max-width: 100px; }
 
         .card {
-            display: inline-block; width: 48px; height: 70px; background: #ffffff; color: #111111;
-            border-radius: 6px; font-weight: bold; margin: 2px; cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.6); user-select: none; position: relative;
-            box-sizing: border-box; transition: transform 0.2s ease; border: 1.5px solid #ccc;
+            display: inline-block; width: 38px; height: 55px; background: #ffffff; color: #111111;
+            border-radius: 5px; font-weight: bold; margin: 1px; cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.6); user-select: none; position: relative;
+            box-sizing: border-box; border: 1px solid #ccc; font-size: 11px;
         }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 6px 14px rgba(0,243,255,0.4); }
         .card.red { color: #e11d48; }
 
-        .card.disabled { opacity: 0.35; cursor: not-allowed; transform: none !important; }
-        .card.selected { border: 2.5px solid #00f3ff !important; transform: translateY(-10px) scale(1.05); box-shadow: 0 0 12px #00f3ff !important; }
-
-        .card-corner { position: absolute; font-size: 9px; line-height: 1; text-align: center; z-index: 2; }
-        .card-corner.top-left { top: 2px; left: 2px; }
-        .card-corner.bottom-right { bottom: 2px; right: 2px; transform: rotate(180deg); }
-        .card-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 20px; }
-
-        .bot-submitted-mini { display: flex; flex-wrap: wrap; gap: 2px; max-width: 180px; margin-top: 4px; justify-content: center; }
         .my-submitted-area {
-            background: rgba(15, 23, 42, 0.6); padding: 4px 10px; border-radius: 10px; margin-bottom: 4px;
-            border: 1px solid rgba(0, 243, 255, 0.2); min-height: 38px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 4px;
+            background: rgba(15, 23, 42, 0.6); padding: 2px 6px; border-radius: 8px; margin-bottom: 2px;
+            border: 1px solid rgba(0, 243, 255, 0.2); min-height: 28px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 3px;
         }
-        .hand-container { background: rgba(15, 23, 42, 0.7); padding: 6px; border-radius: 12px; border: 1px solid rgba(0, 243, 255, 0.3); width: 100%; }
-        .hand-cards { display: flex; justify-content: center; flex-wrap: wrap; min-height: 72px; align-items: center; }
+        .hand-container { background: rgba(15, 23, 42, 0.7); padding: 4px; border-radius: 10px; border: 1px solid rgba(0, 243, 255, 0.3); width: 100%; }
+        .hand-cards { display: flex; justify-content: center; flex-wrap: wrap; min-height: 58px; align-items: center; }
 
         #log-box {
-            background: rgba(3, 7, 18, 0.9); height: 75px; overflow-y: auto; text-align: left; padding: 6px 10px; font-size: 13px;
-            border-radius: 8px; border: 1px solid rgba(0, 243, 255, 0.3); font-family: 'Rajdhani', monospace; color: #38bdf8; margin-top: 6px;
+            background: rgba(3, 7, 18, 0.9); height: 45px; overflow-y: auto; text-align: left; padding: 4px 8px; font-size: 11px;
+            border-radius: 6px; border: 1px solid rgba(0, 243, 255, 0.3); font-family: 'Rajdhani', monospace; color: #38bdf8; margin-top: 4px;
         }
-        .discard-pile-container { display: flex; gap: 3px; overflow-x: auto; max-width: 350px; padding: 4px; background: rgba(0,0,0,0.3); border-radius: 8px; border: 1px dashed rgba(0,243,255,0.3); }
-
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 7, 18, 0.85); justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(8px); }
-        .modal-content { padding: 22px; border-radius: 18px; width: 620px; max-width: 95vw; max-height: 85vh; overflow-y: auto; text-align: center; }
-
-        /* SHOP GRID */
-        .shop-tabs { display: flex; justify-content: center; gap: 6px; margin-bottom: 15px; flex-wrap: wrap; }
-        .shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
-        .shop-item { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(0, 243, 255, 0.25); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
-        .shop-item img.preview-img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; }
-        .shop-card-preview { width: 38px; height: 55px; border-radius: 5px; margin: 0 auto; }
-        .shop-item-title { font-size: 11px; font-weight: bold; color: #00f3ff; text-align: center; }
+        .discard-pile-container { display: flex; gap: 2px; overflow-x: auto; max-width: 200px; padding: 2px; background: rgba(0,0,0,0.3); border-radius: 6px; border: 1px dashed rgba(0,243,255,0.3); }
     </style>
 </head>
-<body class="theme-classic">
+<body>
+
+<!-- OVERLAY PERINGATAN BILA LAYAR HP BERDIRI (PORTRAIT) -->
+<div id="portrait-warning">
+    <div style="font-size: 50px; margin-bottom: 10px;">🔄</div>
+    <div style="font-size: 16px; font-weight: 900; letter-spacing: 2px;">HARAP PUTAR HP KAMU</div>
+    <div style="font-size: 11px; color: #aaa; margin-top: 5px;">Game Remi Hardcore dirancang khusus untuk mode Landscape (Mendatar)</div>
+</div>
 
 <canvas id="matrix-canvas"></canvas>
 
-<!-- MODAL SYSTEM LOGIN PERTAMA -->
+<!-- MODAL SYSTEM LOGIN UTAMA -->
 <div id="modal-system-login" class="modal" style="display: flex;">
-    <div class="modal-content glass-panel" style="max-width: 420px;">
-        <div class="neon-title" style="font-size: 22px;">🔑 REMI HARDCORE</div>
-        <div style="font-size: 11px; color: #38bdf8; margin-bottom: 20px;">PILIH METODE MASUK GAME</div>
+    <div class="modal-content glass-panel">
+        <div class="neon-title" style="font-size: 18px;">🔑 REMI HARDCORE</div>
+        <div style="font-size: 10px; color: #38bdf8; margin-bottom: 15px; letter-spacing: 2px;">ONLINE CASINO LANDSCAPE</div>
         
-        <div style="display: flex; flex-direction: column; gap: 12px;">
-            <button class="btn-google" onclick="loginWithGoogleRedirect()" style="padding: 14px; font-size: 13px;">🌐 LOGIN AKUN GOOGLE (AUTO-SYNC HP)</button>
-            <hr style="border-color: rgba(0, 243, 255, 0.2); width: 100%; margin: 5px 0;">
-            <button class="btn-gm-purple" onclick="openDevPassInput()" style="padding: 12px; font-size: 12px;">👑 MASUK SEBAGAI DEVELOPER (GM)</button>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+            <button class="btn-google" onclick="loginWithGoogleRedirect()" style="padding: 10px; font-size: 11px;">🌐 LOGIN GOOGLE (AUTO-SYNC)</button>
+            <button class="btn-gm-purple" onclick="openCustomDevModal()" style="padding: 10px; font-size: 11px;">👑 MASUK DEVELOPER (GM)</button>
         </div>
     </div>
 </div>
 
-<!-- HOME SCREEN MENU -->
-<div id="home-screen" class="glass-panel">
-    <button id="btn-top-gm-tools" class="btn-gm-purple" onclick="openGmConsoleDirect()" style="position: absolute; top: 15px; right: 15px; padding: 6px 12px; font-size: 10px; z-index: 10; display: none;">👑 DEV TOOLS</button>
-    <button class="btn-dark" onclick="logoutAccount()" style="position: absolute; top: 15px; left: 15px; padding: 6px 12px; font-size: 10px; z-index: 10;">🚪 LOGOUT</button>
+<!-- CUSTOM MODAL INPUT PASSWORD DEVELOPER -->
+<div id="modal-dev-login" class="modal">
+    <div class="modal-content glass-panel" style="border-color: #c084fc !important;">
+        <div style="font-size: 16px; font-weight: 900; color: #c084fc; margin-bottom: 4px;">👑 DEV AUTHENTICATION</div>
+        <p style="font-size: 10px; color: #aaa; margin-bottom: 12px;">Masukkan Passcode GM</p>
+        
+        <div style="margin-bottom: 12px;">
+            <input type="password" id="dev-password-input" class="game-input-field" placeholder="Passcode GM..." onkeypress="handleDevKey(event)">
+            <div id="dev-pass-error" style="color: #f43f5e; font-size: 10px; margin-top: 6px; display: none; font-weight: bold;">⚠️ Passcode Salah!</div>
+        </div>
 
-    <div class="neon-title">♣ REMI HARDCORE ♠</div>
-    <div class="menu-subtitle">~ ONLINE CASINO ARCADE ~</div>
+        <div style="display: flex; justify-content: center; gap: 8px;">
+            <button class="btn-gm-purple" onclick="submitDevPassword()" style="width: 50%;">VERIFIKASI</button>
+            <button class="btn-dark" onclick="closeCustomDevModal()" style="width: 40%;">BATAL</button>
+        </div>
+    </div>
+</div>
+
+<!-- HOME SCREEN MENU LANDSCAPE -->
+<div id="home-screen" class="glass-panel">
+    <div class="home-header-bar">
+        <button class="btn-dark" onclick="logoutAccount()" style="padding: 4px 10px; font-size: 9px;">🚪 LOGOUT</button>
+        <div>
+            <span class="neon-title" style="font-size: 16px;">♣ REMI HARDCORE ♠</span>
+            <span class="menu-subtitle" style="font-size: 9px; margin: 0 0 0 6px;">~ CASINO ~</span>
+        </div>
+        <button id="btn-top-gm-tools" class="btn-gm-purple" onclick="openGmConsoleDirect()" style="padding: 4px 10px; font-size: 9px; display: none;">👑 DEV TOOLS</button>
+    </div>
 
     <div class="profile-card glass-panel" id="home-profile-card">
         <div class="profile-card-overlay"></div>
         <div class="profile-content">
             <div class="avatar-preview-box">
                 <img id="avatar-preview" class="avatar-img" src="avatar_1.webp" alt="Avatar">
-                <img id="border-preview" class="border-overlay" src="" alt="Border Overlay">
             </div>
             
-            <div style="font-size: 20px; font-weight: bold;" id="user-display-name-container">
+            <div style="font-size: 16px; font-weight: bold;" id="user-display-name-container">
                 <span id="user-display-name">Kamu</span>
             </div>
             
-            <div style="font-size: 13px; margin-top: 2px; display: flex; justify-content: center; align-items: center;">
+            <div style="font-size: 11px; margin-top: 2px; display: flex; justify-content: center; align-items: center;">
                 Level <b id="user-level-text" style="margin-left: 4px;">1</b> <span id="user-badge-container"></span>
             </div>
             <div class="exp-bar-bg"><div id="user-exp-fill" class="exp-bar-fill"></div></div>
-            <div style="font-size: 12px; color: #ddd; margin-top: 2px;" id="user-exp-text">0 / 100 EXP</div>
+            <div style="font-size: 10px; color: #ddd; margin-top: 2px;" id="user-exp-text">0 / 100 EXP</div>
 
             <div class="currency-bar">
                 <span><img src="star.png" class="coin-icon" alt="Coin"> Coin: <span class="coin-text" id="user-coin-text">0</span></span>
@@ -277,64 +272,58 @@
     </div>
 
     <button class="menu-btn btn-primary" onclick="startVsBotMode()">🤖 MAIN MEJA POKER OVAL (VS BOT)</button>
-    <button class="menu-btn btn-shop" onclick="openShopModal()">🛒 TOKO CUSTOMIZATION</button>
 </div>
 
 <!-- FULLSCREEN POKER GAME BOARD CONTAINER -->
 <div id="game-container" class="glass-panel">
-    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 5px 5px;">
-        <h3 style="margin: 0; color: #00f3ff; font-size: 14px; letter-spacing: 2px;">♣ REMI CASINO OVAL ♠</h3>
-        <div id="game-phase-info" style="font-weight: bold; color: #00f3ff; font-size: 13px;"></div>
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 2px 2px;">
+        <h3 style="margin: 0; color: #00f3ff; font-size: 11px; letter-spacing: 1px;">♣ REMI CASINO OVAL ♠</h3>
         <div>
-            <button id="btn-game-gm-tools" class="btn-gm-purple" onclick="openGmConsoleDirect()" style="padding: 4px 8px; font-size: 9px; display: none;">👑 DEV</button>
-            <button class="btn-dark" onclick="backToHomeMenu()" style="padding: 4px 8px; font-size: 9px;">🏠 MENU</button>
+            <button id="btn-game-gm-tools" class="btn-gm-purple" onclick="openGmConsoleDirect()" style="padding: 2px 6px; font-size: 8px; display: none;">👑 DEV</button>
+            <button class="btn-dark" onclick="backToHomeMenu()" style="padding: 2px 6px; font-size: 8px;">🏠 MENU</button>
         </div>
     </div>
 
     <div class="poker-table">
-        <div class="seat seat-top"><div id="seat-player-2"></div><div id="bot-submitted-2" class="bot-submitted-mini"></div></div>
-        <div class="seat seat-left"><div id="seat-player-1"></div><div id="bot-submitted-1" class="bot-submitted-mini"></div></div>
+        <div class="seat seat-top"><div id="seat-player-2" style="font-size: 10px; color: #fff;">Bot 2</div></div>
+        <div class="seat seat-left"><div id="seat-player-1" style="font-size: 10px; color: #fff;">Bot 1</div></div>
         <div class="center-table">
-            <div><div style="font-size: 11px; margin-bottom: 2px; font-weight: bold; color: #38bdf8;">DEK</div><div id="deck-pile" class="card face-down" onclick="playerDrawDeck()"></div><div style="font-size: 10px; margin-top: 2px;" id="deck-count">Sisa: 0</div></div>
-            <div><div style="font-size: 11px; margin-bottom: 2px; font-weight: bold; color: #e040fb;">TUYUL</div><div id="tuyul-card" class="card face-down"></div><div style="font-size: 10px; margin-top: 2px; color: #00f3ff;" id="tuyul-info">Wild</div></div>
-            <div><div style="font-size: 11px; margin-bottom: 2px; font-weight: bold; color: #fb923c;">BUANGAN TERAKHIR</div><div id="discard-pile" class="discard-pile-container"></div></div>
+            <div><div style="font-size: 9px; font-weight: bold; color: #38bdf8;">DEK</div><div id="deck-pile" class="card face-down" onclick="playerDrawDeck()"></div></div>
+            <div><div style="font-size: 9px; font-weight: bold; color: #e040fb;">TUYUL</div><div id="tuyul-card" class="card face-down"></div></div>
+            <div><div style="font-size: 9px; font-weight: bold; color: #fb923c;">BUANGAN</div><div id="discard-pile" class="discard-pile-container"></div></div>
         </div>
-        <div class="seat seat-right"><div id="seat-player-3"></div><div id="bot-submitted-3" class="bot-submitted-mini"></div></div>
+        <div class="seat seat-right"><div id="seat-player-3" style="font-size: 10px; color: #fff;">Bot 3</div></div>
         <div class="seat seat-bottom">
-            <div id="my-submitted" class="my-submitted-area"><span style="color: #aaa; font-style: italic; font-size: 11px;">Kombinasi milikmu akan tampil di sini</span></div>
-            <div style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 4px;">
-                <div id="seat-player-0"></div>
-                <div style="display: flex; gap: 4px; flex-wrap: wrap; justify-content: center;">
-                    <button id="btn-tutup" class="btn-orange" onclick="closeHand()">Tutup Tangan 🏁</button>
-                    <button class="btn-green" onclick="autoArrangeCards()">Sortir</button>
-                    <button class="btn-secondary" onclick="submitCombination()">Submit Kombinasi</button>
-                    <button class="btn-shop" onclick="discardSelectedCard()">Buang Kartu</button>
-                </div>
+            <div id="my-submitted" class="my-submitted-area"><span style="color: #aaa; font-style: italic; font-size: 9px;">Kombinasi milikmu</span></div>
+            <div style="display: flex; justify-content: center; align-items: center; gap: 4px; margin-bottom: 2px;">
+                <button id="btn-tutup" class="btn-orange" onclick="closeHand()" style="padding: 4px 8px; font-size: 9px;">Tutup Tangan 🏁</button>
+                <button class="btn-green" onclick="autoArrangeCards()" style="padding: 4px 8px; font-size: 9px;">Sortir</button>
+                <button class="btn-secondary" onclick="submitCombination()" style="padding: 4px 8px; font-size: 9px;">Submit</button>
+                <button class="btn-dark" onclick="discardSelectedCard()" style="padding: 4px 8px; font-size: 9px;">Buang</button>
             </div>
             <div class="hand-container"><div id="my-hand" class="hand-cards"></div></div>
         </div>
     </div>
-    <div id="log-box"></div>
+    <div id="log-box">Log permainan akan muncul di sini...</div>
 </div>
 
 <!-- MODAL GM CONSOLE -->
 <div id="modal-gm" class="modal">
     <div class="modal-content glass-panel">
-        <h3 style="color: #c084fc; margin-top: 0; font-size: 18px;">👑 GAME MASTER CONSOLE</h3>
-        <div style="display: flex; flex-direction: column; gap: 8px; margin: 15px 0;">
-            <button class="btn-gm-purple" onclick="gmEquipExclusiveItems()">👑 EQUIP GM AVATAR & BORDER EKSKLUSIF</button>
+        <h3 style="color: #c084fc; margin-top: 0; font-size: 15px;">👑 GAME MASTER CONSOLE</h3>
+        <div style="display: flex; flex-direction: column; gap: 6px; margin: 10px 0;">
             <button class="btn-primary" onclick="gmAddCoins()">💰 TAMBAH +100.000 KOIN</button>
             
-            <div style="background: rgba(15,23,42,0.8); border: 1px solid #c084fc; padding: 12px; border-radius: 10px; margin-top: 5px;">
-                <div style="color: #c084fc; font-weight: bold; margin-bottom: 8px; font-size: 13px;">⭐ UBAH LEVEL PLAYER DINAMIS:</div>
-                <div style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 10px;">
-                    <label for="gm-level-slider" style="font-size: 12px; color: #fff;">Level: <b id="gm-level-val-text" style="color: #00f3ff;">1</b></label>
-                    <input type="range" id="gm-level-slider" min="1" max="100" value="1" oninput="document.getElementById('gm-level-val-text').innerText = this.value" style="width: 180px;">
-                    <button class="btn-secondary" onclick="gmSetCustomLevel(parseInt(document.getElementById('gm-level-slider').value))" style="padding: 4px 10px; font-size: 10px;">SET LEVEL</button>
+            <div style="background: rgba(15,23,42,0.8); border: 1px solid #c084fc; padding: 8px; border-radius: 8px;">
+                <div style="color: #c084fc; font-weight: bold; margin-bottom: 4px; font-size: 10px;">⭐ SET LEVEL:</div>
+                <div style="display: flex; justify-content: center; align-items: center; gap: 6px;">
+                    <label for="gm-level-slider" style="font-size: 10px; color: #fff;">Lvl: <b id="gm-level-val-text" style="color: #00f3ff;">1</b></label>
+                    <input type="range" id="gm-level-slider" min="1" max="100" value="1" oninput="document.getElementById('gm-level-val-text').innerText = this.value" style="width: 120px;">
+                    <button class="btn-secondary" onclick="gmSetCustomLevel(parseInt(document.getElementById('gm-level-slider').value))" style="padding: 2px 6px; font-size: 9px;">SET</button>
                 </div>
             </div>
         </div>
-        <button class="btn-dark" onclick="closeGmModal()">Tutup Console</button>
+        <button class="btn-dark" onclick="closeGmModal()" style="padding: 4px 10px; font-size: 9px;">Tutup Console</button>
     </div>
 </div>
 
@@ -357,7 +346,7 @@
     let currentUser = null;
     let userProfile = {
         name: "Kamu", level: 1, exp: 0, coins: 1000, isGm: false,
-        equippedAvatar: "avatar_1.webp", equippedBorderUrl: ""
+        equippedAvatar: "avatar_1.webp"
     };
 
     function getRequiredExp(lvl) {
@@ -366,24 +355,36 @@
         return Math.round(100 + Math.pow(lvl - 1, 1.5) * 100);
     }
 
-    /* GOOGLE LOGIN WITH REDIRECT (MOBILE FRIENDLY) */
     function loginWithGoogleRedirect() {
         const provider = new firebase.auth.GoogleAuthProvider();
         auth.signInWithRedirect(provider);
     }
 
-    function openDevPassInput() {
-        const pass = prompt("Masukkan Password Developer (GM):");
+    function openCustomDevModal() {
+        document.getElementById('dev-password-input').value = '';
+        document.getElementById('dev-pass-error').style.display = 'none';
+        document.getElementById('modal-dev-login').style.display = 'flex';
+        setTimeout(() => document.getElementById('dev-password-input').focus(), 100);
+    }
+
+    function closeCustomDevModal() { document.getElementById('modal-dev-login').style.display = 'none'; }
+    function handleDevKey(e) { if (e.key === 'Enter') submitDevPassword(); }
+
+    function submitDevPassword() {
+        const pass = document.getElementById('dev-password-input').value;
         if (pass === "gm123") {
             currentUser = { uid: "gm_dev_account" };
             userProfile = {
                 name: "Developer GM 👑", level: 100, exp: 100000, coins: 999999, isGm: true,
-                equippedAvatar: "gm_avatar.webp", equippedBorderUrl: "gm_border.png"
+                equippedAvatar: "gm_avatar.webp"
             };
+            document.getElementById('modal-dev-login').style.display = 'none';
             document.getElementById('modal-system-login').style.display = 'none';
-            document.getElementById('home-screen').style.display = 'block';
+            document.getElementById('home-screen').style.display = 'flex';
             updateProfileUI();
-        } else { alert("Password GM Salah!"); }
+        } else {
+            document.getElementById('dev-pass-error').style.display = 'block';
+        }
     }
 
     function logoutAccount() {
@@ -394,25 +395,19 @@
         });
     }
 
-    /* FIREBASE AUTH STATE MONITORING */
-    auth.getRedirectResult().catch(err => { console.log(err); });
+    auth.getRedirectResult().catch(err => console.log(err));
 
     auth.onAuthStateChanged(user => {
         if (user) {
             currentUser = user;
             document.getElementById('modal-system-login').style.display = 'none';
-            document.getElementById('home-screen').style.display = 'block';
+            document.getElementById('home-screen').style.display = 'flex';
 
             db.ref('users/' + user.uid).on('value', snapshot => {
                 const data = snapshot.val();
-                if (data) {
-                    userProfile = data;
-                } else {
-                    userProfile = {
-                        name: user.displayName || "Player",
-                        level: 1, exp: 0, coins: 1000, isGm: false,
-                        equippedAvatar: "avatar_1.webp", equippedBorderUrl: ""
-                    };
+                if (data) { userProfile = data; } 
+                else {
+                    userProfile = { name: user.displayName || "Player", level: 1, exp: 0, coins: 1000, isGm: false, equippedAvatar: "avatar_1.webp" };
                     db.ref('users/' + user.uid).set(userProfile);
                 }
                 updateProfileUI();
@@ -421,29 +416,22 @@
     });
 
     function saveProfileData() {
-        if (currentUser && currentUser.uid !== "gm_dev_account") {
-            db.ref('users/' + currentUser.uid).set(userProfile);
-        } else {
-            updateProfileUI();
-        }
+        if (currentUser && currentUser.uid !== "gm_dev_account") { db.ref('users/' + currentUser.uid).set(userProfile); } 
+        else { updateProfileUI(); }
     }
 
     function renderLevelBadge(lvl) {
         if (lvl <= 10) return `<span class="lvl-badge badge-wood">Wood</span>`;
-        if (lvl <= 20) return `<span class="lvl-badge badge-iron">Iron</span>`;
-        if (lvl <= 30) return `<span class="lvl-badge badge-bronze">Bronze</span>`;
-        if (lvl <= 40) return `<span class="lvl-badge badge-silver">Silver</span>`;
-        if (lvl <= 50) return `<span class="lvl-badge badge-gold badge-animated-shine">Gold</span>`;
-        if (lvl <= 80) return `<span class="lvl-badge badge-ruby badge-animated-shine">Ruby</span>`;
-        return `<span class="lvl-badge badge-aurora badge-animated-shine">MAX</span>`;
+        if (lvl <= 50) return `<span class="lvl-badge badge-gold">Gold</span>`;
+        return `<span class="lvl-badge badge-aurora">MAX</span>`;
     }
 
     function updateProfileUI() {
         const nameContainer = document.getElementById('user-display-name-container');
         if (userProfile.isGm) {
             nameContainer.innerHTML = `<span class="gm-nickname"><img src="gm_logo.png" class="gm-badge-logo" alt="GM"> ${userProfile.name}</span>`;
-            document.getElementById('btn-top-gm-tools').style.display = 'block';
-            document.getElementById('btn-game-gm-tools').style.display = 'block';
+            document.getElementById('btn-top-gm-tools').style.display = 'inline-block';
+            document.getElementById('btn-game-gm-tools').style.display = 'inline-block';
         } else {
             nameContainer.innerHTML = `<span id="user-display-name" style="color: #00f3ff;">${userProfile.name}</span>`;
             document.getElementById('btn-top-gm-tools').style.display = 'none';
@@ -459,7 +447,6 @@
         document.getElementById('user-exp-text').innerText = `${userProfile.exp.toLocaleString()} / ${reqExp.toLocaleString()} EXP`;
     }
 
-    /* GM CONSOLE ACTIONS */
     function openGmConsoleDirect() { document.getElementById('modal-gm').style.display = 'flex'; }
     function closeGmModal() { document.getElementById('modal-gm').style.display = 'none'; }
     function gmAddCoins() { userProfile.coins += 100000; saveProfileData(); }
@@ -469,14 +456,13 @@
         saveProfileData(); alert(`⭐ Level di-set ke Level ${lvl}!`);
     }
 
-    /* GAME ENGINE (SIMPLIFIED POKER VS BOT) */
     function startVsBotMode() {
         document.getElementById('home-screen').style.setProperty('display', 'none', 'important');
         document.getElementById('game-container').style.setProperty('display', 'flex', 'important');
     }
     function backToHomeMenu() {
         document.getElementById('game-container').style.setProperty('display', 'none', 'important');
-        document.getElementById('home-screen').style.setProperty('display', 'block', 'important');
+        document.getElementById('home-screen').style.setProperty('display', 'flex', 'important');
     }
 </script>
 </body>
