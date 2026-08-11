@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Remi Hardcore - Oval Table Edition v3.1</title>
+    <title>Remi Hardcore - Oval Table Edition v3.2</title>
     <!-- Font TT Runs / Montserrat / Rajdhani -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <style>
@@ -206,6 +206,18 @@
         .theme-gold .card, .card.theme-gold { background: linear-gradient(180deg, #fffcf0 0%, #f7e7b4 100%); color: #7a5200; border: 1.5px solid #ffd700; }
         .theme-gold .card.red, .card.theme-gold.red { color: #b91c1c; }
 
+        .theme-dragon .card.face-down, .card.theme-dragon.face-down { background: radial-gradient(circle, #ff3d00, #880000) !important; border: 1.5px solid #ffea00 !important; }
+        .theme-dragon .card, .card.theme-dragon { background: linear-gradient(180deg, #2b0303 0%, #150000 100%); color: #ffeb3b; border: 1.5px solid #ff3d00; }
+        .theme-dragon .card.red, .card.theme-dragon.red { color: #ff5252; }
+
+        .theme-royal .card.face-down, .card.theme-royal.face-down { background: linear-gradient(135deg, #7b1fa2, #4a148c) !important; border: 1.5px solid #e040fb !important; }
+        .theme-royal .card, .card.theme-royal { background: linear-gradient(180deg, #fcf4ff 0%, #e1bee7 100%); color: #4a148c; border: 1.5px solid #ab47bc; }
+        .theme-royal .card.red, .card.theme-royal.red { color: #c2185b; }
+
+        .theme-dark .card.face-down, .card.theme-dark.face-down { background: linear-gradient(135deg, #222, #000) !important; border: 1.5px solid #555 !important; }
+        .theme-dark .card, .card.theme-dark { background: #1e1e1e; color: #4ade80; border: 1.5px solid #555; }
+        .theme-dark .card.red, .card.theme-dark.red { color: #f87171; }
+
         .card.disabled { opacity: 0.35; cursor: not-allowed; transform: none !important; }
         .card.selected { border: 2.5px solid #00f3ff !important; transform: translateY(-10px) scale(1.05); box-shadow: 0 0 12px #00f3ff !important; }
 
@@ -242,7 +254,6 @@
 </head>
 <body class="theme-classic">
 
-<!-- MATRIX RAIN CANVAS -->
 <canvas id="matrix-canvas"></canvas>
 
 <!-- HOME SCREEN MENU -->
@@ -384,7 +395,7 @@
     </div>
 </div>
 
-<!-- MODAL TOKO FULL CUSTOMIZATION -->
+<!-- MODAL TOKO FULL CUSTOMIZATION LENGKAP -->
 <div id="modal-shop" class="modal">
     <div class="modal-content glass-panel">
         <h3 style="color: #00f3ff; margin-top: 0; font-size: 18px;">🛒 TOKO CUSTOMIZATION</h3>
@@ -418,11 +429,10 @@
     <div class="modal-content glass-panel">
         <h3 style="color: #00f3ff; margin-top: 0; font-size: 18px;">📜 PATCH NOTES & UPDATE LOG</h3>
         <div style="text-align: left; background: rgba(15,23,42,0.6); padding: 12px; border-radius: 10px; border: 1px solid #00f3ff;">
-            <div style="font-weight: bold; color: #00f3ff;">VERSION 3.1 (FULL FEATURE FIX & DRAG-DROP RECOVERY)</div>
+            <div style="font-weight: bold; color: #00f3ff;">VERSION 3.2 (STRICT FIRST DISCARD RULE & FULL SHOP)</div>
             <ul style="margin: 5px 0 0 18px; padding: 0; font-size: 13px; color: #ddd;">
-                <li>✨ <b>Matrix Rain Background</b>: Background animasi Hujan Matrix Neon diaktifkan penuh!</li>
-                <li>🛒 <b>Full Shop Customization</b>: Menu Toko kembali lengkap (Avatar, Border, Skin Kartu, Rename).</li>
-                <li>🖐️ <b>Drag & Drop Card Swapping</b>: Menggeser dan menukar posisi kartu tangan manual berfungsi kembali sempurna.</li>
+                <li>🎯 <b>Strict First Discard Rule</b>: Ambil buangan pertama kali WAJIB membentuk Seri/Run, Four-of-a-Kind, atau Triple As! Tris biasa baru bisa diambil jika sudah submit.</li>
+                <li>🛒 <b>Full Avatar & Card Skins Catalog</b>: Semua daftar Avatar (1-8 & GM) dan Skin Kartu (Klasik, Cyber, Gold, Dragon, Royal, Dark) tampil lengkap.</li>
             </ul>
         </div>
         <div style="margin-top: 20px;"><button class="btn-green" onclick="closePatchNotesModal()">Tutup</button></div>
@@ -559,23 +569,29 @@
         document.body.className = userProfile.equippedCardTheme || "theme-classic";
     }
 
-    /* DATA TOKO CUSTOMIZATION LENGKAP */
+    /* FULL CATALOG SHOP CUSTOMIZATION */
     const shopAvatars = [
         { name: "Hero 1", url: "avatar_1.webp" }, { name: "Dwarf", url: "avatar_2.webp" },
         { name: "Rogue", url: "avatar_3.webp" }, { name: "Gnome", url: "avatar_4.webp" },
-        { name: "Barbarian", url: "avatar_5.webp" }, { name: "Ranger", url: "avatar_6.webp" }
+        { name: "Barbarian", url: "avatar_5.webp" }, { name: "Ranger", url: "avatar_6.webp" },
+        { name: "Elf Wizard", url: "avatar_7.webp" }, { name: "Paladin", url: "avatar_8.webp" },
+        { name: "Dev GM Avatar 👑", url: "gm_avatar.webp" }
     ];
     const shopBorders = [
         { name: "Tanpa Border", url: "", price: 0 },
         { name: "Entangled 🌸", url: "border_entangled.png", price: 5000 },
         { name: "Fox Border 🦊", url: "border_fox.png", price: 5000 },
         { name: "Alchemy 🧙‍♀️", url: "border_alchemy.png", price: 8000 },
-        { name: "Butterfly 🦋", url: "border_butterfly.png", price: 10000 }
+        { name: "Butterfly 🦋", url: "border_butterfly.png", price: 10000 },
+        { name: "GM Crown Frame 👑", url: "gm_border.png", price: 25000 }
     ];
     const shopCards = [
         { name: "Klasik Merah", themeClass: "theme-classic", price: 0 },
         { name: "Cyber Neon ⚡", themeClass: "theme-cyber", price: 1500 },
-        { name: "Gold Luxury 👑", themeClass: "theme-gold", price: 3500 }
+        { name: "Gold Luxury 👑", themeClass: "theme-gold", price: 3500 },
+        { name: "Dragon Flame 🔥", themeClass: "theme-dragon", price: 5000 },
+        { name: "Royal Purple 🔮", themeClass: "theme-royal", price: 7500 },
+        { name: "Dark Emerald 🐍", themeClass: "theme-dark", price: 10000 }
     ];
 
     function openShopModal() {
@@ -667,7 +683,7 @@
     function gmAddCoins() { userProfile.coins += 100000; saveProfileData(); }
     function gmMaxLevel() { userProfile.level = 100; userProfile.exp = 0; saveProfileData(); }
 
-    /* --- GAME ENGINE (FULL RULES & DRAG DROP) --- */
+    /* --- GAME ENGINE (PRECISE FIRST DISCARD RULE) --- */
     let suits = ['♠', '♣', '♥', '♦']; let values = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
     let targetScore = 1000;
 
@@ -740,13 +756,26 @@
     function isValidGroup(cards) { return isValidSet(cards) || isValidRun(cards); }
     function groupValue(group) { return group.reduce((sum, c) => sum + pointValue(c.value), 0); }
 
-    function cardCompletesMeld(hand, card) {
-        if (!card || isWildCard(card) || hand.length > 10) return false;
+    /* LOGIKA KHUSUS VALIDASI AMBIL BUANGAN PERTAMA KALI VS SELANJUTNYA */
+    function cardCompletesMeld(player, card) {
+        if (!card || isWildCard(card) || player.hand.length > 10) return false;
+        const hasSubmittedBefore = player.submittedGroups.length > 0;
+
         for (const size of [2, 3, 6]) {
-            if (size > hand.length) continue;
-            for (const combo of combinations(hand, size)) {
+            if (size > player.hand.length) continue;
+            for (const combo of combinations(player.hand, size)) {
                 const testGroup = [card, ...combo];
-                if (isValidGroup(testGroup)) return true;
+                if (isValidGroup(testGroup)) {
+                    // JIKA SUDAH PERNAH SUBMIT: Bebas kombinasi apa saja
+                    if (hasSubmittedBefore) return true;
+                    
+                    // JIKA PERTAMA KALI AMBIL BUANGAN: Harus SERI, FOUR-OF-A-KIND, atau TRIPLE AS
+                    const isRun = isValidRun(testGroup);
+                    const isFour = (testGroup.length === 4 && isValidSet(testGroup));
+                    const isTripleAce = (testGroup.length === 3 && isValidSet(testGroup) && testGroup.some(c => c.value === 'A'));
+
+                    if (isRun || isFour || isTripleAce) return true;
+                }
             }
         }
         return false;
@@ -870,7 +899,7 @@
 
         visible.forEach((card, i) => {
             const actualIdx = gameState.discardPile.length - visible.length + i;
-            const usable = humanDrawPhase && cardCompletesMeld(gameState.players[0].hand, card);
+            const usable = humanDrawPhase && cardCompletesMeld(gameState.players[0], card);
             const extra = (humanDrawPhase && !usable) ? 'disabled' : '';
             const div = createCardElement(card, extra, usable ? () => playerDrawDiscard(actualIdx) : null);
             dpEl.appendChild(div);
@@ -888,7 +917,6 @@
             });
         }
 
-        /* RENDER HAND CARDS + FULL DRAG & DROP SUPPORT */
         const handEl = document.getElementById('my-hand'); handEl.innerHTML = '';
         gameState.players[0].hand.forEach((card, idx) => {
             const sel = gameState.selectedIndices.includes(idx) ? 'selected' : '';
